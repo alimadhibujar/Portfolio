@@ -116,6 +116,7 @@ section {
 
         &:hover {
           background: $grey1;
+          color: $blueButton;
         }
       }
       .active {
@@ -184,7 +185,7 @@ section {
         background: $social;
         justify-content: center;
         align-items: center;
-        color: #fff;
+        color: $blurple;
         font-size: 2.23vw !important;
         @media (max-width: 500px) {
           font-size: 20px !important;
