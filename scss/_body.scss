@@ -269,10 +269,8 @@ section {
         color: $grey3;
         font-family: "Josefin Slab", serif;
         font-size: calc(150% + 2vw);
-        text-shadow: 1px 1.5px #c2c2c2, -1px -1.5px #c2c2c2;
-        &:hover {
-          text-shadow: -1px 1.5px #c2c2c2, 1px -1.5px #c2c2c2;
-        }
+        // text-shadow: 1px 1.5px #c2c2c2, -1px -1.5px #c2c2c2;
+
         span {
           display: table-cell;
           margin: 0;
@@ -305,9 +303,11 @@ section {
         20%,
         100% {
           color: $grey3;
+          text-shadow: 1px 1.5px #c2c2c2, -1px -1.5px #c2c2c2;
         }
         10% {
           color: $blueButton;
+          text-shadow: -2.2px 1.5px #c2c2c2, 2.2px -1.5px #c2c2c2;
         }
       }
 
