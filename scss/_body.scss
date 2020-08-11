@@ -118,7 +118,7 @@ section {
         display: block;
         border-radius: 5px;
         margin: 5px 1px;
-        padding: 10px 15px;
+        padding: 15px;
         background-color: $listColor;
 
         &:hover {
@@ -140,6 +140,7 @@ section {
       justify-content: flex-end;
       position: relative;
       left: 8px;
+
       ul {
         position: relative;
         display: flex;
@@ -278,6 +279,7 @@ section {
         font-size: calc(150% + 2vw);
         // text-shadow: 1px 1.5px #c2c2c2, -1px -1.5px #c2c2c2;
         perspective: 700px;
+
         span {
           display: table-cell;
           margin: 0;
@@ -405,6 +407,9 @@ section {
   .swiper-container {
     width: 500px;
     height: 450px;
+    @media (min-width: 767px) {
+      display: none;
+    }
     @media (max-width: 500px) {
       width: 350px;
       height: 250px;
@@ -423,6 +428,125 @@ section {
       background-position: center;
       background-size: cover;
     }
+  }
+
+  #wrapD3Cube {
+    width: 35vw;
+    height: 35vw;
+    margin: 40px auto 0;
+    @media (max-width: 768px) {
+      display: none;
+    }
+  }
+  #D3Cube {
+    width: 30vw;
+    height: 30vw;
+    top: 40px;
+    transform-style: preserve-3d;
+    -moz-transform-style: preserve-3d;
+    -webkit-transform-style: preserve-3d;
+    transform: rotateX(-22deg) rotateY(-38deg) rotateZ(0deg);
+    -moz-transform: rotateX(-22deg) rotateY(-38deg) rotateZ(0deg);
+    -webkit-transform: rotateX(-22deg) rotateY(-38deg) rotateZ(0deg);
+    position: relative;
+    /* Safari 4.0 - 8.0 */
+    -webkit-transition: all 1500ms ease-in-out;
+    -webkit-animation: cubeRotation 5s infinite;
+    animation: cubeRotation 5s infinite;
+    transition: all 1500ms ease-in-out;
+    &:hover {
+      animation-play-state: paused;
+    }
+    a {
+      position: absolute;
+      -webkit-transition: all 1500ms ease-in-out;
+      transition: transform 1500ms ease-in-out;
+      width: 30vw;
+      height: 30vw;
+      overflow: hidden;
+      opacity: 0.8;
+    }
+  }
+  p {
+    position: relative;
+    text-align: center;
+    margin-top: 60px;
+  }
+  /* Safari 4.0 - 8.0 */
+  @-webkit-keyframes cubeRotation {
+    0% {
+      -webkit-transform: rotateX(-22deg) rotateY(-38deg) rotateZ(0deg);
+    }
+    50% {
+      -webkit-transform: rotateX(-22deg) rotateY(-128deg) rotateZ(0deg);
+    }
+    100% {
+      -webkit-transform: rotateX(-22deg) rotateY(-398deg) rotateZ(0deg);
+    }
+  }
+  /* Standard syntax */
+  @keyframes cubeRotation {
+    0% {
+      transform: rotateX(-22deg) rotateY(-38deg) rotateZ(0deg);
+    }
+    50% {
+      transform: rotateX(-22deg) rotateY(-238deg) rotateZ(0deg);
+    }
+    100% {
+      transform: rotateX(-22deg) rotateY(-398deg) rotateZ(0deg);
+    }
+  }
+
+  #side1 {
+    transform: rotatex(90deg) translateX(0px) translateY(0px) translateZ(15vw);
+    -moz-transform: rotatex(90deg) translateX(0px) translateY(0px)
+      translateZ(15vw);
+    -webkit-transform: rotatex(90deg) translateX(0px) translateY(0px)
+      translateZ(15vw);
+    background-image: url(img/projects5.png);
+    background-size: cover;
+  }
+  #side2 {
+    transform: rotateY(-90deg) translateX(0px) translateY(0px) translateZ(15vw);
+    -moz-transform: rotateY(-90deg) translateX(0px) translateY(0px)
+      translateZ(15vw);
+    -webkit-transform: rotateY(-90deg) translateX(0px) translateY(0px)
+      translateZ(15vw);
+    background-image: url(img/projects1.png);
+    background-size: cover;
+    background-position: 50% 50%;
+  }
+  #side3 {
+    transform: translateX(0px) translateY(0px) translateZ(15vw);
+    -moz-transform: translateX(0px) translateY(0px) translateZ(15vw);
+    -webkit-transform: translateX(0px) translateY(0px) translateZ(15vw);
+    background-image: url(img/projects2.png);
+    background-size: cover;
+    background-position: 50% 100%;
+  }
+  #side4 {
+    transform: rotateY(90deg) translateX(0px) translateY(0px) translateZ(15vw);
+    -moz-transform: rotateY(90deg) translateX(0px) translateY(0px)
+      translateZ(15vw);
+    -webkit-transform: rotateY(90deg) translateX(0px) translateY(0px)
+      translateZ(15vw);
+  }
+  #side5 {
+    transform: rotateY(180deg) translateX(0px) translateY(0px) translateZ(15vw);
+    -moz-transform: rotateY(180deg) translateX(0px) translateY(0px)
+      translateZ(15vw);
+    -webkit-transform: rotateY(180deg) translateX(0px) translateY(0px)
+      translateZ(15vw);
+    background-image: url(img/projects3.png);
+    background-size: cover;
+  }
+  #side6 {
+    transform: rotateX(-90deg) translateX(0px) translateY(0px) translateZ(15vw);
+    -moz-transform: rotateX(-90deg) translateX(0px) translateY(0px)
+      translateZ(15vw);
+    -webkit-transform: rotateX(-90deg) translateX(0px) translateY(0px)
+      translateZ(15vw);
+    background-color: $blueButton;
   }
 }
 
