@@ -102,7 +102,7 @@ section {
     }
 
     .closebtn {
-      color: $white;
+      color: $grey5;
       position: absolute;
       top: 20px;
       right: 25px;
@@ -112,17 +112,16 @@ section {
       }
     }
     .list__links {
-      padding: 7.5px;
-
+      padding: 20px 0 7.5px 7.5px;
       li {
         display: block;
-        border-radius: 5px;
-        margin: 5px 1px;
+        border-radius: 5px 0 0 5px;
+        margin: 5px 0;
         padding: 15px;
+        transition: background-color 0.9s ease;
         background-color: $listColor;
-
         &:hover {
-          background: $grey1;
+          background-color: $grey1;
           color: $blueButton;
         }
       }
@@ -133,6 +132,7 @@ section {
       a {
         color: $grey5;
         text-decoration: none;
+        transition: color 0.9s linear;
       }
     }
     .social-links {
@@ -256,7 +256,7 @@ section {
     overflow-x: hidden;
     overflow-y: scroll;
     .icon {
-      font-size: 2rem;
+      font-size: 2.5rem;
       color: $white;
       position: fixed;
       left: 35px;
@@ -452,7 +452,7 @@ section {
     /* Safari 4.0 - 8.0 */
     -webkit-transition: all 1500ms ease-in-out;
     -webkit-animation: cubeRotation 5s infinite;
-    animation: cubeRotation 5s infinite;
+    animation: cubeRotation 8s infinite;
     transition: all 1500ms ease-in-out;
     &:hover {
       animation-play-state: paused;
