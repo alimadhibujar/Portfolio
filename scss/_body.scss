@@ -120,7 +120,7 @@ section {
         padding: 15px;
         transition: background-color 0.9s ease;
         background-color: $listColor;
-        &:hover {
+        &:hover:not(.active) {
           background-color: $grey1;
           color: $blueButton;
         }
