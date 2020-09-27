@@ -32,6 +32,12 @@ window.addEventListener("click", () => {
   }
 });
 
+const frontBox = document.querySelector(".flip-img");
+const soundEffect = new Audio(
+  "https://assets.codepen.io/567707/audio-ding.wav"
+);
+frontBox.addEventListener("mouseover", (e) => soundEffect.play());
+
 // ("use strict");
 
 // var canvas = document.getElementById("canvas"),
