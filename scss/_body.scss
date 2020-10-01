@@ -572,13 +572,13 @@ section {
     flex-basis: 1;
     max-width: 360px;
     margin-top: 25px;
-    input[name],
-    input[email] {
+    position: relative;
+    input {
       width: 100%;
       height: 38px;
-      margin-bottom: 15px;
+      margin-bottom: 25px;
       padding-left: 15px;
-      color: $white;
+      color: $grey5;
       font-size: 16px;
       background-color: $grey3;
       border: 1px solid $white;
@@ -586,8 +586,28 @@ section {
       outline: none;
       box-sizing: border-box;
       &:focus {
-        box-shadow: 0 0 2px 2px $blueButton;
+        box-shadow: 0 0 1px 1px $purple;
       }
+      // https://www.samanthaming.com/tidbits/88-css-placeholder-shown/
+    }
+    label {
+      display: none;
+      position: absolute;
+      top: -18px;
+      font-size: 14px;
+      color: $blurple;
+    }
+    .email {
+      top: 46px;
+    }
+    .message {
+      top: 110px;
+    }
+    input:not(:placeholder-shown) + label {
+      display: block;
+    }
+    input:not(:placeholder-shown) {
+      box-shadow: 0 0 2px 2px $blueButton;
     }
   }
 
@@ -595,7 +615,7 @@ section {
     width: 100%;
     max-width: 360px;
     background-color: $grey3;
-    color: #fff;
+    color: $grey5;
     border: 1px solid $white;
     border-radius: 5px;
     font-size: 16px;
@@ -604,12 +624,18 @@ section {
     padding-left: 15px;
     box-sizing: border-box;
     &:focus {
-      box-shadow: 0 0 2px 2px $blueButton;
+      box-shadow: 0 0 1px 1px $purple;
     }
+  }
+  textarea:not(:placeholder-shown) + label {
+    display: block;
+  }
+  textarea:not(:placeholder-shown) {
+    box-shadow: 0 0 2px 2px $blueButton;
   }
 
   .send-button {
-    margin-top: 15px;
+    margin-top: 20px;
     height: 38px;
     width: 100%;
     overflow: hidden;
@@ -650,6 +676,7 @@ section {
   .direct-contact-container {
     flex-basis: 1;
     max-width: 360px;
+    width: 100%;
   }
 
   /* Location, Phone, Email Section */
@@ -657,14 +684,15 @@ section {
   .contact-list {
     list-style-type: none;
     margin-left: -10px;
-    margin-top: -18px;
+    margin-top: -15px;
     @media (max-width: 767px) {
-      margin-top: 15px;
+      margin: 15px 0 0 0;
+      padding: 0;
     }
   }
 
   .list-item {
-    line-height: 5.7;
+    line-height: 6.2;
     color: #aaa;
     @media (max-width: 767px) {
       line-height: 3.7;
