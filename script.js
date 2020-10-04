@@ -33,10 +33,9 @@ window.addEventListener("click", () => {
 });
 
 const frontBox = document.querySelector(".flip-img");
-const soundEffect = new Audio(
-  "https://assets.codepen.io/567707/audio-ding.wav"
-);
-frontBox.addEventListener("mouseover", (e) => soundEffect.play());
+const soundEffect = "https://assets.codepen.io/567707/audio-ding.wav";
+
+frontBox.addEventListener("mouseover", (e) => new Audio(soundEffect).play());
 
 // ("use strict");
 
