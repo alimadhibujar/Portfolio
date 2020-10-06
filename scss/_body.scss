@@ -118,7 +118,7 @@ section {
         border-radius: 5px 0 0 5px;
         margin: 5px 0;
         padding: 15px;
-        transition: background-color 0.5s ease-in-out;
+        transition: all 0.5s ease-in-out;
         background-color: $listColor;
         position: relative;
         z-index: 1;
@@ -136,6 +136,7 @@ section {
           top: 0;
           left: 0;
           background-color: $grey1;
+          border-radius: 5px 0 0 5px;
           transition: 0.5s ease-in-out;
           z-index: -1;
         }
@@ -640,6 +641,7 @@ section {
     letter-spacing: 1px;
     outline: none;
     padding-left: 15px;
+    padding-top: 5px;
     box-sizing: border-box;
     &:focus {
       box-shadow: 0 0 1px 1px $purple;
