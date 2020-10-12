@@ -9,10 +9,7 @@ $social: #2a2a2a;
 $grey4: #34373c;
 $grey5: #99aab5;
 $white: #ffffff;
-$orange: #f7971e;
-$pink: #ef32d9;
 $purple: #6e48aa;
-$yellow: #ffd200;
 $blue: #00071c;
 $blueButton: #315fb5;
 $listColor: rgba(57, 60, 67, 0.35);
@@ -45,7 +42,8 @@ $listColor: rgba(57, 60, 67, 0.35);
 
 body {
   font-family: $font1;
-  font-size: 20px;
+  font-size: 1.25rem;
+  height: 100vh;
 }
 
 h2,
@@ -74,18 +72,16 @@ section {
 
 .wrapper {
   display: flex;
-  background-color: $grey1;
-  color: $grey5;
 }
 
 .panel__main {
-  background-color: $grey2;
+  background-color: $grey3;
   height: 100vh;
-  flex: 1;
-  border-radius: 10px 0px 0px 0px;
+  width: 100vw;
+  border-radius: 10px;
   display: flex;
   overflow: hidden;
-
+  position: relative;
   .panel__main-side {
     background: $blue;
     height: 100vh;
@@ -265,12 +261,19 @@ section {
   }
 
   .panel__main-content {
-    background: $grey3;
     color: $grey5;
-    flex: 1;
     padding: 0;
     overflow-x: hidden;
     overflow-y: scroll;
+    position: absolute;
+    top: 0px;
+    left: 17.85vw;
+    height: 100vh;
+    width: 82.15vw;
+    @media (max-width: 500px) {
+      width: 100vw;
+      left: 0;
+    }
     .icon {
       font-size: 2.5rem;
       color: $white;
@@ -595,10 +598,10 @@ section {
       margin-bottom: 25px;
       padding-left: 15px;
       color: $grey5;
-      font-size: 1rem;
       background-color: $grey3;
       border: 1px solid $white;
       border-radius: 5px;
+      font: 0.8em $font1;
       outline: none;
       box-sizing: border-box;
       &:focus {
@@ -610,7 +613,7 @@ section {
       display: none;
       position: absolute;
       top: -8px;
-      font-size: 14px;
+      font-size: 16px;
       color: $blurple;
       background: $grey3;
       padding: 0 0.1rem;
@@ -636,12 +639,10 @@ section {
     background-color: $grey3;
     color: $grey5;
     border: 1px solid $white;
+    font: 0.8em $font1;
     border-radius: 5px;
-    font-size: 1rem;
-    letter-spacing: 1px;
     outline: none;
-    padding-left: 15px;
-    padding-top: 5px;
+    padding: 7px 0 0 15px;
     box-sizing: border-box;
     &:focus {
       box-shadow: 0 0 1px 1px $purple;
@@ -749,15 +750,18 @@ section {
 footer {
   background-color: $grey2;
   height: 100px;
-  width: 100%;
+  width: 82.15vw;
   color: $blurple;
+  @media (max-width: 500px) {
+    width: 100vw;
+  }
   .container {
     display: flex;
-    justify-content: flex-start;
+    justify-content: space-between;
     align-items: center;
     max-width: 758px;
     height: 100%;
-    padding: 0 25px;
+    padding: 0 35px 0 25px;
     margin: auto;
     letter-spacing: 1.5px;
     font-size: 2.5rem;
@@ -768,11 +772,11 @@ footer {
     @media (max-width: 767px) {
       flex-direction: column;
       width: 100%;
+      padding: 0;
     }
     .copyright {
-      margin-left: auto;
       @media (max-width: 767px) {
-        margin-left: 0;
+        margin-left: -20px;
       }
     }
   }
