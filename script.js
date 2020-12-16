@@ -24,9 +24,9 @@ openNav.addEventListener("click", () => {
   overLay.style.width = "100vw";
 });
 
-window.addEventListener("click", () => {
+window.addEventListener("click", (e) => {
   const closeNav = document.querySelector(".closebtn");
-  if (event.target == overLay || event.target == closeNav) {
+  if (e.target == overLay || e.target == closeNav) {
     overLay.style.width = "0vw";
     panelSaid.style.width = "0vw";
   }
@@ -37,16 +37,23 @@ const soundEffect = "https://assets.codepen.io/567707/audio-ding.wav";
 
 frontBox.addEventListener("mouseover", (e) => new Audio(soundEffect).play());
 
-// function scanDocument() {
-//   let sectionList = document.querySelector(".hidden");
-//   sectionList.forEach(function (section) {
-//     var introText = document.getElementById("about");
-//     var introPosition = introText.getBoundingClientRect().top;
-//     var screenPosition = window.innerHeight / 1.3;
-//     if (introPosition < screenPosition) {
-//       section.classList.remove("hidden");
-//     }
-//   });
-// }
-
-// window.addEventListener("scroll", scanDocument);
+// sections fade in effect.
+let options = {
+  root: null,
+  rootMargin: "-250px 0px",
+  threshold: 0.05,
+};
+let observer = new IntersectionObserver(beTouching, options);
+document.querySelectorAll(".hidden").forEach((section) => {
+  observer.observe(section);
+});
+function beTouching(entries, observe) {
+  entries.forEach((entry) => {
+    if (entry.isIntersecting) {
+      console.log("intersecting");
+      entry.target.classList.remove("hidden");
+    } else {
+      entry.target.classList.add("hidden");
+    }
+  });
+}
