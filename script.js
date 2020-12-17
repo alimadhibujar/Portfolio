@@ -40,7 +40,7 @@ frontBox.addEventListener("mouseover", (e) => new Audio(soundEffect).play());
 // sections fade in effect.
 let options = {
   root: null,
-  rootMargin: "-250px 0px",
+  rootMargin: "-200px 0px",
   threshold: 0.05,
 };
 let observer = new IntersectionObserver(beTouching, options);
@@ -50,7 +50,7 @@ document.querySelectorAll(".hidden").forEach((section) => {
 function beTouching(entries, observe) {
   entries.forEach((entry) => {
     if (entry.isIntersecting) {
-      console.log("intersecting");
+      // console.log("intersecting");
       entry.target.classList.remove("hidden");
     } else {
       entry.target.classList.add("hidden");
