@@ -66,13 +66,15 @@ a {
 section {
   min-height: 558px;
   max-width: 758px;
-  padding: 15px 25px;
+  padding: 30px 25px;
   margin: auto;
   opacity: 1;
-  transition: opacity 2s ease;
+  transform: translateY(0px);
+  transition: all 1.5s ease;
 }
 .hidden {
   opacity: 0;
+  transform: translateY(20px);
 }
 
 .wrapper {
