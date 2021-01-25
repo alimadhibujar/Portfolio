@@ -127,7 +127,6 @@ section {
         position: relative;
         z-index: 1;
         &:hover:not(.active) {
-          background-color: $grey1;
           color: $blueButton;
           span {
             width: 100%;
@@ -541,8 +540,10 @@ section {
       translateZ(15vw);
     -webkit-transform: rotatex(90deg) translateX(0px) translateY(0px)
       translateZ(15vw);
-    background-image: url(img/projects5.png);
+    background-image: url(img/creditCard4.png);
     background-size: cover;
+    background-position-x: -2px;
+    background-position-y: -2px;
   }
   #side2 {
     transform: rotateY(-90deg) translateX(0px) translateY(0px) translateZ(15vw);
@@ -584,7 +585,10 @@ section {
       translateZ(15vw);
     -webkit-transform: rotateX(-90deg) translateX(0px) translateY(0px)
       translateZ(15vw);
-    background-color: $blueButton;
+    // background-color: $blueButton;
+    background-image: url(img/projects5.png);
+    background-size: cover;
+    background-position: center;
   }
 }
 
