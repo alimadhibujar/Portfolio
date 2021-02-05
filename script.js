@@ -57,3 +57,7 @@ function beTouching(entries, observe) {
     }
   });
 }
+
+const year = document.getElementById("year");
+year.innerHTML = new Date().getFullYear();
+year.style.fontSize = "1rem";
