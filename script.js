@@ -1,7 +1,6 @@
-const nav = document.getElementById("navlinks");
-const navlinks = nav.getElementsByClassName("navlink");
-
 function setActiveLink() {
+  const nav = document.getElementById("navlinks");
+  const navlinks = nav.getElementsByClassName("navlink");
   for (let i = 0; i < navlinks.length; i++) {
     navlinks[i].addEventListener("click", function () {
       const current = document.getElementsByClassName("active");
@@ -25,39 +24,116 @@ openNav.addEventListener("click", () => {
 });
 
 window.addEventListener("click", (e) => {
-  const closeNav = document.querySelector(".closebtn");
+  const closeNav = document.querySelector(".closeBtn");
   if (e.target == overLay || e.target == closeNav) {
     overLay.style.width = "0vw";
     panelSaid.style.width = "0vw";
   }
 });
 
-const frontBox = document.querySelector(".flip-img");
-const soundEffect = "https://assets.codepen.io/567707/audio-ding.wav";
-
-frontBox.addEventListener("mouseover", (e) => new Audio(soundEffect).play());
+// shadow effect when mouse over and out of image.
+// Self-Invoked Function
+(function titleShadow() {
+  const frontBox = document.querySelectorAll(".flip-img");
+  const nameTitle = document.getElementById("name-title");
+  frontBox.forEach((box) => {
+    box.addEventListener("mouseover", (e) => {
+      nameTitleStyle = `text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1),
+       -1px -1px 2px rgb(41, 40, 40), 2px 1px 2px rgba(0, 0, 0, 0.7);
+       transform: translate(0, 0)`;
+      nameTitle.style = nameTitleStyle;
+    });
+  });
+  frontBox.forEach((box) => {
+    box.addEventListener("mouseout", (e) => {
+      const nameTitleStyle = `transform: translate(-1px, -1px);textShadow = 0 -1px 0 #7289da, 1px 1px 1px black,
+      2px 2px 10px rgba(0, 0, 0, 0.15), 4px 5px 10px rgba(0, 0, 0, 0.15),
+      6px 9px 10px rgba(0, 0, 0, 0.15), 8px 15px 10px rgba(0, 0, 0, 0.15),
+      10px 20px 10px rgba(0, 0, 0, 0.15), 15px 30px 10px rgba(0, 0, 0, 0.15)`;
+      nameTitle.style = nameTitleStyle;
+    });
+  });
+})();
 
 // sections fade in effect.
-let options = {
-  root: null,
-  rootMargin: "-200px 0px",
-  threshold: 0.05,
-};
-let observer = new IntersectionObserver(beTouching, options);
-document.querySelectorAll(".hidden").forEach((section) => {
-  observer.observe(section);
-});
-function beTouching(entries, observe) {
-  entries.forEach((entry) => {
-    if (entry.isIntersecting) {
-      // console.log("intersecting");
-      entry.target.classList.remove("hidden");
-    } else {
-      entry.target.classList.add("hidden");
-    }
+function sectionFadeEffect() {
+  let options = {
+    root: null,
+    rootMargin: "-200px 0px",
+    threshold: 0.05,
+  };
+  let observer = new IntersectionObserver(beTouching, options);
+  document.querySelectorAll(".hidden").forEach((section) => {
+    observer.observe(section);
   });
+  function beTouching(entries, observe) {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        // console.log("intersecting");
+        entry.target.classList.remove("hidden");
+      } else {
+        entry.target.classList.add("hidden");
+      }
+    });
+  }
 }
+sectionFadeEffect();
 
+// Typing effect in the home section
+(function typingEffect() {
+  const textDisplay = document.getElementById("text");
+  const phrases = [
+    "Welcome to my portfolio !",
+    "I'm a front-end web developer !",
+    "Nice to meet you !",
+  ];
+  let i = 0;
+  let j = 0;
+  let currentPhrase = [];
+  let isDeleting = false;
+  let isEnd = false;
+
+  function loop() {
+    isEnd = false;
+    textDisplay.innerHTML = currentPhrase.join("");
+
+    if (i < phrases.length) {
+      if (!isDeleting && j <= phrases[i].length) {
+        currentPhrase.push(phrases[i][j]);
+        j++;
+        textDisplay.innerHTML = currentPhrase.join("");
+      }
+
+      if (isDeleting && j <= phrases[i].length) {
+        currentPhrase.pop(phrases[i][j]);
+        j--;
+        textDisplay.innerHTML = currentPhrase.join("");
+      }
+
+      if (j == phrases[i].length) {
+        isEnd = true;
+        isDeleting = true;
+      }
+
+      if (isDeleting && j === 0) {
+        currentPhrase = [];
+        isDeleting = false;
+        i++;
+        if (i === phrases.length) {
+          i = 0;
+        }
+      }
+    }
+    const spedUp = Math.random() * (80 - 50) + 50;
+    const normalSpeed = Math.random() * (300 - 200) + 200;
+    const time = isEnd ? 2000 : isDeleting ? spedUp : normalSpeed;
+    setTimeout(loop, time);
+  }
+
+  loop();
+})();
+
+// creating the current year in footer
 const year = document.getElementById("year");
 year.innerHTML = new Date().getFullYear();
 year.style.fontSize = "1rem";
