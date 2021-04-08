@@ -2,7 +2,8 @@
 $font1: "Josefin Slab, serif";
 $font2: "Mr De Haviland";
 $blurple: #7289da;
-$grey1: #23272a;
+$activeColor: rgb(49, 52, 66);
+$grey1: rgba(#23272a, 0.75);
 $grey2: #2c2f33;
 $grey3: #393c43;
 $social: #2a2a2a;
@@ -13,10 +14,18 @@ $purple: #6e48aa;
 $blue: #00071c;
 $blueButton: #3b3e50;
 $listColor: rgba(57, 60, 67, 0.35);
+$bgImgColor: radial-gradient(
+    circle at top left,
+    hsl(231, 19%, 22%),
+    transparent
+  ),
+  radial-gradient(circle at top right, hsl(323, 9%, 27%), transparent),
+  radial-gradient(circle at bottom right, hsl(51, 6%, 23%), transparent),
+  radial-gradient(circle at bottom left, hsl(145, 9%, 25%), transparent);
 
-* {
-  scroll-behavior: smooth;
-}
+// * {
+//   scroll-behavior: smooth;
+// }
 
 *::-webkit-scrollbar {
   width: 15px;
@@ -42,16 +51,19 @@ h2,
 h3,
 h4,
 h5,
-h6 {
-  color: $white;
+h6,
+p {
+  //color: $grey5;
+  color: $blue;
 }
 
 h3 {
   text-transform: uppercase;
+  text-shadow: -0.4px 0 0 $blurple;
 }
 
 a {
-  color: $blurple;
+  // color: $blue;
   text-decoration: none;
 }
 
@@ -76,6 +88,7 @@ section {
 
 .panel__main {
   background-color: $grey3;
+  background-image: $bgImgColor;
   height: 100vh;
   width: 100vw;
   border-radius: 10px;
@@ -111,38 +124,50 @@ section {
       }
     }
     .list__links {
-      padding: 29px 0 7.5px 16px;
+      padding: 28px 0 7.5px 16px;
       li {
         display: block;
+        border-right: 0;
         border-radius: 8px 0 0 8px;
-        margin: 5px 0;
+        box-shadow: -2px 0 0 rgb(94, 100, 85);
+        margin: 6px 0;
         padding: 15px;
-        transition: all 0.25s ease-in-out;
+        transition: all 0.4s ease-in-out;
         background-color: $listColor;
-        box-shadow: 0 0px 32px -10px rgba(40, 42, 65, 0.37);
         position: relative;
         z-index: 1;
-        &:hover:not(.active) {
-          color: rgb(50, 95, 181);
-          span {
-            width: 100%;
-          }
-        }
+
         span {
-          width: 0%;
+          width: 100%;
           height: 100%;
           position: absolute;
           top: 0;
           left: 0;
           background-color: $grey1;
+          background-image: radial-gradient(
+              at center left,
+              rgba($grey4, 0.85),
+              transparent
+            ),
+            radial-gradient(at center right, rgba($grey4, 0.85), transparent);
           border-radius: 8px 0 0 8px;
-          transition: 0.25s ease-in-out;
+          transition: width 0.6s cubic-bezier(0.52, 1.64, 0.37, 0.66);
           z-index: -1;
         }
       }
       .active {
-        background: $grey3;
-        color: $white;
+        background: $activeColor;
+        background-image: radial-gradient(
+          at left center,
+          rgba(hsl(322, 23%, 23%), 0.4),
+          transparent
+        );
+        box-shadow: -2px 0 0 $blurple;
+        transition: box-shadow 0.4s ease-in-out;
+        span {
+          width: 0;
+          border-left: 0;
+        }
         // making border-radius outside of active "li"
         &::after {
           content: "";
@@ -153,14 +178,14 @@ section {
           height: 17px;
           width: 8px;
           border-bottom-right-radius: 8px;
-          box-shadow: 0 7px 0 0 $grey3;
+          box-shadow: 0 7px 0 0 $activeColor;
         }
 
         &::before {
           content: "";
           background-color: transparent;
           border-top-right-radius: 8px;
-          box-shadow: 0 -7px 0 0 $grey3;
+          box-shadow: 0 -7px 0 0 $activeColor;
           position: absolute;
           top: 52px;
           @media (min-width: 500px) and (max-width: 715px) {
@@ -172,23 +197,41 @@ section {
         }
       }
       a {
-        color: $grey5;
+        color: $white;
         text-decoration: none;
-        transition: color 0.9s linear;
+        transition: color 0.25s linear;
+      }
+      li:hover {
+        a {
+          color: rgb(50, 95, 181);
+        }
+        span {
+          background-image: radial-gradient(
+              at left center,
+              rgba($blue, 0.65),
+              transparent
+            ),
+            radial-gradient(at right center, rgba($blue, 0.65), transparent);
+        }
+      }
+      li.active a {
+        color: $blue;
       }
     }
     .social-links {
       display: flex;
       justify-content: flex-end;
       position: relative;
-      left: 8px;
+      left: 9px;
+      top: 1.26vmin;
+      z-index: 1;
 
       ul {
         position: relative;
         display: flex;
         align-items: center;
         justify-content: center;
-        transform: rotate(-23deg) skew(13deg);
+        transform: rotate(-28deg) skew(17deg);
         transform-style: preserve-3d;
       }
       ul li {
@@ -291,7 +334,6 @@ section {
   }
 
   .panel__main-content {
-    color: $grey5;
     padding: 0;
     position: absolute;
     top: 0px;
@@ -302,7 +344,7 @@ section {
       width: 100vw;
       left: 0;
     }
-    // for scrolling child element
+    // for vertical scrolling child element
     overflow-x: hidden;
     overflow-y: scroll;
     // scroll-snap-type: y proximity;
@@ -326,7 +368,7 @@ section {
       h1 {
         margin: 0;
         padding: 0;
-        color: $grey3;
+        color: transparent;
         font-family: "Josefin Slab", serif;
         font-size: calc(150% + 2vw);
         perspective: 700px;
@@ -653,11 +695,11 @@ section {
       margin-bottom: 25px;
       padding-left: 15px;
       color: $grey5;
-      background-color: $grey3;
+      background-color: transparent;
       /* background-image-size for making wavy  borders*/
       background-size: 1px calc(100% + 16px), calc(100% + 16px) 1px,
         1px calc(100% + 16px), calc(100% + 16px) 1px;
-      border: 1px solid $grey5;
+      border: 1px solid $blurple;
       border-radius: 10px;
       font: 1.2rem $font1;
       outline: none;
@@ -679,7 +721,7 @@ section {
       top: 11px;
       left: 1.4rem;
       font-size: 1.2rem;
-      color: $grey5;
+      color: $blurple;
       border-radius: 1rem;
       padding: 0.1rem 0.5rem;
       text-transform: uppercase;
@@ -741,8 +783,8 @@ section {
     input:not(:placeholder-shown) + label {
       transform: translateY(-25px) translateX(10px) scale(0.75);
       transform-origin: 0 50%;
-      color: $white;
-      background-color: $grey3;
+      color: $blue;
+      background-color: rgb(56, 57, 65);
       /* background-image-size for making visible only the  border-bottom */
       background-size: 0px, 0px, 0px, calc(100% + 16px) 1px;
       border-bottom: 2px solid $purple;
@@ -760,12 +802,13 @@ section {
   textarea {
     width: 100%;
     max-width: 360px;
-    background-color: $grey3;
+    background-color: transparent;
     /* background-image-size for making wavy  borders*/
     background-size: 1px calc(100% + 16px), calc(100% + 16px) 1px,
       1px calc(100% + 16px), calc(100% + 16px) 1px;
     color: $grey5;
     font: 1.2rem $font1;
+    border: 1px solid $blurple;
     border-radius: 10px;
     outline: none;
     padding: 7px 0 0 15px;
@@ -785,8 +828,8 @@ section {
   textarea:not(:placeholder-shown) + label {
     transform: translateY(-23px) translateX(10px) scale(0.75);
     transform-origin: 0 50%;
-    color: $white;
-    background-color: $grey3;
+    color: $blue;
+    background-color: rgb(58, 58, 64);
     background-size: 0px, 0px, 0px, calc(100% + 16px) 1px;
     border-bottom: 2px solid $purple;
   }
@@ -863,9 +906,12 @@ section {
 
   .list-item {
     line-height: 7;
-    color: #aaa;
+    color: $blurple;
+    &:hover {
+      color: $white;
+    }
     span {
-      border-bottom: 2px dashed $grey5;
+      border-bottom: 2px dashed $blurple;
       transition-duration: 0.2s;
       &:hover {
         border-bottom: 3px dashed $white;
@@ -879,7 +925,7 @@ section {
 
   .contact-text {
     letter-spacing: 1.9px;
-    color: #bbb;
+    color: $blurple;
   }
 
   .place {
@@ -893,51 +939,17 @@ section {
   .gmail {
     margin-left: 23px;
   }
-
+  .contact-text,
   .contact-text a {
-    color: #bbb;
+    color: $blurple;
     text-decoration: none;
-    transition-duration: 0.2s;
+    transition-duration: 0.25s;
 
     &:hover {
-      color: #fff;
+      color: $white;
     }
   }
 }
-// footer {
-//   background-color: $grey2;
-//   height: 100px;
-//   width: 82.15vw;
-//   color: $blurple;
-//   @media (max-width: 500px) {
-//     width: 100vw;
-//   }
-//   .container {
-//     display: flex;
-//     justify-content: space-between;
-//     align-items: center;
-//     max-width: 758px;
-//     height: 100%;
-//     padding: 0 35px 0 25px;
-//     margin: auto;
-//     letter-spacing: 1.5px;
-//     font-size: 2.5rem;
-//     font-family: $font2;
-//     @media (min-width: 768px) and (max-width: 806px) {
-//       font-size: 2rem;
-//     }
-//     @media (max-width: 767px) {
-//       flex-direction: column;
-//       width: 100%;
-//       padding: 0;
-//     }
-//     .copyright {
-//       @media (max-width: 767px) {
-//         margin-left: -20px;
-//       }
-//     }
-//   }
-// }
 
 footer {
   background-color: $grey2;
