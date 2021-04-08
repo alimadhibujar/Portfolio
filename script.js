@@ -1,18 +1,18 @@
-function setActiveLink() {
-  const nav = document.getElementById("navlinks");
-  const navlinks = nav.getElementsByClassName("navlink");
-  for (let i = 0; i < navlinks.length; i++) {
-    navlinks[i].addEventListener("click", function () {
-      const current = document.getElementsByClassName("active");
-      if (current.length > 0) {
-        current[0].className = current[0].className.replace(" active", "");
-      }
-      this.className += " active";
-    });
-  }
-}
+// function setActiveLink() {
+//   const nav = document.getElementById("navlinks");
+//   const navlinks = nav.getElementsByClassName("navlink");
+//   for (let i = 0; i < navlinks.length; i++) {
+//     navlinks[i].addEventListener("click", function () {
+//       const current = document.getElementsByClassName("active");
+//       if (current.length > 0) {
+//         current[0].className = current[0].className.replace(" active", "");
+//       }
+//       this.className += " active";
+//     });
+//   }
+// }
 
-setActiveLink();
+// setActiveLink();
 
 const openNav = document.querySelector(".icon");
 const panelSaid = document.querySelector(".panel__main-side");
@@ -55,11 +55,11 @@ window.addEventListener("click", (e) => {
   });
 })();
 
-// sections fade in effect.
+// sections fade in effect and setActiveLink.
 function sectionFadeEffect() {
   let options = {
     root: null,
-    rootMargin: "-200px 0px",
+    rootMargin: "-275px 0px",
     threshold: 0.05,
   };
   let observer = new IntersectionObserver(beTouching, options);
@@ -68,11 +68,16 @@ function sectionFadeEffect() {
   });
   function beTouching(entries, observe) {
     entries.forEach((entry) => {
+      // variables for setActiveLink
+      const id = entry.target.getAttribute("id");
+      let link = document.querySelector(`.list__links li a[href="#${id}"]`);
+
       if (entry.isIntersecting) {
-        // console.log("intersecting");
         entry.target.classList.remove("hidden");
+        link.parentElement.classList.add("active");
       } else {
         entry.target.classList.add("hidden");
+        link.parentElement.classList.remove("active");
       }
     });
   }
