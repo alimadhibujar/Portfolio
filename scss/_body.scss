@@ -2,7 +2,7 @@
 $font1: "Josefin Slab, serif";
 $font2: "Mr De Haviland";
 $blurple: #7289da;
-$activeColor: rgb(49, 52, 66);
+$activeColor: rgb(45, 49, 64);
 $grey1: rgba(#23272a, 0.75);
 $grey2: #2c2f33;
 $grey3: #393c43;
@@ -19,9 +19,9 @@ $bgImgColor: radial-gradient(
     hsl(231, 19%, 22%),
     transparent
   ),
-  radial-gradient(circle at top right, hsl(323, 9%, 27%), transparent),
-  radial-gradient(circle at bottom right, hsl(51, 6%, 23%), transparent),
-  radial-gradient(circle at bottom left, hsl(145, 9%, 25%), transparent);
+  radial-gradient(circle at top right, hsl(323, 9%, 17%), transparent),
+  radial-gradient(circle at bottom right, hsl(51, 6%, 13%), transparent),
+  radial-gradient(circle at bottom left, hsl(145, 9%, 15%), transparent);
 
 // * {
 //   scroll-behavior: smooth;
@@ -159,7 +159,7 @@ section {
         background: $activeColor;
         background-image: radial-gradient(
           at left center,
-          rgba(hsl(322, 23%, 23%), 0.4),
+          rgba(hsl(325, 28%, 28%), 0.35),
           transparent
         );
         box-shadow: -2px 0 0 $blurple;
@@ -801,6 +801,7 @@ section {
 
   textarea {
     width: 100%;
+    // height: 20vh;
     max-width: 360px;
     background-color: transparent;
     /* background-image-size for making wavy  borders*/
@@ -844,6 +845,37 @@ section {
     }
     to {
       background-position: 0 -28px, 0 0, 100% 0, -28px 100%;
+    }
+  }
+  //  text area letter flying effect
+  // https://codepen.io/chris22smith/pen/MWKXbvx
+  #keypress {
+    position: absolute;
+    bottom: 0;
+    @media (max-width: 767px) {
+      bottom: 20vh;
+      left: 30%;
+    }
+    left: 20%;
+    align-items: center;
+    display: flex;
+    justify-content: center;
+    > span {
+      color: $grey5;
+      animation: type 0.75s ease-out;
+    }
+  }
+
+  @keyframes type {
+    0% {
+      font-size: 20vh;
+      opacity: 1;
+      transform: translateY(0);
+    }
+    100% {
+      font-size: 1em;
+      opacity: 0;
+      transform: translateY(-25vh);
     }
   }
 
