@@ -138,6 +138,28 @@ sectionFadeEffect();
   loop();
 })();
 
+//  text area letter flying effect
+// https://codepen.io/chris22smith/pen/MWKXbvx
+const text = document.querySelector("#letters");
+const keypress = document.querySelector("#keypress");
+function type(event) {
+  if (
+    event.keyCode &&
+    ((event.keyCode >= 48 && event.keyCode <= 90) ||
+      (event.keyCode >= 186 && event.keyCode <= 222))
+  ) {
+    const char = event.key;
+    const span = document.createElement("span");
+    span.textContent = char;
+    keypress.appendChild(span);
+    setTimeout(function () {
+      span.parentNode.removeChild(span);
+    }, 750);
+  }
+}
+
+text.addEventListener("keydown", type);
+
 // creating the current year in footer
 const year = document.getElementById("year");
 year.innerHTML = new Date().getFullYear();
