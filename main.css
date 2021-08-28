@@ -42,7 +42,7 @@ a {
 
 section {
   min-height: 558px;
-  max-width: 758px;
+  max-width: 958px;
   margin: auto;
   padding: 1em;
   opacity: 1;
@@ -986,7 +986,7 @@ section {
 #contact .form-horizontal {
   -ms-flex-preferred-size: 1;
       flex-basis: 1;
-  max-width: 360px;
+  max-width: 400px;
   margin-top: 25px;
   position: relative;
 }
@@ -1095,7 +1095,6 @@ section {
 
 #contact textarea {
   width: 100%;
-  max-width: 360px;
   background-color: transparent;
   /* background-image-size for making wavy  borders*/
   background-size: 1px calc(100% + 16px), calc(100% + 16px) 1px, 1px calc(100% + 16px), calc(100% + 16px) 1px;
@@ -1260,14 +1259,14 @@ section {
 #contact .direct-contact-container {
   -ms-flex-preferred-size: 1;
       flex-basis: 1;
-  max-width: 360px;
+  max-width: 400px;
   width: 100%;
 }
 
 #contact .contact-list {
   list-style-type: none;
   margin-left: -10px;
-  margin-top: -22px;
+  margin-top: -30px;
 }
 
 @media (max-width: 767px) {
@@ -1278,7 +1277,7 @@ section {
 }
 
 #contact .list-item {
-  line-height: 6.2;
+  line-height: 6.3;
   color: #7289da;
 }
 
