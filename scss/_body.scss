@@ -424,8 +424,12 @@ section {
       }
 
       .flip-box {
-        width: 300px;
-        height: 297px;
+        width: 400px;
+        height: 397px;
+        @media (max-width: 500px) {
+          width: 300px;
+          height: 297px;
+        }
         perspective: 1000px;
         animation: scale-in-center 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
       }
@@ -627,7 +631,7 @@ section {
       translateZ(15vw);
     -webkit-transform: rotateY(-90deg) translateX(0px) translateY(0px)
       translateZ(15vw);
-    background-image: url(img/projects1.png);
+    background-image: url(img/linkAcademy.png);
     background-size: cover;
     background-position: 50% 50%;
   }
@@ -635,7 +639,7 @@ section {
     transform: translateX(0px) translateY(0px) translateZ(15vw);
     -moz-transform: translateX(0px) translateY(0px) translateZ(15vw);
     -webkit-transform: translateX(0px) translateY(0px) translateZ(15vw);
-    background-image: url(img/projects2.png);
+    background-image: url(img/clock.png);
     background-size: cover;
     background-position: 50% 100%;
   }
@@ -652,7 +656,7 @@ section {
       translateZ(15vw);
     -webkit-transform: rotateY(180deg) translateX(0px) translateY(0px)
       translateZ(15vw);
-    background-image: url(img/projects3.png);
+    background-image: url(img/reactGame.png);
     background-size: cover;
   }
   #side6 {
@@ -661,7 +665,7 @@ section {
       translateZ(15vw);
     -webkit-transform: rotateX(-90deg) translateX(0px) translateY(0px)
       translateZ(15vw);
-    background-image: url(img/projects5.png);
+    background-image: url(img/socialMedia.png);
     background-size: cover;
     background-position: center;
   }
@@ -937,7 +941,7 @@ section {
   }
 
   .list-item {
-    line-height: 7;
+    line-height: 6.2;
     color: $blurple;
     &:hover {
       color: $white;
