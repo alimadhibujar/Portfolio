@@ -910,7 +910,7 @@ section {
   transform: rotateY(-90deg) translateX(0px) translateY(0px) translateZ(15vw);
   -moz-transform: rotateY(-90deg) translateX(0px) translateY(0px) translateZ(15vw);
   -webkit-transform: rotateY(-90deg) translateX(0px) translateY(0px) translateZ(15vw);
-  background-image: url(img/linkAcademy.png);
+  background-image: url(img/reactGame.png);
   background-size: cover;
   background-position: 50% 50%;
 }
@@ -934,7 +934,7 @@ section {
   transform: rotateY(180deg) translateX(0px) translateY(0px) translateZ(15vw);
   -moz-transform: rotateY(180deg) translateX(0px) translateY(0px) translateZ(15vw);
   -webkit-transform: rotateY(180deg) translateX(0px) translateY(0px) translateZ(15vw);
-  background-image: url(img/reactGame.png);
+  background-image: url(img/linkAcademy.png);
   background-size: cover;
 }
 
