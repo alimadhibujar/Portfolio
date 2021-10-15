@@ -187,10 +187,7 @@ section {
           border-top-right-radius: 8px;
           box-shadow: 0 -7px 0 0 $activeColor;
           position: absolute;
-          top: 52px;
-          @media (min-width: 500px) and (max-width: 715px) {
-            top: 74px;
-          }
+          bottom: -16px;
           right: 0;
           height: 17px;
           width: 8px;

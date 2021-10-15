@@ -182,16 +182,10 @@ section {
   -webkit-box-shadow: 0 -7px 0 0 #2d3140;
           box-shadow: 0 -7px 0 0 #2d3140;
   position: absolute;
-  top: 52px;
+  bottom: -16px;
   right: 0;
   height: 17px;
   width: 8px;
-}
-
-@media (min-width: 500px) and (max-width: 715px) {
-  .panel__main .panel__main-side .list__links .active::before {
-    top: 74px;
-  }
 }
 
 .panel__main .panel__main-side .list__links a {
