@@ -16,12 +16,13 @@ window.addEventListener("click", (e) => {
 });
 // Closing mobile nav menu when we clicking to nav links
 const list = document.querySelectorAll(".navlink");
-list.forEach((li) => {
-  li.addEventListener("click", (e) => {
-    overLay.style.width = "0vw";
-    panelSaid.style.width = "0vw";
+document.body.clientWidth < 500 &&
+  list.forEach((li) => {
+    li.addEventListener("click", (e) => {
+      overLay.style.width = "0vw";
+      panelSaid.style.width = "0vw";
+    });
   });
-});
 
 // shadow effect when mouse over and out of image.
 // Self-Invoked Function
