@@ -1,34 +1,26 @@
-// function setActiveLink() {
-//   const nav = document.getElementById("navlinks");
-//   const navlinks = nav.getElementsByClassName("navlink");
-//   for (let i = 0; i < navlinks.length; i++) {
-//     navlinks[i].addEventListener("click", function () {
-//       const current = document.getElementsByClassName("active");
-//       if (current.length > 0) {
-//         current[0].className = current[0].className.replace(" active", "");
-//       }
-//       this.className += " active";
-//     });
-//   }
-// }
-
-// setActiveLink();
-
 const openNav = document.querySelector(".icon");
 const panelSaid = document.querySelector(".panel__main-side");
 const overLay = document.querySelector(".overlay");
-
+// Opening mobile nav menu
 openNav.addEventListener("click", () => {
   panelSaid.style.width = "240px";
   overLay.style.width = "100vw";
 });
-
+// Closing mobile nav menu when we clicking to closeBtn or to overlay
 window.addEventListener("click", (e) => {
   const closeNav = document.querySelector(".closeBtn");
   if (e.target == overLay || e.target == closeNav) {
     overLay.style.width = "0vw";
     panelSaid.style.width = "0vw";
   }
+});
+// Closing mobile nav menu when we clicking to nav links
+const list = document.querySelectorAll(".navlink");
+list.forEach((li) => {
+  li.addEventListener("click", (e) => {
+    overLay.style.width = "0vw";
+    panelSaid.style.width = "0vw";
+  });
 });
 
 // shadow effect when mouse over and out of image.
