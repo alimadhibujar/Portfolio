@@ -11,52 +11,52 @@ particlesJS.load("particles-js", "particles.json", function () {
 /* Otherwise just put the config content (json): */
 
 particlesJS(
-  "particles-js",
+  "bg-js",
 
   {
     particles: {
       number: {
-        value: 160,
+        value: 90,
         density: {
           enable: true,
-          value_area: 800,
+          value_area: 1200,
         },
       },
       color: {
         value: "ffffff",
       },
       shape: {
-        type: "circle",
+        type: "image",
         stroke: {
           width: 0,
-          color: "#000000",
+          color: "#ffffff",
         },
         polygon: {
           nb_sides: 5,
         },
         image: {
-          src: "img/github.svg",
+          src: "http://www.dynamicdigital.us/wp-content/uploads/2013/02/starburst_white_300_drop_2.png",
           width: 100,
           height: 100,
         },
       },
       opacity: {
-        value: 1,
+        value: 0.7,
         random: true,
         anim: {
           enable: true,
-          speed: 1,
+          speed: 2,
           opacity_min: 0,
           sync: false,
         },
       },
       size: {
-        value: 3,
+        value: 5,
         random: true,
         anim: {
-          enable: false,
+          enable: true,
           speed: 4,
-          size_min: 0.3,
+          size_min: 1,
           sync: false,
         },
       },
@@ -70,7 +70,7 @@ particlesJS(
       move: {
         enable: true,
         speed: 1,
-        direction: "none",
+        direction: "bottom",
         random: true,
         straight: false,
         out_mode: "out",
