@@ -16,7 +16,7 @@ particlesJS(
   {
     particles: {
       number: {
-        value: 90,
+        value: 70,
         density: {
           enable: true,
           value_area: 1200,
@@ -26,22 +26,22 @@ particlesJS(
         value: "ffffff",
       },
       shape: {
-        type: "circle",
+        type: "image",
         stroke: {
           width: 0,
-          color: "#000000",
+          color: "#ffffff",
         },
         polygon: {
           nb_sides: 5,
         },
         image: {
-          src: "img/github.svg",
+          src: "http://www.dynamicdigital.us/wp-content/uploads/2013/02/starburst_white_300_drop_2.png",
           width: 100,
           height: 100,
         },
       },
       opacity: {
-        value: 1,
+        value: 0.7,
         random: true,
         anim: {
           enable: true,
@@ -51,10 +51,10 @@ particlesJS(
         },
       },
       size: {
-        value: 5,
+        value: 6,
         random: true,
         anim: {
-          enable: false,
+          enable: true,
           speed: 4,
           size_min: 1,
           sync: false,
