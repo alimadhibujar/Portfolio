@@ -16,10 +16,10 @@ particlesJS(
   {
     particles: {
       number: {
-        value: 160,
+        value: 90,
         density: {
           enable: true,
-          value_area: 800,
+          value_area: 1200,
         },
       },
       color: {
@@ -41,22 +41,22 @@ particlesJS(
         },
       },
       opacity: {
-        value: 1,
+        value: 0.7,
         random: true,
         anim: {
           enable: true,
-          speed: 1,
+          speed: 2,
           opacity_min: 0,
           sync: false,
         },
       },
       size: {
-        value: 3,
+        value: 5,
         random: true,
         anim: {
           enable: false,
           speed: 4,
-          size_min: 0.3,
+          size_min: 1,
           sync: false,
         },
       },
@@ -70,7 +70,7 @@ particlesJS(
       move: {
         enable: true,
         speed: 1,
-        direction: "none",
+        direction: "bottom",
         random: true,
         straight: false,
         out_mode: "out",
