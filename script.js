@@ -16,7 +16,7 @@ window.addEventListener("click", (e) => {
 });
 // Closing mobile nav menu when we clicking to nav links
 const list = document.querySelectorAll(".navlink");
-document.body.clientWidth <= 500 &&
+document.body.clientWidth < 500 &&
   list.forEach((li) => {
     li.addEventListener("click", (e) => {
       overLay.style.width = "0vw";
