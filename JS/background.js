@@ -4,9 +4,9 @@
 
 /* To load a config file (particles.json) you need to host this demo (MAMP/WAMP/local)... */
 
-particlesJS.load("particles-js", "particles.json", function () {
-  console.log("particles.json loaded - callback");
-});
+// particlesJS.load("particles-js", "particles.json", function () {
+//   console.log("particles.json loaded - callback");
+// });
 
 /* Otherwise just put the config content (json): */
 
