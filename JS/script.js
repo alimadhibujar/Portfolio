@@ -3,7 +3,7 @@ const panelSaid = document.querySelector(".panel__main-side");
 const overLay = document.querySelector(".overlay");
 // Opening mobile nav menu
 openNav.addEventListener("click", () => {
-  panelSaid.style.width = "240px";
+  panelSaid.style.width = "50vw";
   overLay.style.width = "100vw";
 });
 // Closing mobile nav menu when we clicking to closeBtn or to overlay

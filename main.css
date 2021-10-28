@@ -77,6 +77,57 @@ section {
   position: relative;
 }
 
+.panel__main .cloud {
+  position: absolute;
+  top: -15%;
+  right: 0;
+  left: 0;
+  -webkit-animation: cloud linear infinite;
+          animation: cloud linear infinite;
+}
+
+.panel__main .cloud:nth-child(1) {
+  -webkit-animation-duration: 60s;
+          animation-duration: 60s;
+}
+
+.panel__main .cloud:nth-child(2) {
+  -webkit-animation-duration: 120s;
+          animation-duration: 120s;
+}
+
+.panel__main .cloud:nth-child(3) {
+  -webkit-animation-duration: 180s;
+          animation-duration: 180s;
+}
+
+.panel__main .cloud:nth-child(4) {
+  -webkit-animation-duration: 240s;
+          animation-duration: 240s;
+}
+
+@-webkit-keyframes cloud {
+  0% {
+    -webkit-transform: translateX(-100%);
+            transform: translateX(-100%);
+  }
+  100% {
+    -webkit-transform: translateX(150%);
+            transform: translateX(150%);
+  }
+}
+
+@keyframes cloud {
+  0% {
+    -webkit-transform: translateX(-100%);
+            transform: translateX(-100%);
+  }
+  100% {
+    -webkit-transform: translateX(150%);
+            transform: translateX(150%);
+  }
+}
+
 .panel__main .panel__main-side {
   background: #00071c;
   height: 100vh;
@@ -96,7 +147,6 @@ section {
     overflow: hidden;
     -webkit-transition: all 0.6s ease-in-out;
     transition: all 0.6s ease-in-out;
-    padding-top: 25px;
     z-index: 3;
   }
 }
@@ -104,7 +154,7 @@ section {
 .panel__main .panel__main-side .closeBtn {
   color: #99aab5;
   position: absolute;
-  top: 20px;
+  top: 10px;
   right: 25px;
   font-size: 36px;
 }
@@ -116,7 +166,12 @@ section {
 }
 
 .panel__main .panel__main-side .list__links {
-  padding: 28px 0 7.5px 16px;
+  padding: 0 0 7.5px 16px;
+  margin: 0;
+  position: absolute;
+  top: 55px;
+  right: 0;
+  left: 0;
 }
 
 .panel__main .panel__main-side .list__links li {
@@ -218,8 +273,14 @@ section {
           justify-content: flex-end;
   position: relative;
   left: 9px;
-  top: 1.26vmin;
+  bottom: -17em;
   z-index: 1;
+}
+
+@media (min-width: 500px) and (max-width: 900px) {
+  .panel__main .panel__main-side .social-links {
+    bottom: -22em;
+  }
 }
 
 .panel__main .panel__main-side .social-links ul {
@@ -249,9 +310,9 @@ section {
 
 @media (max-width: 500px) {
   .panel__main .panel__main-side .social-links ul li {
-    width: 50px;
-    height: 50px;
-    margin: 0 17px;
+    width: 45px;
+    height: 45px;
+    margin: 0 15px;
   }
 }
 
@@ -416,6 +477,7 @@ section {
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
+  position: relative;
 }
 
 .panel__main .panel__main-content #home h1 {
@@ -1023,7 +1085,7 @@ section {
 
 #contact .form-horizontal label {
   position: absolute;
-  top: 11px;
+  top: 9px;
   left: 1.4rem;
   font-size: 1.2rem;
   color: #7289da;
@@ -1040,11 +1102,11 @@ section {
 }
 
 #contact .form-horizontal .email {
-  top: 81px;
+  top: 79px;
 }
 
 #contact .form-horizontal .message {
-  top: 150px;
+  top: 148px;
 }
 
 #contact .form-horizontal input,

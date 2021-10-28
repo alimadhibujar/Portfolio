@@ -95,6 +95,27 @@ section {
   display: flex;
   overflow: hidden;
   position: relative;
+  .cloud {
+    position: absolute;
+    top: -15%;
+    right: 0;
+    left: 0;
+    animation: cloud linear infinite;
+    // givin different speed to different cloud
+    @for $i from 1 through 4 {
+      &:nth-child(#{$i}) {
+        animation-duration: $i * 60s;
+      }
+    }
+  }
+  @keyframes cloud {
+    0% {
+      transform: translateX(-100%);
+    }
+    100% {
+      transform: translateX(150%);
+    }
+  }
 
   .panel__main-side {
     background: $blue;
@@ -111,14 +132,13 @@ section {
       border-top-left-radius: 0px;
       overflow: hidden;
       transition: all 0.6s ease-in-out;
-      padding-top: 25px;
       z-index: 3;
     }
 
     .closeBtn {
       color: $grey5;
       position: absolute;
-      top: 20px;
+      top: 10px;
       right: 25px;
       font-size: 36px;
       @media (min-width: 500px) {
@@ -126,7 +146,13 @@ section {
       }
     }
     .list__links {
-      padding: 28px 0 7.5px 16px;
+      padding: 0 0 7.5px 16px;
+      margin: 0;
+      position: absolute;
+      top: 55px;
+      right: 0;
+      left: 0;
+
       li {
         display: block;
         border-right: 0;
@@ -222,8 +248,11 @@ section {
       justify-content: flex-end;
       position: relative;
       left: 9px;
-      top: 1.26vmin;
+      bottom: -17em;
       z-index: 1;
+      @media (min-width: 500px) and (max-width: 900px) {
+        bottom: -22em;
+      }
 
       ul {
         position: relative;
@@ -240,9 +269,9 @@ section {
         height: 3.72vw;
         margin: 0 1.26vw;
         @media (max-width: 500px) {
-          width: 50px;
-          height: 50px;
-          margin: 0 17px;
+          width: 45px;
+          height: 45px;
+          margin: 0 15px;
         }
       }
       ul li:before {
@@ -363,6 +392,7 @@ section {
       display: flex;
       flex-direction: column;
       align-items: center;
+      position: relative;
 
       h1 {
         margin: 0;
@@ -716,7 +746,7 @@ section {
 
     label {
       position: absolute;
-      top: 11px;
+      top: 9px;
       left: 1.4rem;
       font-size: 1.2rem;
       color: $blurple;
@@ -729,10 +759,10 @@ section {
       animation-play-state: paused;
     }
     .email {
-      top: 81px;
+      top: 79px;
     }
     .message {
-      top: 150px;
+      top: 148px;
     }
 
     // making the wavy borders for input, textarea and label
