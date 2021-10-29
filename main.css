@@ -82,8 +82,8 @@ section {
   top: -15%;
   right: 0;
   left: 0;
-  -webkit-animation: cloud linear infinite;
-          animation: cloud linear infinite;
+  -webkit-animation: cloud linear -5s infinite;
+          animation: cloud linear -5s infinite;
 }
 
 .panel__main .cloud:nth-child(1) {

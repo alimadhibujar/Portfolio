@@ -37,8 +37,8 @@ particlesJS(
         },
         image: {
           src: "https://static.wixstatic.com/media/2cd43b_6de62798d69649d0b42219c15bec7b32~mv2_d_3190_2212_s_2.png/v1/fill/w_320,h_220,q_90/2cd43b_6de62798d69649d0b42219c15bec7b32~mv2_d_3190_2212_s_2.png",
-        width: 320,
-        height: 200,
+          width: 320,
+          height: 200,
 
           // src: "http://www.dynamicdigital.us/wp-content/uploads/2013/02/starburst_white_300_drop_2.png",
           // width: 100,
@@ -56,7 +56,7 @@ particlesJS(
         },
       },
       size: {
-         //value: 7,
+        //value: 7,
         value: 35,
         random: true,
         anim: {

@@ -100,7 +100,8 @@ section {
     top: -15%;
     right: 0;
     left: 0;
-    animation: cloud linear infinite;
+    // givin negative value of animation-daley to get closer the start of animation
+    animation: cloud linear -5s infinite;
     // givin different speed to different cloud
     @for $i from 1 through 4 {
       &:nth-child(#{$i}) {
