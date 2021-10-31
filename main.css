@@ -77,31 +77,35 @@ section {
   position: relative;
 }
 
-.panel__main .cloud {
+.panel__main .clouds {
   position: absolute;
   top: -15%;
-  right: 0;
   left: 0;
+  width: 100%;
+}
+
+.panel__main .clouds .cloud {
+  position: absolute;
   -webkit-animation: cloud linear -5s infinite;
           animation: cloud linear -5s infinite;
 }
 
-.panel__main .cloud:nth-child(1) {
+.panel__main .clouds .cloud:nth-child(1) {
   -webkit-animation-duration: 60s;
           animation-duration: 60s;
 }
 
-.panel__main .cloud:nth-child(2) {
+.panel__main .clouds .cloud:nth-child(2) {
   -webkit-animation-duration: 120s;
           animation-duration: 120s;
 }
 
-.panel__main .cloud:nth-child(3) {
+.panel__main .clouds .cloud:nth-child(3) {
   -webkit-animation-duration: 180s;
           animation-duration: 180s;
 }
 
-.panel__main .cloud:nth-child(4) {
+.panel__main .clouds .cloud:nth-child(4) {
   -webkit-animation-duration: 240s;
           animation-duration: 240s;
 }
@@ -1378,11 +1382,82 @@ section {
   color: #ffffff;
 }
 
+.waves {
+  position: relative;
+  width: 100%;
+  height: 15vh;
+  margin-bottom: -7px;
+  /*Fix for safari gap*/
+  min-height: 100px;
+  max-height: 150px;
+}
+
+.waves .parallax > use {
+  -webkit-animation: move-forever 25s cubic-bezier(0.55, 0.5, 0.45, 0.5) infinite;
+          animation: move-forever 25s cubic-bezier(0.55, 0.5, 0.45, 0.5) infinite;
+}
+
+.waves .parallax > use:nth-child(1) {
+  -webkit-animation-duration: 6s;
+          animation-duration: 6s;
+  -webkit-animation-delay: -2s;
+          animation-delay: -2s;
+}
+
+.waves .parallax > use:nth-child(2) {
+  -webkit-animation-duration: 10s;
+          animation-duration: 10s;
+  -webkit-animation-delay: -3s;
+          animation-delay: -3s;
+}
+
+.waves .parallax > use:nth-child(3) {
+  -webkit-animation-duration: 14s;
+          animation-duration: 14s;
+  -webkit-animation-delay: -4s;
+          animation-delay: -4s;
+}
+
+.waves .parallax > use:nth-child(4) {
+  -webkit-animation-duration: 18s;
+          animation-duration: 18s;
+  -webkit-animation-delay: -5s;
+          animation-delay: -5s;
+}
+
+@-webkit-keyframes move-forever {
+  0% {
+    -webkit-transform: translate3d(-90px, 0, 0);
+            transform: translate3d(-90px, 0, 0);
+  }
+  100% {
+    -webkit-transform: translate3d(85px, 0, 0);
+            transform: translate3d(85px, 0, 0);
+  }
+}
+
+@keyframes move-forever {
+  0% {
+    -webkit-transform: translate3d(-90px, 0, 0);
+            transform: translate3d(-90px, 0, 0);
+  }
+  100% {
+    -webkit-transform: translate3d(85px, 0, 0);
+            transform: translate3d(85px, 0, 0);
+  }
+}
+
+@media (max-width: 768px) {
+  .waves .waves {
+    height: 40px;
+    min-height: 40px;
+  }
+}
+
 footer {
-  background-color: #2c2f33;
-  height: 100px;
+  background-color: #334977;
   width: 82.15vw;
-  color: #7289da;
+  color: #00071c;
 }
 
 @media (max-width: 500px) {
@@ -1395,22 +1470,20 @@ footer .container {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
-  -webkit-box-pack: justify;
-      -ms-flex-pack: justify;
-          justify-content: space-between;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
   max-width: 758px;
-  height: 100%;
-  padding: 0 35px 0 25px;
   margin: auto;
   letter-spacing: 1.5px;
   font-size: 2.5rem;
   font-family: "Mr De Haviland";
 }
 
-@media (max-width: 806px) {
+@media (max-width: 960px) {
   footer .container {
     font-size: 2rem;
   }
@@ -1425,6 +1498,10 @@ footer .container {
     width: 100%;
     padding: 0;
   }
+}
+
+footer .container div:first-of-type {
+  margin-right: 10px;
 }
 
 @media (max-width: 767px) {

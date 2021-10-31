@@ -32,8 +32,8 @@ document.body.clientWidth < 500 &&
   frontBox.forEach((box) => {
     box.addEventListener("mouseover", (e) => {
       nameTitleStyle = `text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1),
-       -1px -1px 2px rgb(41, 40, 40), 2px 1px 2px rgba(0, 0, 0, 0.7);
-       transform: translate(0, 0)`;
+      -1px -1px 2px rgb(41, 40, 40), 2px 1px 2px rgba(0, 0, 0, 0.7);
+      transform: translate(0, 0)`;
       nameTitle.style = nameTitleStyle;
     });
   });

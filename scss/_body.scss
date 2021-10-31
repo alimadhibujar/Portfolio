@@ -16,7 +16,7 @@ $blueButton: #3b3e50;
 $listColor: rgba(57, 60, 67, 0.35);
 $bgImgColor: radial-gradient(
     circle at top left,
-    hsl(231, 19%, 22%),
+    hsl(229, 20%, 22%),
     transparent
   ),
   radial-gradient(circle at top right, hsl(323, 9%, 17%), transparent),
@@ -95,17 +95,20 @@ section {
   display: flex;
   overflow: hidden;
   position: relative;
-  .cloud {
+  .clouds {
     position: absolute;
     top: -15%;
-    right: 0;
     left: 0;
-    // givin negative value of animation-daley to get closer the start of animation
-    animation: cloud linear -5s infinite;
-    // givin different speed to different cloud
-    @for $i from 1 through 4 {
-      &:nth-child(#{$i}) {
-        animation-duration: $i * 60s;
+    width: 100%;
+    .cloud {
+      position: absolute;
+      // givin negative value of animation-daley to get closer the start of animation
+      animation: cloud linear -5s infinite;
+      // givin different speed to different cloud
+      @for $i from 1 through 4 {
+        &:nth-child(#{$i}) {
+          animation-duration: $i * 60s;
+        }
       }
     }
   }
@@ -1010,33 +1013,72 @@ section {
   }
 }
 
+.waves {
+  position: relative;
+  width: 100%;
+  height: 15vh;
+  margin-bottom: -7px; /*Fix for safari gap*/
+  min-height: 100px;
+  max-height: 150px;
+
+  .parallax > use {
+    animation: move-forever 25s cubic-bezier(0.55, 0.5, 0.45, 0.5) infinite;
+    // giving different speed and start to children
+    @for $i from 1 through 4 {
+      &:nth-child(#{$i}) {
+        animation-duration: ($i * 4) + 2s;
+        animation-delay: ($i + 1) * -1s;
+      }
+    }
+  }
+
+  @keyframes move-forever {
+    0% {
+      transform: translate3d(-90px, 0, 0);
+    }
+
+    100% {
+      transform: translate3d(85px, 0, 0);
+    }
+  }
+
+  @media (max-width: 768px) {
+    .waves {
+      height: 40px;
+      min-height: 40px;
+    }
+  }
+}
+
 footer {
-  background-color: $grey2;
-  height: 100px;
+  background-color: rgb(51, 73, 119);
   width: 82.15vw;
-  color: $blurple;
+  color: $blue;
+
   @media (max-width: 500px) {
     width: 100vw;
   }
   .container {
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
     max-width: 758px;
-    height: 100%;
-    padding: 0 35px 0 25px;
     margin: auto;
     letter-spacing: 1.5px;
     font-size: 2.5rem;
     font-family: $font2;
-    @media (max-width: 806px) {
+    @media (max-width: 960px) {
       font-size: 2rem;
     }
     @media (max-width: 767px) {
       flex-direction: column;
       width: 100%;
       padding: 0;
-      // font-size: 2rem;
+    }
+    div {
+      &:first-of-type {
+        margin-right: 10px;
+      }
     }
     .copyright {
       @media (max-width: 767px) {
