@@ -42,7 +42,7 @@ $bgImgColor: radial-gradient(
 
 body {
   font-family: $font1;
-  font-size: 1.25rem;
+  font-size: 1.5rem;
   text-rendering: optimizeSpeed;
   min-height: 100vh;
 }
@@ -68,7 +68,7 @@ a {
 }
 
 section {
-  min-height: 558px;
+  min-height: 658px;
   max-width: 958px;
   margin: auto;
   padding: 1em;
@@ -252,10 +252,13 @@ section {
       justify-content: flex-end;
       position: relative;
       left: 9px;
-      bottom: -17em;
+      bottom: -17.5em;
       z-index: 1;
-      @media (min-width: 500px) and (max-width: 900px) {
-        bottom: -22em;
+      @media (min-width: 801px) and (max-width: 900px) {
+        bottom: -20em;
+      }
+      @media (min-width: 501px) and (max-width: 800px) {
+        bottom: -22.5em;
       }
 
       ul {
@@ -525,7 +528,10 @@ section {
 
       h3 {
         font-family: "Josefin Slab", serif;
-        font-size: calc(100% + 0.9vw);
+        font-size: calc(100% + 0.8vw);
+        @media (max-width: 500px) {
+          font-size: calc(80% + 0.8vw);
+        }
         -webkit-text-fill-color: transparent;
         -webkit-text-stroke: 0.5px $grey5;
         // color: $blurple;
@@ -589,9 +595,9 @@ section {
     width: 30vw;
     height: 30vw;
     top: 40px;
-    transform-style: preserve-3d;
     -moz-transform-style: preserve-3d;
     -webkit-transform-style: preserve-3d;
+    transform-style: preserve-3d;
     transform: rotateX(-22deg) rotateY(-38deg) rotateZ(0deg);
     -moz-transform: rotateX(-22deg) rotateY(-38deg) rotateZ(0deg);
     -webkit-transform: rotateX(-22deg) rotateY(-38deg) rotateZ(0deg);
@@ -891,7 +897,6 @@ section {
     display: flex;
     justify-content: center;
     > span {
-      color: $grey5;
       animation: type 0.75s ease-out;
     }
   }
@@ -901,11 +906,13 @@ section {
       font-size: 20vh;
       opacity: 1;
       transform: translateY(0);
+      color: rgb(51, 73, 119);
     }
     100% {
       font-size: 1em;
       opacity: 0;
-      transform: translateY(-25vh);
+      transform: translateY(-20vh);
+      color: $grey5;
     }
   }
 
@@ -959,7 +966,7 @@ section {
   .contact-list {
     list-style-type: none;
     margin-left: -10px;
-    margin-top: -30px;
+    margin-top: -28px;
     @media (max-width: 767px) {
       margin: 15px 0 0 0;
       padding: 0;
@@ -967,7 +974,7 @@ section {
   }
 
   .list-item {
-    line-height: 6.3;
+    line-height: 6;
     color: $blurple;
     &:hover {
       color: $white;
