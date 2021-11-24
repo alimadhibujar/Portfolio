@@ -1064,15 +1064,15 @@ footer {
     width: 100vw;
   }
   .container {
+    font-size: 2.5rem;
+    font-family: $font2;
     display: flex;
     justify-content: center;
     align-items: center;
     max-width: 758px;
     margin: auto;
     letter-spacing: 1.5px;
-    font-size: 2.5rem;
-    font-family: $font2;
-    background-image: url(https://i.makeagif.com/media/1-10-2018/4oMeP9.gif);
+    background-image: url("https://i.makeagif.com/media/1-10-2018/4oMeP9.gif");
     background-repeat: repeat;
     background-position: center center;
     background-size: contain;

@@ -1480,6 +1480,8 @@ footer {
 }
 
 footer .container {
+  font-size: 2.5rem;
+  font-family: "Mr De Haviland";
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -1492,9 +1494,7 @@ footer .container {
   max-width: 758px;
   margin: auto;
   letter-spacing: 1.5px;
-  font-size: 2.5rem;
-  font-family: "Mr De Haviland";
-  background-image: url(https://i.makeagif.com/media/1-10-2018/4oMeP9.gif);
+  background-image: url("https://i.makeagif.com/media/1-10-2018/4oMeP9.gif");
   background-repeat: repeat;
   background-position: center center;
   background-size: contain;
