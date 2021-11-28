@@ -528,10 +528,7 @@ section {
 
       h3 {
         font-family: "Josefin Slab", serif;
-        font-size: calc(100% + 0.8vw);
-        @media (max-width: 500px) {
-          font-size: calc(80% + 0.8vw);
-        }
+        font-size: calc(100% + 1vw);
         -webkit-text-fill-color: transparent;
         -webkit-text-stroke: 0.5px $grey5;
         // color: $blurple;
@@ -1072,7 +1069,6 @@ footer {
     max-width: 758px;
     margin: auto;
     letter-spacing: 1.5px;
-    // background-image: url("https://i.makeagif.com/media/1-10-2018/4oMeP9.gif");
     background-image: url("https://thumbs.gfycat.com/AgileTenseBetafish-size_restricted.gif");
     background-repeat: repeat;
     background-position: center center;

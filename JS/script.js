@@ -80,11 +80,18 @@ sectionFadeEffect();
 // Typing effect in the home section
 (function typingEffect() {
   const textDisplay = document.getElementById("text");
-  const phrases = [
-    "Welcome to my portfolio !",
-    "I'm a front-end web developer !",
-    "Nice to meet you !",
-  ];
+  let phrases = [];
+  document.body.clientWidth < 768
+    ? (phrases = [
+        "Welcome to my page",
+        "I'm a web developer !",
+        "Nice to meet you !",
+      ])
+    : (phrases = [
+        "Welcome to my portfolio !",
+        "I'm a front-end web developer !",
+        "Nice to meet you !",
+      ]);
   let i = 0;
   let j = 0;
   let currentPhrase = [];
