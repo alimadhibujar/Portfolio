@@ -87,12 +87,9 @@ section {
 }
 
 .panel__main {
-  // background-color: $grey3;
-  // background-image: $bgImgColor;
   background-image: $bgImgColor, url("/img/bgImg.jpg");
   background-repeat: no-repeat;
   background-size: cover;
-
   height: 100vh;
   width: 100vw;
   border-radius: 10px;
