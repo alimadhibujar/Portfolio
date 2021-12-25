@@ -65,8 +65,9 @@ section {
 }
 
 .panel__main {
-  background-color: #393c43;
-  background-image: radial-gradient(circle at top left, #2d3143, transparent), radial-gradient(circle at top right, #2f272c, transparent), radial-gradient(circle at bottom right, #23231f, transparent), radial-gradient(circle at bottom left, #232a26, transparent);
+  background-image: radial-gradient(circle at top left, #2d3143, transparent), radial-gradient(circle at top right, #211c1f, transparent), radial-gradient(circle at bottom right, #080807, transparent), radial-gradient(circle at bottom left, #0c0e0d, transparent), url("/img/bgImg.jpg");
+  background-repeat: no-repeat;
+  background-size: cover;
   height: 100vh;
   width: 100vw;
   border-radius: 10px;
