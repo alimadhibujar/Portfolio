@@ -40,7 +40,8 @@ particlesJS(
           //width: 320,
           //height: 200,
 
-          src: "http://www.dynamicdigital.us/wp-content/uploads/2013/02/starburst_white_300_drop_2.png",
+          // src: "http://www.dynamicdigital.us/wp-content/uploads/2013/02/starburst_white_300_drop_2.png",
+          src: "img/snow.png",
           width: 100,
           height: 100,
         },
