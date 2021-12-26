@@ -87,7 +87,8 @@ section {
 }
 
 .panel__main {
-  background-image: $bgImgColor, url("/img/bgImg.jpg");
+  background-image: $bgImgColor, url(img/bgImg.jpg);
+  background-color: $grey3;
   background-repeat: no-repeat;
   background-size: cover;
   height: 100vh;
@@ -96,6 +97,7 @@ section {
   display: flex;
   overflow: hidden;
   position: relative;
+
   .clouds {
     position: absolute;
     top: -15%;
