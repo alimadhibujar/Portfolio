@@ -16,7 +16,7 @@ particlesJS(
   {
     particles: {
       number: {
-        value: 70,
+        value: 80,
         //value: 25,
         density: {
           enable: true,

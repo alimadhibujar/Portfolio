@@ -2,7 +2,7 @@
 $font1: "Josefin Slab, serif";
 $font2: "Mr De Haviland";
 $blurple: #7289da;
-$activeColor: rgb(45, 49, 64);
+$activeColor: #444756;
 $grey1: rgba(#23272a, 0.75);
 $grey2: #2c2f33;
 $grey3: #393c43;
@@ -19,9 +19,19 @@ $bgImgColor: radial-gradient(
     hsl(229, 20%, 22%),
     transparent
   ),
-  radial-gradient(circle at top right, hsl(323, 9%, 12%), transparent),
-  radial-gradient(circle at bottom right, hsl(51, 6%, 3%), transparent),
-  radial-gradient(circle at bottom left, hsl(145, 9%, 5%), transparent);
+  radial-gradient(circle at top right, hsl(323, 9%, 8%), transparent),
+  radial-gradient(
+    circle at bottom right,
+    hsl(51, 6%, 3%),
+    transparent,
+    transparent
+  ),
+  radial-gradient(
+    circle at bottom left,
+    hsl(145, 9%, 5%),
+    transparent,
+    transparent
+  );
 
 // * {
 //   scroll-behavior: smooth;
@@ -63,7 +73,7 @@ h3 {
 }
 
 a {
-  color: rgba($blurple, 0.5);
+  color: rgba($blurple, 1);
   text-decoration: none;
 }
 
@@ -504,7 +514,8 @@ section {
         img {
           width: 100%;
           height: 100%;
-          filter: contrast(110%) drop-shadow(-5px -3px 25px rgba(0, 0, 0, 0.4));
+          filter: contrast(120%) grayscale(100%)
+            drop-shadow(-5px -3px 25px rgba(0, 0, 0, 0.4));
           -webkit-box-reflect: below -5px linear-gradient(transparent, rgba(20, 18, 18, 0.3));
         }
       }
@@ -512,8 +523,7 @@ section {
       .flip-box-back {
         transform: rotateY(180deg);
         img {
-          filter: contrast(120%) grayscale(100%)
-            drop-shadow(-5px -3px 25px rgba(0, 0, 0, 0.4));
+          filter: contrast(110%) drop-shadow(-5px -3px 25px rgba(0, 0, 0, 0.4));
         }
       }
       hr {
@@ -822,7 +832,7 @@ section {
       transform: translateY(-25px) translateX(10px) scale(0.75);
       transform-origin: 0 50%;
       color: $blue;
-      background-color: rgb(44, 46, 56);
+      background-color: hsl(228, 9%, 33%);
       /* background-image-size for making visible only the  border-bottom */
       background-size: 0px, 0px, 0px, calc(100% + 16px) 1px;
       border-bottom: 2px solid $purple;
@@ -866,7 +876,7 @@ section {
     transform: translateY(-23px) translateX(10px) scale(0.75);
     transform-origin: 0 50%;
     color: $blue;
-    background-color: rgb(44, 46, 56);
+    background-color: #313840;
     background-size: 0px, 0px, 0px, calc(100% + 16px) 1px;
     border-bottom: 2px solid $purple;
   }
