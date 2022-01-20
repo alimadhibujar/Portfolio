@@ -1,14 +1,14 @@
 particlesJS("side-js", {
   particles: {
     number: {
-      value: 160,
+      value: 240,
       density: {
         enable: true,
         value_area: 200,
       },
     },
     color: {
-      value: ["#7927ff", "#ffffff", "#FF8A00", "#ff44ff"],
+      value: ["#FFEA00", "#ffffff", "#FF0000", "#BA181B", "#008000", "#FF0054"],
     },
     shape: {
       type: "circle",
@@ -21,8 +21,8 @@ particlesJS("side-js", {
       },
       image: {
         src: "img/github.svg",
-        width: 100,
-        height: 100,
+        width: 70,
+        height: 70,
       },
     },
     opacity: {
@@ -30,17 +30,17 @@ particlesJS("side-js", {
       random: true,
       anim: {
         enable: true,
-        speed: 10,
+        speed: 20,
         opacity_min: 0,
         sync: false,
       },
     },
     size: {
-      value: 2,
+      value: 0.75,
       random: true,
       anim: {
         enable: true,
-        speed: 10,
+        speed: 20,
         size_min: 0.3,
         sync: false,
       },

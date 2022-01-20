@@ -1,4 +1,3 @@
-@import url("https://fonts.googleapis.com/css2?family=Josefin+Slab:wght@600&family=Mr+De+Haviland&display=swap");
 $font1: "Josefin Slab, serif";
 $font2: "Mr De Haviland";
 $blurple: #7289da;
@@ -22,7 +21,7 @@ $bgImgColor: radial-gradient(
   radial-gradient(circle at top right, hsl(323, 9%, 8%), transparent),
   radial-gradient(
     circle at bottom right,
-    hsl(51, 6%, 3%),
+    hsl(51, 6%, 8%),
     transparent,
     transparent
   ),
@@ -63,7 +62,6 @@ h4,
 h5,
 h6,
 p {
-  //color: $grey5;
   color: $blue;
 }
 
@@ -98,7 +96,6 @@ section {
 
 .panel__main {
   background-image: $bgImgColor, url(img/bgImg.jpg);
-  background-color: $grey3;
   background-repeat: no-repeat;
   background-size: cover;
   height: 100vh;
@@ -110,13 +107,16 @@ section {
 
   .clouds {
     position: absolute;
-    top: -15%;
+    top: -5%;
     left: 0;
     width: 100%;
+    mix-blend-mode: overlay;
     .cloud {
       position: absolute;
+      filter: blur(3px);
+      opacity: 0.7;
       // givin negative value of animation-daley to get closer the start of animation
-      animation: cloud linear -5s infinite;
+      animation: clouds-move linear -4s infinite;
       // givin different speed to different cloud
       @for $i from 1 through 4 {
         &:nth-child(#{$i}) {
@@ -125,7 +125,8 @@ section {
       }
     }
   }
-  @keyframes cloud {
+
+  @keyframes clouds-move {
     0% {
       transform: translateX(-100%);
     }
@@ -173,12 +174,11 @@ section {
       li {
         display: block;
         border-right: 0;
-        border-radius: 8px 0 0 8px;
-        box-shadow: -2px 0 0 rgb(94, 100, 85);
+        border-radius: 10px 0 0 10px;
+        box-shadow: -2px 0 0 rgb(50, 95, 181);
         margin: 6px 0;
         padding: 15px;
-        transition: all 0.4s ease-in-out;
-        background-color: $listColor;
+        transition: all 0.3s ease-in-out;
         position: relative;
         z-index: 1;
 
@@ -188,27 +188,31 @@ section {
           position: absolute;
           top: 0;
           left: 0;
-          background-color: $grey1;
+          background-color: $social;
           background-image: radial-gradient(
               at center left,
-              rgba($grey4, 0.85),
+              rgba($blue, 0.65),
               transparent
             ),
-            radial-gradient(at center right, rgba($grey4, 0.85), transparent);
-          border-radius: 8px 0 0 8px;
+            radial-gradient(
+              ellipse at center right,
+              rgba($blue, 0.65),
+              transparent
+            );
+          border-radius: 10px 0 0 10px;
           transition: width 0.6s cubic-bezier(0.52, 1.64, 0.37, 0.66);
           z-index: -1;
         }
       }
       .active {
-        background: $activeColor;
         background-image: radial-gradient(
-          at left center,
-          rgba(hsl(325, 28%, 28%), 0.35),
-          transparent
-        );
+            ellipse at right,
+            $activeColor,
+            transparent
+          ),
+          radial-gradient(ellipse at left center, $activeColor, transparent);
         box-shadow: -2px 0 0 $blurple;
-        transition: box-shadow 0.4s ease-in-out;
+        transition: box-shadow 0.3s ease-in-out;
         span {
           width: 0;
           border-left: 0;
@@ -223,14 +227,14 @@ section {
           height: 17px;
           width: 8px;
           border-bottom-right-radius: 8px;
-          box-shadow: 0 7px 0 0 $activeColor;
+          box-shadow: 0 7px 0 0 hsl(225, 29%, 17%);
         }
 
         &::before {
           content: "";
           background-color: transparent;
           border-top-right-radius: 8px;
-          box-shadow: 0 -7px 0 0 $activeColor;
+          box-shadow: 0 -7px 0 0 hsl(225, 29%, 17%);
           position: absolute;
           bottom: -16px;
           right: 0;
@@ -239,21 +243,27 @@ section {
         }
       }
       a {
-        color: $white;
+        color: rgb(50, 95, 181);
         text-decoration: none;
         transition: color 0.25s linear;
       }
       li:hover {
+        box-shadow: -2px 0 0 rgb(94, 100, 85);
         a {
-          color: rgb(50, 95, 181);
+          color: $white;
         }
         span {
+          background-color: $blue;
           background-image: radial-gradient(
-              at left center,
-              rgba($blue, 0.65),
+              ellipse at left center,
+              rgba($grey3, 0.6),
               transparent
             ),
-            radial-gradient(at right center, rgba($blue, 0.65), transparent);
+            radial-gradient(
+              ellipse at right center,
+              rgba($grey3, 0.6),
+              transparent
+            );
         }
       }
       li.active a {
@@ -627,7 +637,7 @@ section {
       width: 30vw;
       height: 30vw;
       overflow: hidden;
-      opacity: 0.8;
+      opacity: 0.85;
     }
   }
   p {
@@ -723,7 +733,6 @@ section {
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
-    font-size: $font1;
     @media (max-width: 767px) {
       flex-direction: column;
       width: 100%;
