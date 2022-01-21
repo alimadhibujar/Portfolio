@@ -64,6 +64,7 @@ section {
 }
 
 .panel__main {
+  background-color: #393c43;
   background-image: radial-gradient(circle at top left, #2d3143, transparent), radial-gradient(circle at top right, #161315, transparent), radial-gradient(circle at bottom right, #161513, transparent, transparent), radial-gradient(circle at bottom left, #0c0e0d, transparent, transparent), url(img/bgImg.jpg);
   background-repeat: no-repeat;
   background-size: cover;
@@ -848,8 +849,14 @@ section {
   /* Standard syntax */
 }
 
+@media (max-width: 767px) {
+  #projects p {
+    display: none;
+  }
+}
+
 #projects .swiper-container {
-  width: 500px;
+  width: 450px;
   height: 450px;
   position: absolute;
   left: 40%;
@@ -874,7 +881,7 @@ section {
 }
 
 #projects .swiper-container p {
-  font-size: 15px;
+  display: block;
 }
 
 #projects .swiper-container .swiper-slide {

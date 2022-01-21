@@ -95,6 +95,7 @@ section {
 }
 
 .panel__main {
+  background-color: $grey3;
   background-image: $bgImgColor, url(img/bgImg.jpg);
   background-repeat: no-repeat;
   background-size: cover;
@@ -576,8 +577,13 @@ section {
 
 #projects {
   position: relative;
+  p {
+    @media (max-width: 767px) {
+      display: none;
+    }
+  }
   .swiper-container {
-    width: 500px;
+    width: 450px;
     height: 450px;
     @media (min-width: 767px) {
       display: none;
@@ -594,7 +600,7 @@ section {
     margin-left: -180px;
     margin-top: -150px;
     p {
-      font-size: 15px;
+      display: block;
     }
 
     .swiper-slide {
