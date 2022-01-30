@@ -50,11 +50,27 @@ document.body.clientWidth < 500 &&
 
 // sections fade in effect and setActiveLink.
 function sectionFadeEffect() {
-  let options = {
+  /* because of "rootMargin: -275px"
+  let option = {
     root: null,
     rootMargin: "-275px 0px",
     threshold: 0.05,
-  };
+  }
+  section dose not appear in mobile
+  making responsive intersection*/
+  let options = {};
+  document.body.clientHeight > 768
+    ? (options = {
+        root: null,
+        rootMargin: "-275px 0px",
+        threshold: 0.05,
+      })
+    : (options = {
+        root: null,
+        rootMargin: " 0px",
+        threshold: 0.2,
+      });
+
   let observer = new IntersectionObserver(beTouching, options);
   document.querySelectorAll(".hidden").forEach((section) => {
     observer.observe(section);

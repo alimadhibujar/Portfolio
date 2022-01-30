@@ -511,6 +511,12 @@ section {
   will-change: text-shadow;
 }
 
+@media (max-width: 500px) {
+  .panel__main .panel__main-content #home h1 {
+    font-size: calc(150% + 1vw);
+  }
+}
+
 .panel__main .panel__main-content #home h1:hover {
   -webkit-transform: translate(-1px, -1px);
           transform: translate(-1px, -1px);
@@ -825,6 +831,12 @@ section {
           animation: cursor 500ms infinite;
   -webkit-transform: rotateX(55deg) skewX(-20deg);
           transform: rotateX(55deg) skewX(-20deg);
+}
+
+@media (max-width: 500px) {
+  .panel__main .panel__main-content #home h3 {
+    font-size: calc(100% + 0.1vw);
+  }
 }
 
 @-webkit-keyframes cursor {
