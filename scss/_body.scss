@@ -52,6 +52,9 @@ $bgImgColor: radial-gradient(
 body {
   font-family: $font1;
   font-size: 1.5rem;
+  @media (max-width: 500px) {
+    font-size: 1rem;
+  }
   text-rendering: optimizeSpeed;
   min-height: 100vh;
 }
@@ -284,6 +287,9 @@ section {
       @media (min-width: 501px) and (max-width: 800px) {
         bottom: -22.5em;
       }
+      @media (max-width: 500px) {
+        bottom: -23em;
+      }
 
       ul {
         position: relative;
@@ -431,9 +437,6 @@ section {
         color: transparent;
         font-family: "Josefin Slab", serif;
         font-size: calc(150% + 2vw);
-        @media (max-width: 500px) {
-          font-size: calc(150% + 1vw);
-        }
         perspective: 700px;
         text-shadow: 0 -1px 0 $blurple, 1px 1px 1px black,
           2px 2px 10px rgba(0, 0, 0, 0.15), 4px 5px 10px rgba(0, 0, 0, 0.15),
@@ -556,9 +559,6 @@ section {
       h3 {
         font-family: "Josefin Slab", serif;
         font-size: calc(100% + 1vw);
-        @media (max-width: 500px) {
-          font-size: calc(100% + 0.1vw);
-        }
         -webkit-text-fill-color: transparent;
         -webkit-text-stroke: 0.5px $grey5;
         // color: $blurple;
@@ -591,13 +591,13 @@ section {
   .swiper-container {
     width: 450px;
     height: 450px;
-    @media (min-width: 767px) {
+    @media (min-width: 766px) {
       display: none;
     }
     @media (max-width: 500px) {
-      width: 350px;
-      height: 350px;
-      left: 50%;
+      width: 300px;
+      height: 300px;
+      left: 58%;
       top: 45%;
     }
     position: absolute;
@@ -619,7 +619,7 @@ section {
     width: 35vw;
     height: 35vw;
     margin: 40px auto 0;
-    @media (max-width: 768px) {
+    @media (max-width: 767px) {
       display: none;
     }
   }
