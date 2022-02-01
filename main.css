@@ -310,7 +310,8 @@ section {
 
 @media (max-width: 500px) {
   .panel__main .panel__main-side .social-links {
-    bottom: -23em;
+    bottom: -25em;
+    left: 30px;
   }
 }
 
@@ -329,6 +330,13 @@ section {
           transform: rotate(-28deg) skew(17deg);
   -webkit-transform-style: preserve-3d;
           transform-style: preserve-3d;
+}
+
+@media (max-width: 500px) {
+  .panel__main .panel__main-side .social-links ul {
+    -webkit-transform: rotate(-45deg) skew(-14deg);
+            transform: rotate(-45deg) skew(-14deg);
+  }
 }
 
 .panel__main .panel__main-side .social-links ul li {
@@ -885,10 +893,10 @@ section {
 
 @media (max-width: 500px) {
   #projects .swiper-container {
-    width: 300px;
-    height: 300px;
-    left: 58%;
-    top: 45%;
+    width: 280px;
+    height: 280px;
+    left: 61%;
+    top: 50%;
   }
 }
 

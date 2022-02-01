@@ -288,7 +288,8 @@ section {
         bottom: -22.5em;
       }
       @media (max-width: 500px) {
-        bottom: -23em;
+        bottom: -25em;
+        left: 30px;
       }
 
       ul {
@@ -297,6 +298,9 @@ section {
         align-items: center;
         justify-content: center;
         transform: rotate(-28deg) skew(17deg);
+        @media (max-width: 500px) {
+          transform: rotate(-45deg) skew(-14deg);
+        }
         transform-style: preserve-3d;
       }
       ul li {
@@ -595,10 +599,10 @@ section {
       display: none;
     }
     @media (max-width: 500px) {
-      width: 300px;
-      height: 300px;
-      left: 58%;
-      top: 45%;
+      width: 280px;
+      height: 280px;
+      left: 61%;
+      top: 50%;
     }
     position: absolute;
     left: 40%;
