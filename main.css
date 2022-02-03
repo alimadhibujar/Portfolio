@@ -491,11 +491,11 @@ section {
 }
 
 .panel__main .panel__main-content .icon {
-  font-size: 2.5rem;
-  color: #ffffff;
+  font-size: 1.5rem;
+  color: #99aab5;
   position: fixed;
   left: 35px;
-  top: 100px;
+  bottom: 35px;
   z-index: 2;
 }
 
@@ -895,8 +895,8 @@ section {
   #projects .swiper-container {
     width: 280px;
     height: 280px;
-    left: 61%;
-    top: 50%;
+    left: 62%;
+    top: 40%;
   }
 }
 

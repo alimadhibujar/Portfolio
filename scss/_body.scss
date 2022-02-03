@@ -419,11 +419,11 @@ section {
     // scroll-snap-type: y proximity;
 
     .icon {
-      font-size: 2.5rem;
-      color: $white;
+      font-size: 1.5rem;
+      color: $grey5;
       position: fixed;
       left: 35px;
-      top: 100px;
+      bottom: 35px;
       z-index: 2;
       @media (min-width: 500px) {
         display: none;
@@ -601,8 +601,8 @@ section {
     @media (max-width: 500px) {
       width: 280px;
       height: 280px;
-      left: 61%;
-      top: 50%;
+      left: 62%;
+      top: 40%;
     }
     position: absolute;
     left: 40%;
