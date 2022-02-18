@@ -3,7 +3,7 @@
 }
 
 *::-webkit-scrollbar-track {
-  background: #2c2f33;
+  background: #444756;
   border-radius: 5px;
 }
 
@@ -32,12 +32,12 @@ h4,
 h5,
 h6,
 p {
-  color: #00071c;
+  color: #000;
+  text-shadow: -0.5px 0 0 #000;
 }
 
 h3 {
   text-transform: uppercase;
-  text-shadow: -0.4px 0 0 #7289da;
 }
 
 a {
@@ -46,7 +46,7 @@ a {
 }
 
 section {
-  min-height: 658px;
+  min-height: 100vh;
   max-width: 958px;
   margin: auto;
   padding: 1em;
@@ -55,6 +55,22 @@ section {
           transform: translateY(0px) scale(1);
   -webkit-transition: all 1.5s ease;
   transition: all 1.5s ease;
+}
+
+section:last-of-type {
+  margin-bottom: -20.5vh;
+}
+
+@media (max-width: 768px) {
+  section:last-of-type {
+    margin-bottom: 0;
+  }
+}
+
+@media (min-width: 769px) and (max-width: 960px) {
+  section:last-of-type {
+    margin-bottom: -18vh;
+  }
 }
 
 .hidden {
@@ -99,6 +115,13 @@ section {
   opacity: 0.7;
   -webkit-animation: clouds-move linear -4s infinite;
           animation: clouds-move linear -4s infinite;
+}
+
+@media (max-width: 768px) {
+  .panel__main .clouds .cloud {
+    -webkit-animation: clouds-move linear 0.75s infinite;
+            animation: clouds-move linear 0.75s infinite;
+  }
 }
 
 .panel__main .clouds .cloud:nth-child(1) {
@@ -1166,7 +1189,7 @@ section {
           transform: translateY(-25px) translateX(10px) scale(0.75);
   -webkit-transform-origin: 0 50%;
           transform-origin: 0 50%;
-  color: #00071c;
+  color: inherit;
   background-color: #4d505c;
   /* background-image-size for making visible only the  border-bottom */
   background-size: 0px, 0px, 0px, calc(100% + 16px) 1px;
@@ -1218,7 +1241,7 @@ section {
           transform: translateY(-23px) translateX(10px) scale(0.75);
   -webkit-transform-origin: 0 50%;
           transform-origin: 0 50%;
-  color: #00071c;
+  color: inherit;
   background-color: #313840;
   background-size: 0px, 0px, 0px, calc(100% + 16px) 1px;
   border-bottom: 2px solid #6e48aa;

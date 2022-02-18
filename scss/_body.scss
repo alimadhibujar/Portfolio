@@ -6,7 +6,7 @@ $grey1: rgba(#23272a, 0.75);
 $grey2: #2c2f33;
 $grey3: #393c43;
 $social: #2a2a2a;
-$grey4: #34373c;
+$grey4: #000;
 $grey5: #99aab5;
 $white: #ffffff;
 $purple: #6e48aa;
@@ -40,7 +40,7 @@ $bgImgColor: radial-gradient(
   width: 15px;
 }
 *::-webkit-scrollbar-track {
-  background: $grey2;
+  background: $activeColor;
   border-radius: 5px;
 }
 *::-webkit-scrollbar-thumb {
@@ -65,12 +65,12 @@ h4,
 h5,
 h6,
 p {
-  color: $blue;
+  color: $grey4;
+  text-shadow: -0.5px 0 0 $grey4;
 }
 
 h3 {
   text-transform: uppercase;
-  text-shadow: -0.4px 0 0 $blurple;
 }
 
 a {
@@ -79,7 +79,7 @@ a {
 }
 
 section {
-  min-height: 658px;
+  min-height: 100vh;
   max-width: 958px;
   margin: auto;
   padding: 1em;
@@ -87,6 +87,19 @@ section {
   transform: translateY(0px) scale(1);
   transition: all 1.5s ease;
   // scroll-snap-align: start;
+  &:last-of-type {
+    margin-bottom: -20.5vh;
+  }
+  @media (max-width: 768px) {
+    &:last-of-type {
+      margin-bottom: 0;
+    }
+  }
+  @media (min-width: 769px) and (max-width: 960px) {
+    &:last-of-type {
+      margin-bottom: -18vh;
+    }
+  }
 }
 .hidden {
   opacity: 0;
@@ -121,6 +134,9 @@ section {
       opacity: 0.7;
       // givin negative value of animation-daley to get closer the start of animation
       animation: clouds-move linear -4s infinite;
+      @media (max-width: 768px) {
+        animation: clouds-move linear 0.75s infinite;
+      }
       // givin different speed to different cloud
       @for $i from 1 through 4 {
         &:nth-child(#{$i}) {
@@ -565,7 +581,6 @@ section {
         font-size: calc(100% + 1vw);
         -webkit-text-fill-color: transparent;
         -webkit-text-stroke: 0.5px $grey5;
-        // color: $blurple;
         text-shadow: 1px 2px 2px rgba(0, 0, 0, 0.1),
           2px 2px 2px rgba(0, 0, 0, 0.5), 3px 3px 3px rgba(0, 0, 0, 0.8);
         padding-right: 0.2em;
@@ -856,7 +871,7 @@ section {
     input:not(:placeholder-shown) + label {
       transform: translateY(-25px) translateX(10px) scale(0.75);
       transform-origin: 0 50%;
-      color: $blue;
+      color: inherit;
       background-color: hsl(228, 9%, 33%);
       /* background-image-size for making visible only the  border-bottom */
       background-size: 0px, 0px, 0px, calc(100% + 16px) 1px;
@@ -900,7 +915,7 @@ section {
   textarea:not(:placeholder-shown) + label {
     transform: translateY(-23px) translateX(10px) scale(0.75);
     transform-origin: 0 50%;
-    color: $blue;
+    color: inherit;
     background-color: #313840;
     background-size: 0px, 0px, 0px, calc(100% + 16px) 1px;
     border-bottom: 2px solid $purple;
