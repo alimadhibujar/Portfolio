@@ -6,7 +6,7 @@ $grey1: rgba(#23272a, 0.75);
 $grey2: #2c2f33;
 $grey3: #393c43;
 $social: #2a2a2a;
-$grey4: #000;
+$grey4: hwb(204 69% 20%);
 $grey5: #99aab5;
 $white: #ffffff;
 $purple: #6e48aa;
@@ -50,6 +50,7 @@ $bgImgColor: radial-gradient(
 }
 
 body {
+  color: $grey4;
   font-family: $font1;
   font-size: 1.5rem;
   @media (max-width: 500px) {
@@ -57,16 +58,6 @@ body {
   }
   text-rendering: optimizeSpeed;
   min-height: 100vh;
-}
-
-h2,
-h3,
-h4,
-h5,
-h6,
-p {
-  color: $grey4;
-  text-shadow: -0.5px 0 0 $grey4;
 }
 
 h3 {
@@ -580,7 +571,7 @@ section {
         font-family: "Josefin Slab", serif;
         font-size: calc(100% + 1vw);
         -webkit-text-fill-color: transparent;
-        -webkit-text-stroke: 0.5px $grey5;
+        -webkit-text-stroke: 0.5px $grey4;
         text-shadow: 1px 2px 2px rgba(0, 0, 0, 0.1),
           2px 2px 2px rgba(0, 0, 0, 0.5), 3px 3px 3px rgba(0, 0, 0, 0.8);
         padding-right: 0.2em;
@@ -913,12 +904,12 @@ section {
   }
   // Animating the label position to textarea
   textarea:not(:placeholder-shown) + label {
-    transform: translateY(-23px) translateX(10px) scale(0.75);
-    transform-origin: 0 50%;
     color: inherit;
-    background-color: #313840;
+    background-color: hsl(228, 9%, 33%);
     background-size: 0px, 0px, 0px, calc(100% + 16px) 1px;
     border-bottom: 2px solid $purple;
+    transform: translateY(-23px) translateX(10px) scale(0.75);
+    transform-origin: 0 50%;
   }
   textarea:not(:placeholder-shown) {
     border: 1px solid $purple;
