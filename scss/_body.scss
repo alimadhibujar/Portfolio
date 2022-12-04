@@ -964,8 +964,9 @@ section {
     overflow: hidden;
     position: relative;
     border-radius: 5px;
-    border: 1px solid $white;
+    border: 1px solid $grey4;
     background-color: $grey2;
+    color: inherit;
     transition: all 0.2s ease-in-out;
   }
 
@@ -986,7 +987,7 @@ section {
   .send-text {
     display: block;
     margin-top: 28px;
-    font: 300 14px "Lato", sans-serif;
+    font: 300 16px "Lato", sans-serif;
     letter-spacing: 2px;
   }
 
@@ -1018,24 +1019,19 @@ section {
     line-height: 6;
     color: $blurple;
     &:hover {
-      color: $white;
+      color: $grey4;
     }
     span {
       border-bottom: 2px dashed $blurple;
       transition-duration: 0.2s;
       &:hover {
-        border-bottom: 3px dashed $white;
+        border-bottom: 3px dashed $grey4;
       }
     }
 
     @media (max-width: 767px) {
       line-height: 3.7;
     }
-  }
-
-  .contact-text {
-    letter-spacing: 1.9px;
-    color: $blurple;
   }
 
   .place {
@@ -1056,7 +1052,7 @@ section {
     transition-duration: 0.25s;
 
     &:hover {
-      color: $white;
+      color: $grey4;
     }
   }
 }
