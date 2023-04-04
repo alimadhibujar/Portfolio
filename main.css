@@ -721,7 +721,7 @@ section:last-of-type {
   transform: rotateY(180deg) translateX(0px) translateY(0px) translateZ(15vw);
   -moz-transform: rotateY(180deg) translateX(0px) translateY(0px) translateZ(15vw);
   -webkit-transform: rotateY(180deg) translateX(0px) translateY(0px) translateZ(15vw);
-  background-image: url(img/Photo-Gallery.png);
+  background-image: url(img/Photo-Gallery.jpg);
   background-size: cover;
 }
 #projects #side6 {
