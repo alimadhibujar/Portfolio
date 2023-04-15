@@ -548,8 +548,7 @@ section:last-of-type {
   width: 100%;
   height: 100%;
   transform: translate3d(0, 0, 0);
-  -webkit-backface-visibility: hidden;
-          backface-visibility: hidden;
+  backface-visibility: hidden;
 }
 .panel__main .panel__main-content #home .flip-box-front img,
 .panel__main .panel__main-content #home .flip-box-back img {
