@@ -3,7 +3,7 @@
 }
 
 *::-webkit-scrollbar-track {
-  background: #444756;
+  background: hsl(230, 12%, 45%);
   border-radius: 5px;
 }
 
@@ -122,7 +122,7 @@ section:last-of-type {
   height: 100vh;
   width: 17.85vw;
   position: relative;
-  border-top-right-radius: 8px;
+  border-top-right-radius: 60px;
   border-top-left-radius: 8px;
 }
 @media (max-width: 500px) {
@@ -135,13 +135,14 @@ section:last-of-type {
     overflow: hidden;
     transition: all 0.6s ease-in-out;
     z-index: 3;
+    border-bottom-right-radius: 60px;
   }
 }
 .panel__main .panel__main-side .closeBtn {
   color: #99aab5;
   position: absolute;
-  top: 10px;
-  right: 25px;
+  top: 35px;
+  right: 35px;
   font-size: 36px;
 }
 @media (min-width: 500px) {
@@ -153,7 +154,7 @@ section:last-of-type {
   padding: 0 0 7.5px 16px;
   margin: 0;
   position: absolute;
-  top: 55px;
+  top: 85px;
   right: 0;
   left: 0;
 }
@@ -162,8 +163,8 @@ section:last-of-type {
   border-right: 0;
   border-radius: 10px 0 0 10px;
   box-shadow: -2px 0 0 rgb(50, 95, 181);
-  margin: 6px 0;
-  padding: 15px;
+  margin: 8px 0;
+  padding: 10px;
   transition: all 0.3s ease-in-out;
   position: relative;
   z-index: 1;
@@ -181,7 +182,7 @@ section:last-of-type {
   z-index: -1;
 }
 .panel__main .panel__main-side .list__links .active {
-  background-image: radial-gradient(ellipse at right, #444756, transparent), radial-gradient(ellipse at left center, #444756, transparent);
+  background-image: radial-gradient(ellipse at right center, hsl(230, 12%, 45%), transparent), radial-gradient(ellipse at left center, hsl(230, 12%, 45%), transparent);
   box-shadow: -2px 0 0 #7289da;
   transition: box-shadow 0.3s ease-in-out;
 }
@@ -198,17 +199,17 @@ section:last-of-type {
   height: 17px;
   width: 8px;
   border-bottom-right-radius: 8px;
-  box-shadow: 0 7px 0 0 hsl(225, 29%, 17%);
+  box-shadow: 0 8px 0 hsla(231, 12%, 31%, 0.75);
 }
 .panel__main .panel__main-side .list__links .active::before {
   content: "";
   background-color: transparent;
   border-top-right-radius: 8px;
-  box-shadow: 0 -7px 0 0 hsl(225, 29%, 17%);
+  box-shadow: 0 -8px 0 hsla(231, 12%, 31%, 0.75);
   position: absolute;
-  bottom: -16px;
+  bottom: -21px;
   right: 0;
-  height: 17px;
+  height: 20px;
   width: 8px;
 }
 .panel__main .panel__main-side .list__links a {

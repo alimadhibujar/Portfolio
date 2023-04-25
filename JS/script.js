@@ -9,7 +9,7 @@ openNav.addEventListener("click", () => {
 // Closing mobile nav menu when we clicking to closeBtn or to overlay
 window.addEventListener("click", (e) => {
   const closeNav = document.querySelector(".closeBtn");
-  if (e.target == overLay || e.target == closeNav) {
+  if (e.target === overLay || e.target === closeNav) {
     overLay.style.width = "0vw";
     panelSaid.style.width = "0vw";
   }

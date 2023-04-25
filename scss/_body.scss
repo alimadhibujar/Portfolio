@@ -1,7 +1,7 @@
 $font1: "Josefin Slab, serif";
 $font2: "Mr De Haviland";
 $blurple: #7289da;
-$activeColor: #444756;
+$activeColor: hsl(230, 12%, 45%);
 $grey1: rgba(#23272a, 0.75);
 $grey2: #2c2f33;
 $grey3: #393c43;
@@ -151,7 +151,7 @@ section {
     height: 100vh;
     width: 17.85vw;
     position: relative;
-    border-top-right-radius: 8px;
+    border-top-right-radius: 60px;
     border-top-left-radius: 8px;
     @media (max-width: 500px) {
       width: 0;
@@ -162,13 +162,14 @@ section {
       overflow: hidden;
       transition: all 0.6s ease-in-out;
       z-index: 3;
+      border-bottom-right-radius: 60px;
     }
 
     .closeBtn {
       color: $grey5;
       position: absolute;
-      top: 10px;
-      right: 25px;
+      top: 35px;
+      right: 35px;
       font-size: 36px;
       @media (min-width: 500px) {
         display: none;
@@ -178,7 +179,7 @@ section {
       padding: 0 0 7.5px 16px;
       margin: 0;
       position: absolute;
-      top: 55px;
+      top: 85px;
       right: 0;
       left: 0;
 
@@ -187,8 +188,8 @@ section {
         border-right: 0;
         border-radius: 10px 0 0 10px;
         box-shadow: -2px 0 0 rgb(50, 95, 181);
-        margin: 6px 0;
-        padding: 15px;
+        margin: 8px 0;
+        padding: 10px;
         transition: all 0.3s ease-in-out;
         position: relative;
         z-index: 1;
@@ -217,7 +218,7 @@ section {
       }
       .active {
         background-image: radial-gradient(
-            ellipse at right,
+            ellipse at right center,
             $activeColor,
             transparent
           ),
@@ -238,18 +239,18 @@ section {
           height: 17px;
           width: 8px;
           border-bottom-right-radius: 8px;
-          box-shadow: 0 7px 0 0 hsl(225, 29%, 17%);
+          box-shadow: 0 8px 0 hsla(231, 12%, 31%, 0.75);
         }
 
         &::before {
           content: "";
           background-color: transparent;
           border-top-right-radius: 8px;
-          box-shadow: 0 -7px 0 0 hsl(225, 29%, 17%);
+          box-shadow: 0 -8px 0 hsla(231, 12%, 31%, 0.75);
           position: absolute;
-          bottom: -16px;
+          bottom: -21px;
           right: 0;
-          height: 17px;
+          height: 20px;
           width: 8px;
         }
       }
