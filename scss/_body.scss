@@ -1,3 +1,7 @@
+html {
+  color-scheme: light dark;
+}
+
 $font1: "Josefin Slab, serif";
 $font2: "Mr De Haviland";
 $blurple: #7289da;
@@ -53,6 +57,7 @@ body {
   color: $grey4;
   font-family: $font1;
   font-size: 1.5rem;
+  display: flex;
   @media (max-width: 500px) {
     font-size: 1rem;
   }
@@ -95,10 +100,6 @@ section {
 .hidden {
   opacity: 0;
   transform: translateY(-40px) scale(0.9);
-}
-
-.wrapper {
-  display: flex;
 }
 
 .panel__main {
