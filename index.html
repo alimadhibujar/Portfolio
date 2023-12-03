@@ -335,7 +335,12 @@
             
               ----------------->
 
-            <form class="form-horizontal" method="post" action="contact.php">
+            <form
+              class="form-horizontal"
+              target="_blank"
+              action="https://formsubmit.co/b.alimadhi@gmail.com"
+              method="POST"
+            >
               <input
                 type="text"
                 class="form-control"
@@ -368,6 +373,8 @@
                 name="message"
               ></textarea>
               <label for="letters" class="message">message</label>
+
+              <input type="hidden" name="_captcha" value="false" />
 
               <button
                 class="send-button"
