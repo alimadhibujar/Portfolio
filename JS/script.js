@@ -13,6 +13,11 @@ window.addEventListener("click", (e) => {
     overLay.style.width = "0vw";
     panelSaid.style.width = "0vw";
   }
+  // Shorthand
+  // if ([overLay, closeNav].includes(e.target)) {
+  //   overLay.style.width = "0vw";
+  //   panelSaid.style.width = "0vw";
+  // }
 });
 // Closing mobile nav menu when we clicking to nav links
 const list = document.querySelectorAll(".navlink");
