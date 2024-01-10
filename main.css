@@ -18,7 +18,7 @@ html {
 }
 
 body {
-  color: #c9dbe6;
+  color: hsl(240, 4%, 81%);
   font-family: "Josefin Slab, serif";
   font-size: 1.5rem;
   display: flex;
@@ -46,8 +46,9 @@ section {
   margin: auto;
   padding: 1em;
   opacity: 1;
+  filter: blur(0);
   transform: translateY(0px) scale(1);
-  transition: all 1.5s ease;
+  transition: all 1s ease;
 }
 section:last-of-type {
   margin-bottom: -20.5vh;
@@ -62,10 +63,16 @@ section:last-of-type {
     margin-bottom: -18vh;
   }
 }
+@media (prefers-reduced-motion) {
+  section {
+    transition: none;
+  }
+}
 
 .hidden {
   opacity: 0;
   transform: translateY(-40px) scale(0.9);
+  filter: blur(3px);
 }
 
 .panel__main {
@@ -583,7 +590,7 @@ section:last-of-type {
   font-family: "Josefin Slab", serif;
   font-size: calc(100% + 1vw);
   -webkit-text-fill-color: transparent;
-  -webkit-text-stroke: 0.5px #c9dbe6;
+  -webkit-text-stroke: 0.5px hsl(240, 4%, 81%);
   text-shadow: 1px 2px 2px rgba(0, 0, 0, 0.1), 2px 2px 2px rgba(0, 0, 0, 0.5), 3px 3px 3px rgba(0, 0, 0, 0.8);
   padding-right: 0.2em;
   border-right: 3px solid #99aab5;
@@ -598,6 +605,22 @@ section:last-of-type {
 
 #about p {
   line-height: 1.5;
+}
+#about p span {
+  color: hsla(0, 0%, 100%, 0.4);
+  -webkit-background-clip: text;
+          background-clip: text;
+  background-repeat: repeat;
+  background-size: 0% 100%;
+  background-image: linear-gradient(90deg, white, white);
+  animation: scroll-reveal linear forwards;
+  animation-timeline: view(y);
+  animation-range: cover 15vh cover 0vh;
+}
+@keyframes scroll-reveal {
+  to {
+    background-size: 100% 100%;
+  }
 }
 
 #projects {
@@ -941,7 +964,7 @@ section:last-of-type {
   overflow: hidden;
   position: relative;
   border-radius: 5px;
-  border: 1px solid #c9dbe6;
+  border: 1px solid hsl(240, 4%, 81%);
   background-color: #2c2f33;
   color: inherit;
   transition: all 0.2s ease-in-out;
@@ -989,14 +1012,14 @@ section:last-of-type {
   color: #7289da;
 }
 #contact .list-item:hover {
-  color: #c9dbe6;
+  color: hsl(240, 4%, 81%);
 }
 #contact .list-item span {
   border-bottom: 2px dashed #7289da;
   transition-duration: 0.2s;
 }
 #contact .list-item span:hover {
-  border-bottom: 3px dashed #c9dbe6;
+  border-bottom: 3px dashed hsl(240, 4%, 81%);
 }
 @media (max-width: 767px) {
   #contact .list-item {
@@ -1020,7 +1043,7 @@ section:last-of-type {
 }
 #contact .contact-text:hover,
 #contact .contact-text a:hover {
-  color: #c9dbe6;
+  color: hsl(240, 4%, 81%);
 }
 
 .waves {
