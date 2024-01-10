@@ -10,7 +10,7 @@ $grey1: rgba(#23272a, 0.75);
 $grey2: #2c2f33;
 $grey3: #393c43;
 $social: #2a2a2a;
-$grey4: #c9dbe6;
+$grey4: hsl(240, 4%, 81%);
 $grey5: #99aab5;
 $white: #ffffff;
 $purple: #6e48aa;
@@ -80,8 +80,9 @@ section {
   margin: auto;
   padding: 1em;
   opacity: 1;
+  filter: blur(0);
   transform: translateY(0px) scale(1);
-  transition: all 1.5s ease;
+  transition: all 1s ease;
   // scroll-snap-align: start;
   &:last-of-type {
     margin-bottom: -20.5vh;
@@ -96,10 +97,15 @@ section {
       margin-bottom: -18vh;
     }
   }
+  // when user don't  prefer animations
+  @media (prefers-reduced-motion) {
+    transition: none;
+  }
 }
 .hidden {
   opacity: 0;
   transform: translateY(-40px) scale(0.9);
+  filter: blur(3px);
 }
 
 .panel__main {
@@ -589,8 +595,29 @@ section {
     }
   }
 }
-#about p {
-  line-height: 1.5;
+#about {
+  p {
+    line-height: 1.5;
+
+    //  text reveal scroll effect
+    // https://www.youtube.com/watch?v=d10GaL6F-lA&t=76s&ab_channel=KevinPowell
+    span {
+      color: hsl(0 0% 100% / 0.4);
+      background-clip: text;
+      background-repeat: repeat;
+      background-size: 0% 100%;
+      background-image: linear-gradient(90deg, white, white);
+      animation: scroll-reveal linear forwards;
+      animation-timeline: view(y);
+      animation-range: cover 15vh cover 0vh;
+    }
+  }
+
+  @keyframes scroll-reveal {
+    to {
+      background-size: 100% 100%;
+    }
+  }
 }
 
 #projects {
