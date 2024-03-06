@@ -598,18 +598,15 @@ section {
 #about {
   p {
     line-height: 1.5;
-
-    //  text reveal scroll effect
-    // https://www.youtube.com/watch?v=d10GaL6F-lA&t=76s&ab_channel=KevinPowell
     span {
       color: hsl(0 0% 100% / 0.4);
       background-clip: text;
-      background-repeat: repeat;
+      background-repeat: no-repeat;
       background-size: 0% 100%;
       background-image: linear-gradient(90deg, white, white);
       animation: scroll-reveal linear forwards;
       animation-timeline: view(y);
-      animation-range: cover 15vh cover 0vh;
+      animation-range: cover 15vh cover 24vh;
     }
   }
 
@@ -954,7 +951,6 @@ section {
     }
   }
   //  text area letter flying effect
-  // https://codepen.io/chris22smith/pen/MWKXbvx
   #keypress {
     position: absolute;
     bottom: 0;
