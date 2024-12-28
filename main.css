@@ -117,12 +117,15 @@ section:last-of-type {
 .panel__main .clouds .cloud:nth-child(4) {
   animation-duration: 240s;
 }
+.panel__main .clouds .cloud:nth-child(5) {
+  animation-duration: 300s;
+}
 @keyframes clouds-move {
   0% {
     transform: translateX(-100%);
   }
   100% {
-    transform: translateX(150%);
+    transform: translateX(200%);
   }
 }
 .panel__main .panel__main-side {

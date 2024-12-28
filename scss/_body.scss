@@ -136,7 +136,7 @@ section {
         animation: clouds-move linear 0.75s infinite;
       }
       // givin different speed to different cloud
-      @for $i from 1 through 4 {
+      @for $i from 1 through 5 {
         &:nth-child(#{$i}) {
           animation-duration: $i * 60s;
         }
@@ -149,7 +149,7 @@ section {
       transform: translateX(-100%);
     }
     100% {
-      transform: translateX(150%);
+      transform: translateX(200%);
     }
   }
 
