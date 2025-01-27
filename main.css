@@ -735,7 +735,7 @@ section:last-of-type {
   transform: translateX(0px) translateY(0px) translateZ(15vw);
   -moz-transform: translateX(0px) translateY(0px) translateZ(15vw);
   -webkit-transform: translateX(0px) translateY(0px) translateZ(15vw);
-  background-image: url(img/clock.png);
+  background-image: url(img/Tetris-Game.png);
   background-size: cover;
   background-position: 50% 100%;
 }
