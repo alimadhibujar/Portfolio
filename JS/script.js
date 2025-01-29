@@ -88,6 +88,8 @@ function sectionFadeEffect() {
 
       if (entry.isIntersecting) {
         entry.target.classList.remove("hidden");
+        // prevent errors when link is null
+        if (!link) return;
         link.parentElement.classList.add("active");
       } else {
         entry.target.classList.add("hidden");

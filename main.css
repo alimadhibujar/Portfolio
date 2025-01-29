@@ -2,6 +2,11 @@ html {
   color-scheme: light dark;
 }
 
+* {
+  scrollbar-color: rgba(35, 39, 42, 0.75) hsl(230, 12%, 45%);
+  scrollbar-width: thin;
+}
+
 *::-webkit-scrollbar {
   width: 15px;
 }
@@ -98,6 +103,7 @@ section:last-of-type {
   position: absolute;
   filter: blur(3px);
   opacity: 0.7;
+  will-change: transform;
   animation: clouds-move linear -4s infinite;
 }
 @media (max-width: 768px) {
@@ -679,6 +685,9 @@ section:last-of-type {
   width: 30vw;
   height: 30vw;
   top: 40px;
+  -moz-transform-style: preserve-3d;
+  -webkit-transform-style: preserve-3d;
+  will-change: transform;
   transform-style: preserve-3d;
   transform: rotateX(-22deg) rotateY(-38deg) rotateZ(0deg);
   -moz-transform: rotateX(-22deg) rotateY(-38deg) rotateZ(0deg);

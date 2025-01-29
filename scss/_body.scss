@@ -36,9 +36,11 @@ $bgImgColor: radial-gradient(
     transparent
   );
 
-// * {
-//   scroll-behavior: smooth;
-// }
+* {
+  // scroll-behavior: smooth;
+  scrollbar-color: $grey1 $activeColor;
+  scrollbar-width: thin;
+}
 
 *::-webkit-scrollbar {
   width: 15px;
@@ -130,6 +132,7 @@ section {
       position: absolute;
       filter: blur(3px);
       opacity: 0.7;
+      will-change: transform;
       // givin negative value of animation-daley to get closer the start of animation
       animation: clouds-move linear -4s infinite;
       @media (max-width: 768px) {
@@ -665,6 +668,7 @@ section {
     top: 40px;
     -moz-transform-style: preserve-3d;
     -webkit-transform-style: preserve-3d;
+    will-change: transform;
     transform-style: preserve-3d;
     transform: rotateX(-22deg) rotateY(-38deg) rotateZ(0deg);
     -moz-transform: rotateX(-22deg) rotateY(-38deg) rotateZ(0deg);
