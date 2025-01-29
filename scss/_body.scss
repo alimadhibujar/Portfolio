@@ -112,7 +112,7 @@ section {
 
 .panel__main {
   background-color: $grey3;
-  background-image: $bgImgColor, url(img/bgImg.jpg);
+  background-image: $bgImgColor, url(img/bgImg.webp);
   background-repeat: no-repeat;
   background-size: cover;
   height: 100vh;
@@ -728,7 +728,7 @@ section {
       translateZ(15vw);
     -webkit-transform: rotatex(90deg) translateX(0px) translateY(0px)
       translateZ(15vw);
-    background-image: url(img/Gallery-of-Pets.png);
+    background-image: url(img/Gallery-of-Pets.webp);
     background-size: cover;
   }
   #side2 {
@@ -745,7 +745,7 @@ section {
     transform: translateX(0px) translateY(0px) translateZ(15vw);
     -moz-transform: translateX(0px) translateY(0px) translateZ(15vw);
     -webkit-transform: translateX(0px) translateY(0px) translateZ(15vw);
-    background-image: url(img/Tetris-Game.png);
+    background-image: url(img/Tetris-Game.webp);
     background-size: cover;
     background-position: 50% 100%;
   }
@@ -762,7 +762,7 @@ section {
       translateZ(15vw);
     -webkit-transform: rotateY(180deg) translateX(0px) translateY(0px)
       translateZ(15vw);
-    background-image: url(img/Photo-Gallery.jpg);
+    background-image: url(img/Photo-Gallery.webp);
     background-size: cover;
   }
   #side6 {
@@ -771,7 +771,7 @@ section {
       translateZ(15vw);
     -webkit-transform: rotateX(-90deg) translateX(0px) translateY(0px)
       translateZ(15vw);
-    background-image: url(img/tikTok.png);
+    background-image: url(img/tikTok.webp);
     background-size: cover;
     background-position: center;
   }

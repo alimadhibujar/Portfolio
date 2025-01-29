@@ -82,7 +82,7 @@ section:last-of-type {
 
 .panel__main {
   background-color: #393c43;
-  background-image: radial-gradient(circle at top left, hsl(229, 20%, 22%), transparent), radial-gradient(circle at top right, hsl(323, 9%, 8%), transparent), radial-gradient(circle at bottom right, hsl(51, 6%, 8%), transparent, transparent), radial-gradient(circle at bottom left, hsl(145, 9%, 5%), transparent, transparent), url(img/bgImg.jpg);
+  background-image: radial-gradient(circle at top left, hsl(229, 20%, 22%), transparent), radial-gradient(circle at top right, hsl(323, 9%, 8%), transparent), radial-gradient(circle at bottom right, hsl(51, 6%, 8%), transparent, transparent), radial-gradient(circle at bottom left, hsl(145, 9%, 5%), transparent, transparent), url(img/bgImg.webp);
   background-repeat: no-repeat;
   background-size: cover;
   height: 100vh;
@@ -729,7 +729,7 @@ section:last-of-type {
   transform: rotatex(90deg) translateX(0px) translateY(0px) translateZ(15vw);
   -moz-transform: rotatex(90deg) translateX(0px) translateY(0px) translateZ(15vw);
   -webkit-transform: rotatex(90deg) translateX(0px) translateY(0px) translateZ(15vw);
-  background-image: url(img/Gallery-of-Pets.png);
+  background-image: url(img/Gallery-of-Pets.webp);
   background-size: cover;
 }
 #projects #side2 {
@@ -744,7 +744,7 @@ section:last-of-type {
   transform: translateX(0px) translateY(0px) translateZ(15vw);
   -moz-transform: translateX(0px) translateY(0px) translateZ(15vw);
   -webkit-transform: translateX(0px) translateY(0px) translateZ(15vw);
-  background-image: url(img/Tetris-Game.png);
+  background-image: url(img/Tetris-Game.webp);
   background-size: cover;
   background-position: 50% 100%;
 }
@@ -757,14 +757,14 @@ section:last-of-type {
   transform: rotateY(180deg) translateX(0px) translateY(0px) translateZ(15vw);
   -moz-transform: rotateY(180deg) translateX(0px) translateY(0px) translateZ(15vw);
   -webkit-transform: rotateY(180deg) translateX(0px) translateY(0px) translateZ(15vw);
-  background-image: url(img/Photo-Gallery.jpg);
+  background-image: url(img/Photo-Gallery.webp);
   background-size: cover;
 }
 #projects #side6 {
   transform: rotateX(-90deg) translateX(0px) translateY(0px) translateZ(15vw);
   -moz-transform: rotateX(-90deg) translateX(0px) translateY(0px) translateZ(15vw);
   -webkit-transform: rotateX(-90deg) translateX(0px) translateY(0px) translateZ(15vw);
-  background-image: url(img/tikTok.png);
+  background-image: url(img/tikTok.webp);
   background-size: cover;
   background-position: center;
 }
