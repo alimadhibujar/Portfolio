@@ -98,6 +98,9 @@ section:last-of-type {
   left: 0;
   width: 100%;
   mix-blend-mode: overlay;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  perspective: 1000;
 }
 .panel__main .clouds .cloud {
   position: absolute;
@@ -707,7 +710,6 @@ section:last-of-type {
   width: 30vw;
   height: 30vw;
   overflow: hidden;
-  opacity: 0.85;
 }
 #projects p {
   position: relative;
@@ -752,6 +754,9 @@ section:last-of-type {
   transform: rotateY(90deg) translateX(0px) translateY(0px) translateZ(15vw);
   -moz-transform: rotateY(90deg) translateX(0px) translateY(0px) translateZ(15vw);
   -webkit-transform: rotateY(90deg) translateX(0px) translateY(0px) translateZ(15vw);
+  background-image: url(img/tikTok.webp);
+  background-size: cover;
+  background-position: center;
 }
 #projects #side5 {
   transform: rotateY(180deg) translateX(0px) translateY(0px) translateZ(15vw);
@@ -764,9 +769,6 @@ section:last-of-type {
   transform: rotateX(-90deg) translateX(0px) translateY(0px) translateZ(15vw);
   -moz-transform: rotateX(-90deg) translateX(0px) translateY(0px) translateZ(15vw);
   -webkit-transform: rotateX(-90deg) translateX(0px) translateY(0px) translateZ(15vw);
-  background-image: url(img/tikTok.webp);
-  background-size: cover;
-  background-position: center;
 }
 
 #contact {
@@ -1147,4 +1149,35 @@ footer .container div:first-of-type {
   footer .container .copyright {
     margin-left: -20px;
   }
+}
+
+#ghost {
+  position: fixed;
+  top: 0;
+  left: 0;
+  display: block;
+  width: 100%;
+  z-index: 10000;
+  pointer-events: none;
+  transform: translateZ(0);
+  contain: strict;
+}
+
+/* lil-gui styling */
+.lil-gui {
+  display: none !important;
+  --width: 300px;
+  max-width: 90%;
+  --widget-height: 20px;
+  font-size: 15px;
+  --input-font-size: 15px;
+  --padding: 10px;
+  --spacing: 10px;
+  --slider-knob-width: 5px;
+  --background-color: rgba(5, 0, 15, 0.8);
+  --widget-color: rgba(255, 255, 255, 0.3);
+  --focus-color: rgba(255, 255, 255, 0.4);
+  --hover-color: rgba(255, 255, 255, 0.5);
+  --font-family: monospace;
+  z-index: 1;
 }/*# sourceMappingURL=main.css.map */
