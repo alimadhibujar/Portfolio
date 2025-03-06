@@ -544,12 +544,11 @@ hr {
   .action-button {
     width: 115px;
     padding: 10px 0px;
-    margin: 0 0 10px 0;
+    margin: 10px 0;
   }
 
   .container {
     grid-template-columns: 1fr;
-    border-radius: 10px;
   }
   .sidebar,
   .main-content {
