@@ -558,4 +558,8 @@ hr {
   .main-content h1 {
     font-size: 1.5em;
   }
+  .sidebar-section:last-child {
+    padding-bottom: 10px;
+    padding-bottom: 10px;
+  }
 }
