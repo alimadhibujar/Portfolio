@@ -90,9 +90,10 @@ h3 {
 }
 
 /* Buttons */
+
 .action-button {
   display: inline-block;
-  width: 130px;
+  width: 150px;
   padding: 10px 5px;
   margin: 10px;
   background: var(--secondary-color);
@@ -528,14 +529,33 @@ hr {
 /* Mobile */
 
 @media (max-width: 768px) {
+  body {
+    margin: 0;
+    padding: 0;
+  }
+
+  .button-container {
+    width: 100%;
+    max-width: 832px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .action-button {
+    width: 115px;
+    padding: 10px 0px;
+    margin: 0 0 10px 0;
+  }
+
   .container {
     grid-template-columns: 1fr;
-    padding: 1em;
+    border-radius: 10px;
   }
   .sidebar,
   .main-content {
-    padding: 10px;
+    padding: 0px;
   }
+
   .main-content h1 {
     font-size: 1.5em;
   }
