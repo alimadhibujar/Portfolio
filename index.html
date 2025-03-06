@@ -3,44 +3,70 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Bujar Alimadhi - Web Developer Portfolio"
+    />
     <title>Bujar Alimadhi Portfolio</title>
-    <link rel="stylesheet" href="main.css" type="text/css" />
 
+    <!-- Preload critical fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-
     <link
       href="https://fonts.googleapis.com/css2?family=Josefin+Slab:wght@600&family=Mr+De+Haviland&display=swap"
       rel="stylesheet"
       rel="preload"
+      as="style"
     />
 
+    <!-- Preload CSS -->
+    <link rel="stylesheet" href="main.css" type="text/css" />
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
     />
-
     <link
       rel="stylesheet"
       href="https://unpkg.com/swiper/swiper-bundle.min.css"
     />
 
-    <link rel="shortcut icon" type="image/icon" href="img/favicon.webp" />
+    <link rel="icon" type="image/webp" href="img/favicon.webp" />
   </head>
   <body>
     <div id="bg-js" class="panel__main">
       <div class="clouds">
-        <img class="cloud" src="img/cloud6.webp" alt="cloud" />
-        <img class="cloud" src="img/cloud6.webp" alt="cloud" />
-        <img class="cloud" src="img/cloud6.webp" alt="cloud" />
-        <img class="cloud" src="img/cloud6.webp" alt="cloud" />
-        <img class="cloud" src="img/cloud6.webp" alt="cloud" />
+        <img
+          class="cloud"
+          src="img/cloud6.webp"
+          alt="Gray Clouds"
+          loading="lazy"
+        />
+        <img
+          class="cloud"
+          src="img/cloud6.webp"
+          alt="Gray Clouds"
+          loading="lazy"
+        />
+        <img
+          class="cloud"
+          src="img/cloud6.webp"
+          alt="Gray Clouds"
+          loading="lazy"
+        />
+        <img
+          class="cloud"
+          src="img/cloud6.webp"
+          alt="Gray Clouds"
+          loading="lazy"
+        />
       </div>
 
-      <i class="cursor"></i>
+      <i class="cursor" aria-hidden="true"></i>
+
+      <!-- Sidebar Navigation -->
       <aside id="side-js" class="panel__main-side">
-        <a href="javascript:void(0)" class="closeBtn">&times;</a>
-        <nav>
+        <button class="closeBtn" aria-label="Close navigation">&times;</button>
+        <nav aria-label="Main navigation">
           <ul id="navlinks" class="list__links">
             <li class="navlink active">
               <a href="#home">
@@ -48,49 +74,45 @@
                 <span></span>
               </a>
             </li>
-
             <li class="navlink">
               <a href="#about">
                 <i class="fa fa-id-card" aria-hidden="true"></i>&nbsp; About
                 <span></span>
               </a>
             </li>
-
             <li class="navlink">
               <a href="#projects">
                 <i class="fa fa-laptop" aria-hidden="true"></i> &nbsp; Projects
                 <span></span>
               </a>
             </li>
-
             <li class="navlink">
               <a href="#contact">
                 <i class="fa fa-address-book" aria-hidden="true"></i>&nbsp;
                 Contact <span></span>
               </a>
             </li>
-
             <li class="navlink">
-              <a href="CV/cv.html" target="_blank"
-                ><i class="fa fa-id-card" aria-hidden="true"></i>&nbsp; My-CV
+              <a href="CV/cv.html" target="_blank" rel="noopener">
+                <i class="fa fa-id-card" aria-hidden="true"></i>&nbsp; My-CV
                 <span></span>
               </a>
             </li>
           </ul>
         </nav>
 
+        <!-- Social Links -->
         <div class="social-links">
           <ul>
             <li>
               <a
                 href="https://www.linkedin.com/in/bujar-alimadhi/"
                 target="_blank"
-                title="connect me on linkedin"
+                rel="noopener"
+                title="Follow me on LinkedIn"
+                aria-label="LinkedIn"
               >
-                <span></span>
-                <span></span>
-                <span></span>
-                <span></span>
+                <span></span><span></span><span></span><span></span>
                 <span class="fa fa-linkedin"></span>
               </a>
             </li>
@@ -98,12 +120,11 @@
               <a
                 href="https://github.com/alimadhibujar"
                 target="_blank"
-                title="follow me on github"
+                rel="noopener"
+                title="Follow me on GitHub"
+                aria-label="GitHub"
               >
-                <span></span>
-                <span></span>
-                <span></span>
-                <span></span>
+                <span></span><span></span><span></span><span></span>
                 <span class="fa fa-github"></span>
               </a>
             </li>
@@ -111,59 +132,45 @@
               <a
                 href="https://codepen.io/alimadhibujar"
                 target="_blank"
-                title="follow me on Codepen"
+                rel="noopener"
+                title="Follow me on CodePen"
+                aria-label="CodePen"
               >
-                <span></span>
-                <span></span>
-                <span></span>
-                <span></span>
+                <span></span><span></span><span></span><span></span>
                 <span class="fa fa-codepen"></span>
               </a>
             </li>
           </ul>
         </div>
       </aside>
-      <div class="overlay"></div>
-      <main class="panel__main-content">
-        <div class="icon">
-          <i class="fa fa-bars"></i>
-        </div>
 
+      <div class="overlay" aria-hidden="true"></div>
+
+      <!-- Main Content -->
+      <main class="panel__main-content">
+        <button class="icon" aria-label="Open navigation">
+          <i class="fa fa-bars"></i>
+        </button>
+
+        <!-- Home Section -->
         <section id="home" class="hidden">
           <h1 id="name-title">
-            <span>I</span>
-            <span>'</span>
-            <span>m</span>
-            <span>&nbsp;</span>
-            <span>B</span>
-            <span>u</span>
-            <span>j</span>
-            <span>a</span>
-            <span>r</span>
-            <span>&nbsp;</span>
-            <span>A</span>
-            <span>l</span>
-            <span>i</span>
-            <span>m</span>
-            <span>a</span>
-            <span>d</span>
-            <span>h</span>
-            <span>i</span>
+            <span>I</span><span>'</span><span>m</span><span>&nbsp;</span>
+            <span>B</span><span>u</span><span>j</span><span>a</span
+            ><span>r</span><span>&nbsp;</span> <span>A</span><span>l</span
+            ><span>i</span><span>m</span><span>a</span><span>d</span
+            ><span>h</span><span>i</span>
           </h1>
-          <div class="flip-box">
-            <div class="flip-box-inner">
-              <div class="flip-box-front">
-                <img class="flip-img" src="img/img2.png" alt="Bujar Alimadhi" />
-              </div>
-              <div class="flip-box-back">
-                <img class="flip-img" src="img/img2.png" alt="Bujar Alimadhi" />
-              </div>
-            </div>
+
+          <div class="image-container">
+            <canvas id="heroImage"></canvas>
           </div>
-          <hr />
-          <!-- JS typing effect -->
-          <h3 id="text"></h3>
+
+          <hr aria-hidden="true" />
+          <h2 id="text"></h2>
         </section>
+
+        <!-- About Section -->
         <section id="about" class="hidden">
           <h3>About</h3>
           <p>
@@ -180,12 +187,12 @@
           <p>
             <span>
               My background is a mixture of education. I hold a
-              <a href="img/certificate.webp" target="_blank"
+              <a href="img/certificate.webp" target="_blank" rel="noopener"
                 >Graduation Certificate</a
               >
-              from "Link Academy" front-end development lab. I am an self -
-              taught web developer. I learned a lot from the most popular, local
-              and online courses, but I have learned most of my skills from just
+              from "Link Academy" front-end development lab. I am a self-taught
+              web developer. I learned a lot from the most popular, local and
+              online courses, but I have learned most of my skills from just
               setting projects and doing new things.
             </span>
           </p>
@@ -193,8 +200,8 @@
             <span>
               I've used a wide range of different languages and frameworks, but
               I'm currently loving working with HTML, CSS/SCSS, and
-              JavaScript/React on the front-end.</span
-            >
+              JavaScript/React on the front-end.
+            </span>
           </p>
           <p>
             <span>
@@ -204,90 +211,60 @@
             </span>
           </p>
           <p>
-            <span>Outside of coding , I enjoy hiking , and traveling .</span>
+            <span>Outside of coding, I enjoy hiking and traveling.</span>
           </p>
         </section>
 
+        <!-- Projects Section -->
         <section id="projects" class="hidden">
           <h3>My Projects</h3>
 
+          <!-- 3D Cube for Desktop -->
           <div id="wrapD3Cube">
             <div id="D3Cube">
               <a
                 id="side1"
                 href="https://alimadhibujar.github.io/Gallery-of-Pets/"
                 target="_blank"
+                rel="noopener"
                 title="Gallery of Pets"
               ></a>
-
               <a
                 id="side2"
                 href="https://alimadhibujar.github.io/React-Rock-Scissors-Paper/"
                 target="_blank"
+                rel="noopener"
                 title="Rock-Paper-Scissors-React-Game"
               ></a>
-
               <a
                 id="side3"
                 href="https://codepen.io/alimadhibujar/full/mybzoNg"
                 target="_blank"
+                rel="noopener"
                 title="Tetris-React-Game"
               ></a>
               <a
                 id="side4"
                 href="https://alimadhibujar.github.io/Tik-Tok-React-App/"
                 target="_blank"
+                rel="noopener"
                 title="Tik-Tok-React-App"
               ></a>
               <a
                 id="side5"
                 href="https://alimadhibujar.github.io/Photo-Gallery"
                 target="_blank"
+                rel="noopener"
                 title="React Photo Gallery"
               ></a>
               <a id="side6"></a>
             </div>
           </div>
-          <p>Click in photo to see the full project</p>
+          <p>Click on picture to see the full project</p>
+
           <!-- 3D Cube Mobile version -->
           <div class="swiper-container">
             <div class="swiper-wrapper">
-              <div
-                class="swiper-slide"
-                style="background-image: url(img/Photo-Gallery.webp)"
-              >
-                <a
-                  class="swiper-container"
-                  href="https://alimadhibujar.github.io/Photo-Gallery/"
-                  target="_blank"
-                  title="React Photo Gallery"
-                ></a>
-              </div>
-
-              <div
-                class="swiper-slide"
-                style="background-image: url(img/Tetris-Game.webp)"
-              >
-                <a
-                  class="swiper-container"
-                  href="https://codepen.io/alimadhibujar/full/mybzoNg"
-                  target="_blank"
-                  title="Tetris-Game"
-                ></a>
-              </div>
-
-              <div
-                class="swiper-slide"
-                style="background-image: url(img/reactGame.png)"
-              >
-                <a
-                  class="swiper-container"
-                  href="https://alimadhibujar.github.io/Rock-Paper-Scissors-React-Game/"
-                  target="_blank"
-                  title="Rock-Paper-Scissors-React-Game"
-                ></a>
-              </div>
-
               <div
                 class="swiper-slide"
                 style="background-image: url(img/Gallery-of-Pets.webp)"
@@ -296,10 +273,46 @@
                   class="swiper-container"
                   href="https://alimadhibujar.github.io/Gallery-of-Pets/"
                   target="_blank"
+                  rel="noopener"
                   title="Gallery of Pets"
                 ></a>
               </div>
-
+              <div
+                class="swiper-slide"
+                style="background-image: url(img/Tetris-Game.webp)"
+              >
+                <a
+                  class="swiper-container"
+                  href="https://codepen.io/alimadhibujar/full/mybzoNg"
+                  target="_blank"
+                  rel="noopener"
+                  title="Tetris-Game"
+                ></a>
+              </div>
+              <div
+                class="swiper-slide"
+                style="background-image: url(img/reactGame.png)"
+              >
+                <a
+                  class="swiper-container"
+                  href="https://alimadhibujar.github.io/Rock-Paper-Scissors-React-Game/"
+                  target="_blank"
+                  rel="noopener"
+                  title="Rock-Paper-Scissors-React-Game"
+                ></a>
+              </div>
+              <div
+                class="swiper-slide"
+                style="background-image: url(img/Photo-Gallery.webp)"
+              >
+                <a
+                  class="swiper-container"
+                  href="https://alimadhibujar.github.io/Photo-Gallery/"
+                  target="_blank"
+                  rel="noopener"
+                  title="React Photo Gallery"
+                ></a>
+              </div>
               <div
                 class="swiper-slide"
                 style="background-image: url(img/tikTok.webp)"
@@ -308,34 +321,31 @@
                   class="swiper-container"
                   href="https://alimadhibujar.github.io/Tik-Tok-React-App/"
                   target="_blank"
+                  rel="noopener"
                   title="Tik-Tok-React-App"
                 ></a>
               </div>
             </div>
             <p>
-              Grab and turn left the cube and click on the each photo to see
-              full projects .
+              Grab and turn the cube left. Click on picture to see the full
+              project.
             </p>
           </div>
         </section>
 
+        <!-- Contact Section -->
         <section id="contact" class="hidden">
           <h3>Contact</h3>
           <p>
-            If you’d like to find out more about how I work and my process of
-            working with clients, get in touch. Please feel free and use the
-            form below to talk about the project you have in mind, and to
-            discuss how I can be of most value to your project. I'm looking
-            forward to learning about your project.
+            If you'd like to find out more about how I work and my process of
+            working with clients, get in touch. Please feel free to use the form
+            below to talk about the project you have in mind, and to discuss how
+            I can be of most value to your project. I'm looking forward to
+            learning about your project.
           </p>
 
           <div class="contact-wrapper">
-            <!---------------- 
-        
-              CONTACT PAGE LEFT 
-            
-              ----------------->
-
+            <!-- Contact Form -->
             <form
               class="form-horizontal"
               target="_blank"
@@ -348,9 +358,8 @@
                 id="name"
                 placeholder="YOUR NAME"
                 name="name"
-                value=""
-                autocomplete="off"
-                required="required"
+                autocomplete="name"
+                required
               />
               <label for="name">your name</label>
 
@@ -360,268 +369,160 @@
                 id="email"
                 placeholder="TYPE YOUR EMAIL"
                 name="email"
-                value=""
-                autocomplete="off"
-                required="required"
+                autocomplete="email"
+                required
               />
               <label for="email" class="email">your email</label>
 
               <textarea
                 id="letters"
                 class="form-control"
-                rows="5"
+                rows="4"
                 placeholder="TYPE YOUR MESSAGE"
                 name="message"
+                required
               ></textarea>
               <label for="letters" class="message">message</label>
 
               <input type="hidden" name="_captcha" value="false" />
 
-              <button
-                class="send-button"
-                id="submit"
-                type="submit"
-                value="SEND"
-              >
+              <button class="send-button" id="submit" type="submit">
                 <div class="button">
                   <i class="fa fa-paper-plane"></i>
                   <span class="send-text">SEND</span>
                 </div>
               </button>
             </form>
-            <!--text area letter flying effect
-                https://codepen.io/chris22smith/pen/MWKXbvx -->
+
+            <!-- Letter flying effect container -->
             <div id="keypress"></div>
 
-            <!---------------- 
-        
-              CONTACT PAGE RIGHT 
-            
-              ----------------->
-
+            <!-- Contact Information -->
             <div class="direct-contact-container">
               <ul class="contact-list">
                 <li class="list-item">
-                  <i class="fa fa-map-marker"
-                    ><span class="contact-text place">Tiranë | Albania</span></i
-                  >
+                  <i class="fa fa-map-marker">
+                    <span class="contact-text place">Tiranë | Albania</span>
+                  </i>
                 </li>
-
                 <li class="list-item">
-                  <i class="fa fa-phone"
-                    ><span class="contact-text phone"
-                      ><a href="tel:00355 685169365" title="Give me a call"
+                  <i class="fa fa-phone">
+                    <span class="contact-text phone">
+                      <a href="tel:00355685169365" title="Give me a call"
                         >00355 685169365</a
-                      ></span
-                    ></i
-                  >
+                      >
+                    </span>
+                  </i>
                 </li>
                 <li class="list-item">
-                  <i class="fa fa-envelope"
-                    ><span class="contact-text gmail"
-                      ><a
+                  <i class="fa fa-envelope">
+                    <span class="contact-text gmail">
+                      <a
                         href="mailto:b.alimadhi@yahoo.co.uk"
                         title="Send me an email"
                         >b.alimadhi@yahoo.co.uk</a
-                      ></span
-                    ></i
-                  >
+                      >
+                    </span>
+                  </i>
                 </li>
               </ul>
             </div>
           </div>
         </section>
-        <div>
-          <svg
-            class="waves"
-            xmlns="http://www.w3.org/2000/svg"
-            xmlns:xlink="http://www.w3.org/1999/xlink"
-            viewBox="0 24 150 28"
-            preserveAspectRatio="none"
-            shape-rendering="auto"
-          >
-            <defs>
-              <path
-                id="gentle-wave"
-                d="M-160 44c30 0 58-18 88-18s 58 18 88 18 58-18 88-18 58 18 88 18 v44h-352z"
-              />
-            </defs>
-            <g class="parallax">
-              <use
-                xlink:href="#gentle-wave"
-                x="48"
-                y="0"
-                fill="rgba(51, 73, 119, 0.7)"
-              />
-              <use
-                xlink:href="#gentle-wave"
-                x="48"
-                y="3"
-                fill="rgba(51, 73, 119, 0.5)"
-              />
-              <use
-                xlink:href="#gentle-wave"
-                x="48"
-                y="5"
-                fill="rgba(51, 73, 119, 0.3)"
-              />
-              <use
-                xlink:href="#gentle-wave"
-                x="48"
-                y="7"
-                fill="rgba(51, 73, 119, 1)"
-              />
-            </g>
-          </svg>
-        </div>
-        <footer>
-          <div class="container">
-            <div>Thanks for visiting !</div>
-            <div class="copyright">
-              All of the rights reserved &copy; <span id="year"></span> !
-            </div>
+
+        <div class="footer-wrapper">
+          <div>
+            <!-- Wave Animation -->
+            <svg
+              class="waves"
+              xmlns="http://www.w3.org/2000/svg"
+              xmlns:xlink="http://www.w3.org/1999/xlink"
+              viewBox="0 24 150 28"
+              preserveAspectRatio="none"
+              shape-rendering="auto"
+              aria-hidden="true"
+            >
+              <defs>
+                <path
+                  id="gentle-wave"
+                  d="M-160 44c30 0 58-18 88-18s 58 18 88 18 58-18 88-18 58 18 88 18 v44h-352z"
+                />
+              </defs>
+              <g class="parallax">
+                <use
+                  xlink:href="#gentle-wave"
+                  x="48"
+                  y="0"
+                  fill="rgba(51, 73, 119, 0.7)"
+                />
+                <use
+                  xlink:href="#gentle-wave"
+                  x="48"
+                  y="3"
+                  fill="rgba(51, 73, 119, 0.5)"
+                />
+                <use
+                  xlink:href="#gentle-wave"
+                  x="48"
+                  y="5"
+                  fill="rgba(51, 73, 119, 0.3)"
+                />
+                <use
+                  xlink:href="#gentle-wave"
+                  x="48"
+                  y="7"
+                  fill="rgba(51, 73, 119, 1)"
+                />
+              </g>
+            </svg>
           </div>
-        </footer>
+
+          <!-- Footer -->
+          <footer>
+            <div class="container">
+              <div>Thanks for visiting!</div>
+              <div class="copyright">
+                All rights reserved &copy; <span id="year"></span>!
+              </div>
+            </div>
+          </footer>
+        </div>
       </main>
     </div>
+
+    <!-- Ghost Canvas -->
     <canvas id="ghost"></canvas>
 
-    <script src="./JS/script.js"></script>
-    <script src="./JS/particles.js"></script>
-    <script src="./JS/background.js"></script>
-    <script src="./JS/side.js"></script>
-
+    <!-- JavaScript Resources -->
+    <script src="./JS/script.js" defer></script>
+    <script src="./JS/particles.js" defer></script>
+    <script src="./JS/background.js" defer></script>
+    <script src="./JS/side.js" defer></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"
+      defer
+    ></script>
+    <script type="module" src="./JS/heroImage.js" defer></script>
+    <script src="./JS/ghost-cursor.js" type="module" defer></script>
     <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
 
+    <!-- Initialize Swiper -->
     <script>
-      var swiper = new Swiper(".swiper-container", {
-        effect: "cube",
-        grabCursor: true,
-        cubeEffect: {
-          shadow: true,
-          slideShadows: true,
-          shadowOffset: 20,
-          shadowScale: 0.94,
-        },
-        pagination: {
-          el: ".swiper-pagination",
-        },
+      document.addEventListener("DOMContentLoaded", function () {
+        new Swiper(".swiper-container", {
+          effect: "cube",
+          grabCursor: true,
+          cubeEffect: {
+            shadow: true,
+            slideShadows: true,
+            shadowOffset: 20,
+            shadowScale: 0.94,
+          },
+          pagination: {
+            el: ".swiper-pagination",
+          },
+        });
       });
     </script>
-
-    <!-- vertShader for the Ghost -->
-    <script type="x-shader/x-fragment" id="vertShader">
-      precision mediump float;
-      varying vec2 vUv;
-      attribute vec2 a_position;
-      void main() {
-        vUv = 0.5 * (a_position + 1.0);
-        gl_Position = vec4(a_position, 0.0, 1.0);
-      }
-    </script>
-
-    <!-- Fragment Shader -->
-    <script type="x-shader/x-fragment" id="fragShader">
-      precision mediump float;
-      varying vec2 vUv;
-      uniform float u_time;
-      uniform float u_ratio;
-      uniform float u_size;
-      uniform vec2 u_pointer;
-      uniform float u_smile;
-      uniform vec2 u_target_pointer;
-      uniform vec3 u_main_color;
-      uniform vec3 u_border_color;
-      uniform float u_flat_color;
-      uniform sampler2D u_texture;
-
-      #define TWO_PI 6.28318530718
-      #define PI 3.14159265358979323846
-
-      vec3 mod289(vec3 x) { return x - floor(x * (1.0 / 289.0)) * 289.0; }
-      vec2 mod289(vec2 x) { return x - floor(x * (1.0 / 289.0)) * 289.0; }
-      vec3 permute(vec3 x) { return mod289(((x * 34.0) + 1.0) * x); }
-      float snoise(vec2 v) {
-        const vec4 C = vec4(0.211324865405187, 0.366025403784439, -0.577350269189626, 0.024390243902439);
-        vec2 i = floor(v + dot(v, C.yy));
-        vec2 x0 = v - i + dot(i, C.xx);
-        vec2 i1 = (x0.x > x0.y) ? vec2(1.0, 0.0) : vec2(0.0, 1.0);
-        vec4 x12 = x0.xyxy + C.xxzz;
-        x12.xy -= i1;
-        i = mod289(i);
-        vec3 p = permute(permute(i.y + vec3(0.0, i1.y, 1.0)) + i.x + vec3(0.0, i1.x, 1.0));
-        vec3 m = max(0.5 - vec3(dot(x0, x0), dot(x12.xy, x12.xy), dot(x12.zw, x12.zw)), 0.0);
-        m = m * m;
-        m = m * m;
-        vec3 x = 2.0 * fract(p * C.www) - 1.0;
-        vec3 h = abs(x) - 0.5;
-        vec3 ox = floor(x + 0.5);
-        vec3 a0 = x - ox;
-        m *= 1.79284291400159 - 0.85373472095314 * (a0 * a0 + h * h);
-        vec3 g;
-        g.x = a0.x * x0.x + h.x * x0.y;
-        g.yz = a0.yz * x12.xz + h.yz * x12.yw;
-        return 130.0 * dot(m, g);
-      }
-      vec2 rotate(vec2 v, float angle) {
-        float r_sin = sin(angle);
-        float r_cos = cos(angle);
-        return vec2(v.x * r_cos - v.y * r_sin, v.x * r_sin + v.y * r_cos);
-      }
-      float eyes(vec2 uv) {
-        uv.y -= 0.5;
-        uv.x *= 1.0;
-        uv.y *= 0.8;
-        uv.x = abs(uv.x);
-        uv.y += u_smile * 0.3 * pow(uv.x, 1.3);
-        uv.x -= (0.6 + 0.2 * u_smile);
-        float d = clamp(length(uv), 0.0, 1.0);
-        return 1.0 - pow(d, 0.08);
-      }
-      float mouth(vec2 uv) {
-        uv.y += 1.5;
-        uv.x *= (0.5 + 0.5 * abs(1.0 - u_smile));
-        uv.y *= (3.0 - 2.0 * abs(1.0 - u_smile));
-        uv.y -= u_smile * 4.0 * pow(uv.x, 2.0);
-        float d = clamp(length(uv), 0.0, 1.0);
-        return 1.0 - pow(d, 0.07);
-      }
-      float face(vec2 uv, float rotation) {
-        uv = rotate(uv, rotation);
-        uv /= (0.27 * u_size);
-        float eyes_shape = 10.0 * eyes(uv);
-        float mouth_shape = 20.0 * mouth(uv);
-        float col = 0.0;
-        col = mix(col, 1.0, eyes_shape);
-        col = mix(col, 1.0, mouth_shape);
-        return col;
-      }
-      void main() {
-        vec2 point = u_pointer;
-        point.x *= u_ratio;
-        vec2 uv = vUv;
-        uv.x *= u_ratio;
-        uv -= point;
-        float texture = texture2D(u_texture, vec2(vUv.x, 1.0 - vUv.y)).r;
-        float shape = texture;
-        float noise = snoise(uv * vec2(0.7 / u_size, 0.6 / u_size) + vec2(0.0, 0.0015 * u_time));
-        noise += 1.2;
-        noise *= 2.1;
-        noise += smoothstep(-0.8, -0.2, (uv.y) / u_size);
-        float face = face(uv, 5.0 * (u_target_pointer.x - u_pointer.x));
-        shape -= face;
-        shape *= noise;
-        vec3 border = (1.0 - u_border_color);
-        border.g += 0.2 * sin(0.005 * u_time);
-        border *= 0.5;
-        vec3 color = u_main_color;
-        color -= (1.0 - u_flat_color) * border * smoothstep(0.0, 0.01, shape);
-        shape = u_flat_color * smoothstep(0.8, 1.0, shape) + (1.0 - u_flat_color) * shape;
-        color *= shape;
-        gl_FragColor = vec4(color, shape);
-      }
-    </script>
-
-    <script src="./JS/ghost-cursor.js" type="module"></script>
   </body>
 </html>

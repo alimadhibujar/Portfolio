@@ -4,10 +4,9 @@
   --primary-color: #2a5c82;
   --secondary-color: #4a7b9d;
   --accent-color: #ff6b6b;
-  --background-color: #f8f9fa;
+  --background-color: #fff;
   --text-color: #2d3436;
   --skill-bar-bg: #e0e7ec;
-  --link-hover: #4a7b9d;
   --header-bg: radial-gradient(
     circle farthest-corner at top left,
     rgba(44, 62, 80, 0.9) 0%,
@@ -24,6 +23,23 @@
     0.98 84.5%,
     1
   );
+  --imageFilter: grayscale(100%) drop-shadow(-4px -2px 25px rgba(0, 0, 0, 0.2));
+  --containerBoxShadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+  --containerBoxShadowHover: 0 10px 20px rgba(0, 0, 0, 0.15);
+}
+
+.dark-mode {
+  --background-color: #2d3436;
+  --text-color: #f8f9fa;
+  --primary-color: hsl(206, 70%, 74%);
+  --secondary-color: hsl(204, 39%, 77%);
+  --imageFilter: grayscale(0%) drop-shadow(0px 0px 0px rgba(0, 0, 0, 0.2));
+  --containerBoxShadow: 0 10px 20px rgba(0, 0, 0, 0.4);
+  --containerBoxShadowHover: 0 15px 30px rgba(0, 0, 0, 0.5);
+}
+
+* a:hover {
+  color: var(--accent-color) !important;
 }
 
 /* Improved performance */
@@ -45,6 +61,9 @@
   a::after {
     content: " (" attr(href) ")";
   }
+  .tooltip {
+    display: none;
+  }
   @page {
     size: A4;
     margin: 0;
@@ -54,8 +73,7 @@
 body {
   font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
   line-height: 1.6;
-  color: var(--text-color);
-  background-color: var(--background-color);
+  background-color: #f8f9fa;
   margin: 0;
   padding: 20px;
   display: flex;
@@ -67,13 +85,15 @@ h1,
 h2,
 h3 {
   line-height: 1.2;
+  font-family: "Times New Roman", Arial, sans-serif;
   font-weight: 600;
 }
 
+/* Buttons */
 .action-button {
   display: inline-block;
-  width: 150px;
-  padding: 10px;
+  width: 130px;
+  padding: 10px 5px;
   margin: 10px;
   background: var(--secondary-color);
   color: #fff;
@@ -88,10 +108,29 @@ h3 {
   transform: translateY(-2px);
 }
 
+.fa-sun-o {
+  color: gold;
+  animation: fa-spin 3s infinite linear;
+  animation-play-state: paused;
+}
+
+.fa-moon-o {
+  color: hsl(14, 94%, 80%);
+  animation: pulse 1.5s infinite;
+  animation-play-state: paused;
+}
+
+.action-button:hover .fa-sun-o,
+.action-button:hover .fa-moon-o {
+  animation-play-state: running;
+}
+
+/* CV format A4 */
 .container {
+  color: var(--text-color);
+  background-color: var(--background-color);
   max-width: 800px;
-  background-color: white;
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--containerBoxShadow);
   display: grid;
   grid-template-columns: 30% 70%;
   transition: box-shadow 0.3s ease;
@@ -99,7 +138,7 @@ h3 {
 }
 
 .container:hover {
-  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+  box-shadow: var(--containerBoxShadowHover);
 }
 
 /* Sidebar Styles */
@@ -111,7 +150,7 @@ h3 {
 .profile-image {
   width: 100%;
   margin-bottom: 10px;
-  filter: grayscale(100%);
+  filter: var(--imageFilter);
   transition: filter 0.3s ease, transform 0.3s ease;
   animation: 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
@@ -125,7 +164,7 @@ h3 {
 }
 
 .profile-image:hover {
-  filter: grayscale(0%);
+  filter: grayscale(0%) drop-shadow(0 0 0 rgba(0, 0, 0, 0.3));
   transform: scale(1.05);
 }
 
@@ -163,21 +202,18 @@ h3 {
 
 .contact-list li a,
 .certification-item ul li a {
-  color: var(--primary-color);
+  /* color: var(--primary-color);   this style is implemented inline html for better pdf style */
   text-decoration: none;
   transition: color 0.3s ease;
-}
-
-.contact-list li a:hover {
-  color: var(--secondary-color);
 }
 
 .skill-bar {
   background-color: var(--skill-bar-bg);
   height: 8px;
   border-radius: 4px;
-  margin-top: 5px;
-  overflow: hidden;
+  margin-top: 10px;
+  position: relative;
+  cursor: pointer;
 }
 
 .skill-level {
@@ -214,6 +250,41 @@ h3 {
   }
 }
 
+/* Tooltip styles */
+.tooltip {
+  position: absolute;
+  background-color: var(--text-color);
+  color: var(--background-color);
+  padding: 5px 10px;
+  border-radius: 4px;
+  font-size: 14px;
+  pointer-events: none;
+  opacity: 0;
+  will-change: opacity;
+  transition: opacity 0.3s ease;
+  top: -9px;
+  left: var(--skill-level);
+  transform: translateX(-50%) translateY(-100%);
+  white-space: nowrap;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  z-index: 100;
+}
+
+.tooltip::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: var(--text-color) transparent transparent transparent;
+}
+
+.skill-bar:hover .tooltip {
+  opacity: 1;
+}
+
 .language-level {
   font-weight: bold;
   margin-left: 5px;
@@ -223,6 +294,7 @@ h3 {
 }
 
 /* Main Content Styles */
+
 .main-content {
   padding: 10px 30px;
 }
@@ -239,6 +311,20 @@ h3 {
   padding: 10px;
   border-radius: 5px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  background-size: 400% 400%;
+  animation: gradient 15s ease infinite;
+}
+
+@keyframes gradient {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
 }
 
 .main-content header p {
@@ -265,6 +351,7 @@ h3 {
 .main-content p a {
   font-size: 1em;
   color: var(--secondary-color);
+  text-decoration: none;
 }
 
 .main-content p {
@@ -357,13 +444,9 @@ section:hover {
 }
 
 .project-list li a {
-  color: var(--primary-color);
+  /*color: var(--primary-color) !important; implemented inline html style for better pdf style*/
   text-decoration: none;
   transition: color 0.3s ease;
-}
-
-.project-list li a:hover {
-  color: var(--secondary-color);
 }
 
 hr {
@@ -439,5 +522,21 @@ hr {
   }
   100% {
     transform: rotate(359deg);
+  }
+}
+
+/* Mobile */
+
+@media (max-width: 768px) {
+  .container {
+    grid-template-columns: 1fr;
+    padding: 1em;
+  }
+  .sidebar,
+  .main-content {
+    padding: 10px;
+  }
+  .main-content h1 {
+    font-size: 1.5em;
   }
 }

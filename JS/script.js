@@ -3,7 +3,7 @@ const panelSaid = document.querySelector(".panel__main-side");
 const overLay = document.querySelector(".overlay");
 // Opening mobile nav menu
 openNav.addEventListener("click", () => {
-  panelSaid.style.width = "50vw";
+  panelSaid.style.width = "200px";
   overLay.style.width = "100vw";
 });
 // Closing mobile nav menu when we clicking to closeBtn or to overlay
@@ -20,36 +20,82 @@ window.addEventListener("click", (e) => {
   // }
 });
 // Closing mobile nav menu when we clicking to nav links
-const list = document.querySelectorAll(".navlink");
-document.body.clientWidth < 500 &&
-  list.forEach((li) => {
-    li.addEventListener("click", (e) => {
+const navLinks = document.querySelectorAll(".navlink");
+document.body.clientWidth <= 768 &&
+  navLinks.forEach((link) => {
+    link.addEventListener("click", (e) => {
       overLay.style.width = "0vw";
       panelSaid.style.width = "0vw";
     });
   });
 
-// shadow effect when mouse over and out of image.
+// Custom smooth scrolling for all navigation links to prevent layout issues
+navLinks.forEach((link) => {
+  link.addEventListener("click", function (e) {
+    const href = this.querySelector("a").getAttribute("href");
+
+    // Only handle internal hash links
+    if (href.charAt(0) === "#") {
+      e.preventDefault();
+
+      const targetSection = document.querySelector(href);
+      if (!targetSection) return;
+
+      // Get correct scroll position
+      const mainContent = document.querySelector(".panel__main-content");
+      const offsetTop = targetSection.offsetTop;
+
+      // Special handling for contact section to prevent gap issues
+      if (href === "#contact") {
+        // For contact section, use a slightly different scroll approach to prevent the gap
+        const mainContent = document.querySelector(".panel__main-content");
+
+        // Add class to disable smooth scrolling temporarily
+        mainContent.classList.add("scrolling-to-contact");
+
+        // Apply scroll
+        mainContent.scrollTo({
+          top: offsetTop - 10, // Small offset to prevent the gap
+          behavior: "smooth",
+        });
+
+        // Remove class after animation completes
+        setTimeout(() => {
+          mainContent.classList.remove("scrolling-to-contact");
+        }, 1000);
+      } else {
+        // Normal smooth scroll for other sections
+        mainContent.scrollTo({
+          top: offsetTop,
+          behavior: "smooth",
+        });
+      }
+
+      // Still update the URL hash for proper history/bookmarking, but without scrolling
+      window.history.pushState(null, null, href);
+    }
+  });
+});
+
+// shadow effect when mouse over and out of image-container.
 // Self-Invoked Function
 (function titleShadow() {
-  const frontBox = document.querySelectorAll(".flip-img");
+  const heroImg = document.querySelector(".image-container");
   const nameTitle = document.getElementById("name-title");
-  frontBox.forEach((box) => {
-    box.addEventListener("mouseover", (e) => {
-      nameTitleStyle = `text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1),
+
+  heroImg.addEventListener("mouseover", (e) => {
+    nameTitleStyle = `text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1),
       -1px -1px 2px rgb(41, 40, 40), 2px 1px 2px rgba(0, 0, 0, 0.7);
       transform: translate(0, 0)`;
-      nameTitle.style = nameTitleStyle;
-    });
+    nameTitle.style = nameTitleStyle;
   });
-  frontBox.forEach((box) => {
-    box.addEventListener("mouseout", (e) => {
-      const nameTitleStyle = `transform: translate(-1px, -1px);textShadow = 0 -1px 0 #7289da, 1px 1px 1px black,
+
+  heroImg.addEventListener("mouseout", (e) => {
+    const nameTitleStyle = `transform: translate(-1px, -1px);textShadow = 0 -1px 0 #7289da, 1px 1px 1px black,
       2px 2px 10px rgba(0, 0, 0, 0.15), 4px 5px 10px rgba(0, 0, 0, 0.15),
       6px 9px 10px rgba(0, 0, 0, 0.15), 8px 15px 10px rgba(0, 0, 0, 0.15),
       10px 20px 10px rgba(0, 0, 0, 0.15), 15px 30px 10px rgba(0, 0, 0, 0.15)`;
-      nameTitle.style = nameTitleStyle;
-    });
+    nameTitle.style = nameTitleStyle;
   });
 })();
 
@@ -63,18 +109,10 @@ function sectionFadeEffect() {
   }
   section dose not appear in mobile
   making responsive intersection*/
-  let options = {};
-  document.body.clientHeight > 768
-    ? (options = {
-        root: null,
-        rootMargin: "-275px 0px",
-        threshold: 0.05,
-      })
-    : (options = {
-        root: null,
-        rootMargin: " 0px",
-        threshold: 0.2,
-      });
+  const options =
+    window.innerHeight > 768
+      ? { rootMargin: "-275px 0px", threshold: 0.05 }
+      : { rootMargin: "0px", threshold: 0.2 };
 
   let observer = new IntersectionObserver(beTouching, options);
   document.querySelectorAll(".hidden").forEach((section) => {
@@ -104,7 +142,7 @@ sectionFadeEffect();
 (function typingEffect() {
   const textDisplay = document.getElementById("text");
   let phrases = [];
-  document.body.clientWidth < 768
+  document.body.clientWidth < 500
     ? (phrases = [
         "Welcome to my page",
         "I'm a web developer !",
@@ -155,10 +193,10 @@ sectionFadeEffect();
     const spedUp = Math.random() * (80 - 50) + 50;
     const normalSpeed = Math.random() * (300 - 200) + 200;
     const time = isEnd ? 2000 : isDeleting ? spedUp : normalSpeed;
-    setTimeout(loop, time);
+    setTimeout(() => requestAnimationFrame(loop), time);
   }
 
-  loop();
+  requestAnimationFrame(loop);
 })();
 
 //  text area letter flying effect
@@ -182,8 +220,21 @@ function type(event) {
 }
 
 text.addEventListener("keydown", type);
+// Cleanup on page unload
+window.addEventListener("unload", () => {
+  text.removeEventListener("keydown", type);
+});
 
 // creating the current year in footer
 const year = document.getElementById("year");
-year.innerHTML = new Date().getFullYear();
+year.textContent = new Date().getFullYear();
 year.style.fontSize = "1rem";
+
+// Window resize handler to maintain proper scroll behavior
+window.addEventListener("resize", function () {
+  // Reset any scroll-related classes when window is resized
+  const mainContent = document.querySelector(".panel__main-content");
+  if (mainContent.classList.contains("scrolling-to-contact")) {
+    mainContent.classList.remove("scrolling-to-contact");
+  }
+});

@@ -1,9 +1,10 @@
-html {
-  color-scheme: light dark;
-}
+// Global variables
 
+$side-width: 17.85vw;
+$max-side-width: 250px;
 $font1: "Josefin Slab, serif";
 $font2: "Mr De Haviland";
+$base-font-size: clamp(1rem, 1.5rem, 2vw); // Fluid typography
 $blurple: #7289da;
 $activeColor: hsl(230, 12%, 45%);
 $grey1: rgba(#23272a, 0.75);
@@ -36,6 +37,13 @@ $bgImgColor: radial-gradient(
     transparent
   );
 
+// HTML root
+html {
+  color-scheme: light dark;
+}
+
+// Global styles
+
 * {
   // scroll-behavior: smooth;
   scrollbar-color: $grey1 $activeColor;
@@ -55,20 +63,42 @@ $bgImgColor: radial-gradient(
   border: 3px solid $grey2;
 }
 
+// ======================
+// Helper Mixins
+// ======================
+
+@mixin flex-layout($direction: row, $justify-content: "", $align-items: "") {
+  display: flex;
+  flex-direction: $direction;
+  justify-content: $justify-content;
+  align-items: $align-items;
+}
+
+@mixin position(
+  $position,
+  $top: null,
+  $right: null,
+  $bottom: null,
+  $left: null
+) {
+  position: $position;
+  top: $top;
+  right: $right;
+  bottom: $bottom;
+  left: $left;
+}
+
 body {
   color: $grey4;
   font-family: $font1;
-  font-size: 1.5rem;
+  font-size: $base-font-size;
   display: flex;
+  min-height: 100vh;
   @media (max-width: 500px) {
-    font-size: 1rem;
+    margin: 0;
+    padding: 0;
   }
   text-rendering: optimizeSpeed;
-  min-height: 100vh;
-}
-
-h3 {
-  text-transform: uppercase;
 }
 
 a {
@@ -76,39 +106,49 @@ a {
   text-decoration: none;
 }
 
+// Flexible section styles
+
 section {
-  min-height: 100vh;
+  min-height: clamp(500px, 85vh, 900px);
   max-width: 958px;
   margin: auto;
   padding: 1em;
   opacity: 1;
   filter: blur(0);
   transform: translateY(0px) scale(1);
+  will-change: transform, opacity;
   transition: all 1s ease;
-  // scroll-snap-align: start;
-  &:last-of-type {
-    margin-bottom: -20.5vh;
-  }
-  @media (max-width: 768px) {
-    &:last-of-type {
-      margin-bottom: 0;
-    }
-  }
-  @media (min-width: 769px) and (max-width: 960px) {
-    &:last-of-type {
-      margin-bottom: -18vh;
-    }
-  }
-  // when user don't  prefer animations
   @media (prefers-reduced-motion) {
-    transition: none;
+    transition: none; // Respect user preferences
   }
 }
+
+#contact {
+  min-height: clamp(300px, 65vh, 800px); // Reduced for better spacing
+  position: relative;
+  overflow: visible; // Ensure content is visible
+
+  // Fix for tablet view
+  @media (min-width: 768px) and (max-width: 1024px) {
+    padding-top: 10px; // Add some padding at the top
+    margin-bottom: 0; // Ensure no bottom margin
+  }
+}
+
+@media (orientation: landscape) and (max-width: 1024px) {
+  #contact {
+    padding-bottom: 150px;
+    margin-bottom: 0; // Ensure no extra margin
+  }
+}
+
 .hidden {
   opacity: 0;
   transform: translateY(-40px) scale(0.9);
   filter: blur(3px);
 }
+
+// Main panel
 
 .panel__main {
   background-color: $grey3;
@@ -122,10 +162,10 @@ section {
   overflow: hidden;
   position: relative;
 
+  // Clouds
+
   .clouds {
-    position: absolute;
-    top: -5%;
-    left: 0;
+    @include position(absolute, $top: -5%, $left: 0);
     width: 100%;
     mix-blend-mode: overlay;
     transform: translateZ(0);
@@ -136,15 +176,14 @@ section {
       filter: blur(3px);
       opacity: 0.7;
       will-change: transform;
-      // givin negative value of animation-daley to get closer the start of animation
-      animation: clouds-move linear -4s infinite;
+      animation: clouds-move linear infinite;
       @media (max-width: 768px) {
-        animation: clouds-move linear 0.75s infinite;
+        animation: clouds-move linear 0.75s infinite; // Faster on mobile
       }
-      // givin different speed to different cloud
-      @for $i from 1 through 5 {
+      @for $i from 1 through 4 {
         &:nth-child(#{$i}) {
-          animation-duration: $i * 60s;
+          animation-duration: $i * 60s; // Varied speeds
+          animation-delay: -4s; // animation-daley negative value to get closer to the animation start
         }
       }
     }
@@ -162,15 +201,14 @@ section {
   .panel__main-side {
     background: $blue;
     height: 100vh;
-    width: 17.85vw;
+    width: $side-width;
+    max-width: $max-side-width;
     position: relative;
     border-top-right-radius: 60px;
     border-top-left-radius: 8px;
-    @media (max-width: 500px) {
+    @media (max-width: 768px) {
+      @include position(fixed, $top: 0, $left: 0);
       width: 0;
-      position: fixed;
-      top: 0;
-      left: 0;
       border-top-left-radius: 0px;
       overflow: hidden;
       transition: all 0.6s ease-in-out;
@@ -180,21 +218,19 @@ section {
 
     .closeBtn {
       color: $grey5;
-      position: absolute;
-      top: 35px;
-      right: 35px;
+      @include position(absolute, $top: 35px, $right: 35px);
+      background-color: transparent;
+      border: none;
+      outline: none;
       font-size: 36px;
-      @media (min-width: 500px) {
+      @media (min-width: 769px) {
         display: none;
       }
     }
     .list__links {
       padding: 0 0 7.5px 16px;
       margin: 0;
-      position: absolute;
-      top: 85px;
-      right: 0;
-      left: 0;
+      @include position(absolute, $top: 85px, $right: 0, $left: 0);
 
       li {
         display: block;
@@ -202,7 +238,7 @@ section {
         border-radius: 10px 0 0 10px;
         box-shadow: -2px 0 0 rgb(50, 95, 181);
         margin: 8px 0;
-        padding: 10px;
+        padding: 10px 10px 10px 16px;
         transition: all 0.3s ease-in-out;
         position: relative;
         z-index: 1;
@@ -210,9 +246,7 @@ section {
         span {
           width: 100%;
           height: 100%;
-          position: absolute;
-          top: 0;
-          left: 0;
+          @include position(absolute, $top: 0, $left: 0);
           background-color: $social;
           background-image: radial-gradient(
               at center left,
@@ -245,10 +279,8 @@ section {
         // making border-radius outside of active "li"
         &::after {
           content: "";
-          position: absolute;
+          @include position(absolute, $bottom: 100%, $right: 0);
           background-color: transparent;
-          bottom: 100%;
-          right: 0;
           height: 17px;
           width: 8px;
           border-bottom-right-radius: 8px;
@@ -260,9 +292,7 @@ section {
           background-color: transparent;
           border-top-right-radius: 8px;
           box-shadow: 0 -8px 0 hsla(231, 12%, 31%, 0.75);
-          position: absolute;
-          bottom: -21px;
-          right: 0;
+          @include position(absolute, $bottom: -21px, $right: 0);
           height: 20px;
           width: 8px;
         }
@@ -296,30 +326,35 @@ section {
       }
     }
     .social-links {
-      display: flex;
-      justify-content: flex-end;
-      position: relative;
-      left: 9px;
-      bottom: -17.5em;
+      @include flex-layout(row, $justify-content: flex-end);
+      @include position(relative, $left: 9px, $top: 50vh);
       z-index: 1;
-      @media (min-width: 801px) and (max-width: 900px) {
-        bottom: -20em;
+
+      @media (min-width: 769px) and (max-width: 1024px) {
+        top: 35vh;
       }
-      @media (min-width: 501px) and (max-width: 800px) {
-        bottom: -22.5em;
+
+      @media (orientation: landscape) and (max-width: 1366px) {
+        top: 63vh;
+      }
+      @media (min-width: 501px) and (max-width: 768px) {
+        top: 45vh;
+        left: 38px;
       }
       @media (max-width: 500px) {
-        bottom: -25em;
-        left: 30px;
+        top: 60vh;
+        left: 15px;
       }
 
       ul {
         position: relative;
-        display: flex;
-        align-items: center;
-        justify-content: center;
+        @include flex-layout(
+          row,
+          $justify-content: center,
+          $align-items: center
+        );
         transform: rotate(-28deg) skew(17deg);
-        @media (max-width: 500px) {
+        @media (max-width: 768px) {
           transform: rotate(-45deg) skew(-14deg);
         }
         transform-style: preserve-3d;
@@ -329,7 +364,14 @@ section {
         list-style: none;
         width: 3.72vw;
         height: 3.72vw;
-        margin: 0 1.26vw;
+        max-width: 52px;
+        max-height: 52px;
+        margin: 0 min(1.26vw, 18px);
+        @media (max-width: 768px) {
+          width: 48px;
+          height: 48px;
+          margin: 0 20px;
+        }
         @media (max-width: 500px) {
           width: 45px;
           height: 45px;
@@ -338,9 +380,7 @@ section {
       }
       ul li:before {
         content: "";
-        position: absolute;
-        bottom: -10px;
-        left: 0px;
+        @include position(absolute, $bottom: -10px, $left: 0);
         width: 100%;
         height: 10px;
         background: $social;
@@ -349,9 +389,7 @@ section {
       }
       ul li:after {
         content: "";
-        position: absolute;
-        top: 0px;
-        left: -9px;
+        @include position(absolute, $top: 0, $left: -9px);
         width: 9px;
         height: 100%;
         background: $social;
@@ -359,20 +397,18 @@ section {
         transform: skewY(-46deg);
       }
       ul li span {
-        position: absolute;
-        top: 0;
-        left: 0;
+        @include position(absolute, $top: 0, $left: 0);
         width: 100%;
         height: 100%;
-        display: flex !important;
+        @include flex-layout(
+          row !important,
+          $justify-content: center,
+          $align-items: center
+        );
+
         background: $social;
-        justify-content: center;
-        align-items: center;
         color: $blurple;
-        font-size: 2.23vw !important;
-        @media (max-width: 500px) {
-          font-size: 20px !important;
-        }
+        font-size: clamp(1em, 2.23vw, 2rem) !important;
         transition: 1.5s ease-out;
       }
       ul li:hover span {
@@ -423,184 +459,204 @@ section {
     transition: all 0.6s linear;
   }
 
+  // Main content area
+
   .panel__main-content {
     padding: 0;
     position: absolute;
     top: 0px;
-    left: 17.85vw;
+    left: min(
+      $side-width,
+      $max-side-width
+    ); /* Dynamically adjust left position */
+    width: calc(
+      100vw - min($side-width, $max-side-width)
+    ); /* Adjust width accordingly */
     height: 100vh;
-    width: 82.15vw;
-    @media (max-width: 500px) {
+    @media (max-width: 768px) {
       width: 100vw;
       left: 0;
     }
     // for vertical scrolling child element
     overflow-x: hidden;
-    overflow-y: scroll;
-    // scroll-snap-type: y proximity;
+    overflow-y: auto;
+    scroll-padding-bottom: 0; // Ensure no extra padding when scrolling
+    // Add fix for contact section scroll behavior
+    &:not(.scrolling-to-contact) {
+      scroll-behavior: smooth;
+    }
 
     .icon {
       font-size: 1.5rem;
-      color: $grey5;
-      position: fixed;
-      left: 35px;
-      bottom: 35px;
+      background-color: transparent;
+      border: none;
+      outline: none;
+      color: $blurple;
+      @include position(fixed, $left: 35px, $top: 35px);
       z-index: 2;
-      @media (min-width: 500px) {
+      @media (min-width: 769px) {
         display: none;
-      }
+      } // Mobile toggle
     }
-    #home {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      position: relative;
+  }
 
-      h1 {
+  // Home section
+
+  #home {
+    @include flex-layout(column, $align-items: center);
+    position: relative;
+
+    h1 {
+      margin: 30px 0;
+      @media (max-width: 920px) {
+        margin-top: 10%;
+      }
+      @media (max-width: 480px) {
+        margin-top: 35%;
+      }
+      padding: 0;
+      color: transparent;
+      font-family: "Josefin Slab", serif;
+      font-size: clamp(2rem, 6vw, 4rem);
+      perspective: 700px;
+      text-shadow: 0 -1px 0 $blurple, 1px 1px 1px black,
+        2px 2px 10px rgba(0, 0, 0, 0.15), 4px 5px 10px rgba(0, 0, 0, 0.15),
+        6px 9px 10px rgba(0, 0, 0, 0.15), 8px 15px 10px rgba(0, 0, 0, 0.15),
+        10px 20px 10px rgba(0, 0, 0, 0.15), 15px 30px 10px rgba(0, 0, 0, 0.15);
+      will-change: text-shadow;
+      &:hover {
+        transform: translate(-1px, -1px);
+        text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1),
+          -1px -1px 2px rgb(41, 40, 40), 2px 1px 2px rgba(0, 0, 0, 0.7);
+      }
+      span {
+        display: table-cell;
         margin: 0;
         padding: 0;
-        color: transparent;
-        font-family: "Josefin Slab", serif;
-        font-size: calc(150% + 2vw);
-        perspective: 700px;
-        text-shadow: 0 -1px 0 $blurple, 1px 1px 1px black,
-          2px 2px 10px rgba(0, 0, 0, 0.15), 4px 5px 10px rgba(0, 0, 0, 0.15),
-          6px 9px 10px rgba(0, 0, 0, 0.15), 8px 15px 10px rgba(0, 0, 0, 0.15),
-          10px 20px 10px rgba(0, 0, 0, 0.15), 15px 30px 10px rgba(0, 0, 0, 0.15);
-        will-change: text-shadow;
-        &:hover {
-          transform: translate(-1px, -1px);
-          text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1),
-            -1px -1px 2px rgb(41, 40, 40), 2px 1px 2px rgba(0, 0, 0, 0.7);
-        }
-        span {
-          display: table-cell;
-          margin: 0;
-          padding: 0;
-          animation: focus 700ms cubic-bezier(0.25, 0.46, 0.45, 0.94) both,
-            light 5s linear infinite;
-          @for $i from 1 through 18 {
-            &:nth-child(#{$i}) {
-              animation-delay: $i * 0.05s;
-              transition: text-shadow $i * 0.05s ease-in-out;
-            }
+        animation: focus 700ms cubic-bezier(0.25, 0.46, 0.45, 0.94) both,
+          light 5s linear infinite;
+        @for $i from 1 through 18 {
+          &:nth-child(#{$i}) {
+            animation-delay: $i * 0.05s;
+            transition: text-shadow $i * 0.05s ease-in-out;
           }
         }
       }
-      @keyframes focus {
-        0% {
-          letter-spacing: -0.5em;
-          transform: translateZ(-800px);
-          filter: blur(12px);
-          opacity: 0;
-        }
-        100% {
-          transform: translateZ(0);
-          filter: blur(0);
-          opacity: 1;
-        }
+    }
+    @keyframes focus {
+      0% {
+        letter-spacing: -0.5em;
+        transform: translateZ(-800px);
+        filter: blur(12px);
+        opacity: 0;
+      }
+      100% {
+        transform: translateZ(0);
+        filter: blur(0);
+        opacity: 1;
+      }
+    }
+
+    @keyframes light {
+      0%,
+      20%,
+      70%,
+      100% {
+        color: $grey3;
+      }
+      10% {
+        color: rgb(50, 95, 180);
+      }
+    }
+
+    .image-container {
+      position: relative;
+      width: 100%;
+      max-width: 100%;
+      max-height: 475px;
+      height: 50vh;
+      overflow: hidden;
+
+      @media (max-width: 1024px) {
+        height: 363px;
       }
 
-      @keyframes light {
-        0%,
-        20%,
-        70%,
-        100% {
-          color: $grey3;
-        }
-        10% {
-          color: rgb(50, 95, 180);
-          // color: $blurple;
-        }
+      @media (max-width: 480px) {
+        height: 330px;
+      }
+      @media (min-width: 1920px) and (max-width: 2560px) {
+        height: 540px;
+        max-height: 620px;
+      }
+    }
+
+    #heroImage {
+      filter: contrast(120%) grayscale(100%)
+        drop-shadow(-5px -3px 25px rgba(0, 0, 0, 0.4));
+      will-change: filter;
+      @include position(absolute, $left: 50%, $top: 55%);
+      transform: translate(-50%, -50%);
+      transition: filter 0.3s ease-in-out;
+      cursor: grab;
+
+      &:hover {
+        filter: contrast(120%) grayscale(0%)
+          drop-shadow(0 0 0 rgba(0, 0, 0, 0.4));
       }
 
-      .flip-box {
-        width: 400px;
-        height: 397px;
-        @media (max-width: 500px) {
-          width: 300px;
-          height: 297px;
-        }
-        perspective: 1000px;
-        animation: scale-in-center 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      @media (max-width: 1024px) {
+        height: 780px !important;
+        width: 620px !important;
       }
 
-      @keyframes scale-in-center {
-        0% {
-          transform: scale(0);
-        }
-        100% {
-          transform: scale(1);
-        }
+      @media (max-width: 480px) {
+        height: 712px !important;
+        width: 100% !important;
       }
+    }
 
-      .flip-box-inner {
-        position: relative;
-        width: 100%;
-        height: 100%;
-        transition: transform 0.5s linear;
-        transform-style: preserve-3d;
+    hr {
+      width: 50vw;
+      height: 1px;
+      margin-top: 0;
+      outline: 0;
+      border: 0;
+      box-shadow: 0px 2px 2px rgb(81, 107, 92);
+      z-index: 1;
+      @media (max-width: 1024px) {
+        width: 70vw;
       }
+      @media (max-width: 500px) {
+        width: 100vw;
+      }
+    }
 
-      .flip-box:hover .flip-box-inner {
-        transform: rotateY(180deg);
+    #text {
+      font-family: "Josefin Slab", serif;
+      font-size: calc(100% + 1.2vw);
+      @media (max-width: 768px) {
+        font-size: calc(100% + 2vw);
       }
-
-      .flip-box-front,
-      .flip-box-back {
-        position: absolute;
-        width: 100%;
-        height: 100%;
-        transform: translate3d(0, 0, 0);
-        backface-visibility: hidden;
-        img {
-          width: 100%;
-          height: 100%;
-          filter: contrast(120%) grayscale(100%)
-            drop-shadow(-5px -3px 25px rgba(0, 0, 0, 0.4));
-          -webkit-box-reflect: below -5px linear-gradient(transparent, rgba(20, 18, 18, 0.3));
-        }
-      }
-
-      .flip-box-back {
-        transform: rotateY(180deg);
-        img {
-          filter: contrast(110%) drop-shadow(-5px -3px 25px rgba(0, 0, 0, 0.4));
-        }
-      }
-      hr {
-        width: 50vw;
-        height: 1px;
-        margin-top: -2px;
-        outline: 0;
-        border: 0;
-        box-shadow: 0px 2px 2px rgb(81, 107, 92);
-        z-index: 1;
-        @media (max-width: 500px) {
-          width: 100vw;
-        }
-      }
-
-      h3 {
-        font-family: "Josefin Slab", serif;
-        font-size: calc(100% + 1vw);
-        -webkit-text-fill-color: transparent;
-        -webkit-text-stroke: 0.5px $grey4;
-        text-shadow: 1px 2px 2px rgba(0, 0, 0, 0.1),
-          2px 2px 2px rgba(0, 0, 0, 0.5), 3px 3px 3px rgba(0, 0, 0, 0.8);
-        padding-right: 0.2em;
-        border-right: 3px solid $grey5;
-        animation: cursor 500ms infinite;
-        transform: rotateX(55deg) skewX(-20deg);
-      }
-      @keyframes cursor {
-        50% {
-          border-color: transparent;
-        }
+      -webkit-text-fill-color: transparent;
+      -webkit-text-stroke: 0.5px $grey4;
+      text-shadow: 1px 2px 2px rgba(0, 0, 0, 0.1),
+        2px 2px 2px rgba(0, 0, 0, 0.5), 3px 3px 3px rgba(0, 0, 0, 0.8);
+      padding-right: 0.2em;
+      border-right: 3px solid $grey5;
+      animation: cursor 500ms infinite;
+      transform: rotateX(55deg) skewX(-20deg);
+      text-transform: capitalize;
+    }
+    @keyframes cursor {
+      50% {
+        border-color: transparent;
       }
     }
   }
 }
+
+// About section
+
 #about {
   p {
     line-height: 1.5;
@@ -622,6 +678,8 @@ section {
     }
   }
 }
+
+// Projects section with mobile optimization
 
 #projects {
   position: relative;
@@ -725,10 +783,10 @@ section {
   }
 
   #side1 {
-    transform: rotatex(90deg) translateX(0px) translateY(0px) translateZ(15vw);
-    -moz-transform: rotatex(90deg) translateX(0px) translateY(0px)
+    transform: rotateX(90deg) translateX(0px) translateY(0px) translateZ(15vw);
+    -moz-transform: rotateX(90deg) translateX(0px) translateY(0px)
       translateZ(15vw);
-    -webkit-transform: rotatex(90deg) translateX(0px) translateY(0px)
+    -webkit-transform: rotateX(90deg) translateX(0px) translateY(0px)
       translateZ(15vw);
     background-image: url(img/Gallery-of-Pets.webp);
     background-size: cover;
@@ -779,24 +837,27 @@ section {
   }
 }
 
+// Contact section
 #contact {
   p {
     line-height: 1.5;
   }
   .contact-wrapper {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
+    @include flex-layout(
+      row,
+      $justify-content: space-between,
+      $align-items: flex-start
+    );
     @media (max-width: 767px) {
-      flex-direction: column;
+      @include flex-layout(column, $align-items: center);
       width: 100%;
-      align-items: center;
     }
   }
+
   /* Begin Left Contact Page */
 
   .form-horizontal {
-    flex-basis: 1;
+    flex-basis: 45%;
     max-width: 400px;
     margin-top: 25px;
     position: relative;
@@ -807,12 +868,11 @@ section {
       padding-left: 15px;
       color: $grey5;
       background-color: transparent;
-      /* background-image-size for making wavy  borders*/
       background-size: 1px calc(100% + 16px), calc(100% + 16px) 1px,
-        1px calc(100% + 16px), calc(100% + 16px) 1px;
+        1px calc(100% + 16px), calc(100% + 16px) 1px; /* background-image-size for making wavy  borders*/
       border: 1px solid $blurple;
       border-radius: 10px;
-      font: 1.2rem $font1;
+      font: $base-font-size $font1;
       outline: none;
       box-sizing: border-box;
       transition: background-color 300ms linear;
@@ -829,9 +889,9 @@ section {
 
     label {
       position: absolute;
-      top: 9px;
+      top: 12px;
       left: 1.4rem;
-      font-size: 1.2rem;
+      font-size: 1rem;
       color: $blurple;
       border-radius: 1rem;
       padding: 0.1rem 0.5rem;
@@ -842,10 +902,10 @@ section {
       animation-play-state: paused;
     }
     .email {
-      top: 79px;
+      top: 82px;
     }
     .message {
-      top: 148px;
+      top: 151px;
     }
 
     // making the wavy borders for input, textarea and label
@@ -892,7 +952,7 @@ section {
 
     // Animating the label position to inputs
     input:not(:placeholder-shown) + label {
-      transform: translateY(-25px) translateX(10px) scale(0.75);
+      transform: translateY(-22px) translateX(10px) scale(0.75);
       transform-origin: 0 50%;
       color: inherit;
       background-color: hsl(228, 9%, 33%);
@@ -917,7 +977,7 @@ section {
     background-size: 1px calc(100% + 16px), calc(100% + 16px) 1px,
       1px calc(100% + 16px), calc(100% + 16px) 1px;
     color: $grey5;
-    font: 1.2rem $font1;
+    font: $base-font-size $font1;
     border: 1px solid $blurple;
     border-radius: 10px;
     outline: none;
@@ -940,7 +1000,7 @@ section {
     background-color: hsl(228, 9%, 33%);
     background-size: 0px, 0px, 0px, calc(100% + 16px) 1px;
     border-bottom: 2px solid $purple;
-    transform: translateY(-23px) translateX(10px) scale(0.75);
+    transform: translateY(-20px) translateX(10px) scale(0.75);
     transform-origin: 0 50%;
   }
   textarea:not(:placeholder-shown) {
@@ -1029,7 +1089,7 @@ section {
   /* Begin Right Contact Page */
 
   .direct-contact-container {
-    flex-basis: 1;
+    flex-basis: 45%;
     max-width: 400px;
     width: 100%;
   }
@@ -1058,6 +1118,9 @@ section {
       &:hover {
         border-bottom: 3px dashed $grey4;
       }
+    }
+    @media (min-width: 768px) and (max-width: 960px) {
+      line-height: 8.2;
     }
 
     @media (max-width: 767px) {
@@ -1124,13 +1187,23 @@ section {
     }
   }
 }
+@media (min-width: 768px) and (max-width: 1024px) {
+  .footer-wrapper {
+    margin-top: -7rem;
+    position: relative;
+    z-index: 1;
+  }
+}
 
 footer {
   background-color: rgb(51, 73, 119);
-  width: 82.15vw;
-  @media (max-width: 500px) {
+  width: calc(100vw - min($side-width, $max-side-width));
+  position: relative;
+  z-index: 1;
+  @media (max-width: 768px) {
     width: 100vw;
   }
+
   .container {
     font-size: 2.5rem;
     font-family: $font2;
@@ -1169,7 +1242,7 @@ footer {
     }
   }
 }
-// styling ghost cursor effect
+// Ghost that follow cursor
 #ghost {
   position: fixed;
   top: 0;
@@ -1181,10 +1254,9 @@ footer {
   transform: translateZ(0);
   contain: strict;
 }
-/* lil-gui styling */
 
+// lil-gui (hidden)
 .lil-gui {
-  // not showing controls on screen
   display: none !important;
   --width: 300px;
   max-width: 90%;

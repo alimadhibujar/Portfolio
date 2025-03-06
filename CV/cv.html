@@ -26,59 +26,72 @@
       <button class="action-button" id="download-btn" title="Download CV">
         <i class="fa fa-download"></i>&nbsp; Download CV
       </button>
+      <button class="action-button" id="theme-toggle" aria-label="Toggle Dark Mode">
+        <i class="fa fa-moon-o" aria-hidden="true"></i> Dark Mode
+      </button>
     </div>
     <div id="cv-container" class="container">
       <aside class="sidebar">
-        <img id ="imageProfile" src="./../img/img2.png" alt="Bujar Alimadhi" class="profile-image">
+
+        <img id ="imageProfile"  alt="Bujar Alimadhi" class="profile-image">  <!-- img src = imgData via js.cv -->
+        
         <section class="sidebar-section">
           <h2><i class="fa fa-address-book" aria-hidden="true"></i>&nbsp;Contact</h2>
-          <ul class="contact-list">
-            <li><i class="fa fa-map-marker"></i>&nbsp;  Tirana, Albania</li>
-            <li><i class="fa fa-phone" aria-hidden="true"></i>&nbsp;  00355 685169365</li>
-            <li><a href="mailto:b.alimadhi@yahoo.co.uk"><i class="fa fa-envelope-o" aria-hidden="true"></i>&nbsp;  b.alimadhi@yahoo.co.uk</a></li>
-            <li><a href="/index.html" ><i class="fa fa-globe" aria-hidden="true"></i>&nbsp; Portfolio</a></li>
-            <li><a href="https://github.com/alimadhibujar"><i class="fa fa-github" aria-hidden="true"></i>&nbsp; GitHub</a></li>
-            <li><a href="https://codepen.io/alimadhibujar"><i class="fa fa-codepen" aria-hidden="true"></i>&nbsp; Codepen</a></li>
-            <li><a href="https://www.linkedin.com/in/bujar-alimadhi/"><i class="fa fa-linkedin" aria-hidden="true"></i>&nbsp;   LinkedIn</a></li>
-          </ul>
+          <address>
+            <ul class="contact-list"> 
+              <li><a href="https://maps.app.goo.gl/KGjn8BQeKSzrgMJa7" target="_blank" ><i class="fa fa-map-marker" aria-hidden="true" ></i>&nbsp;  Tirana, Albania</a></li>
+              <li><a href="tel:00355685169365" title="Give me a call" ><i class="fa fa-phone" aria-hidden="true"></i>&nbsp; 00355 685169365</a
+              ></li>
+              <li><a href="mailto:b.alimadhi@yahoo.co.uk" ><i class="fa fa-envelope-o" aria-hidden="true"></i>&nbsp;  b.alimadhi@yahoo.co.uk</a></li>
+              <li><a href="/index.html" ><i class="fa fa-globe" aria-hidden="true" ></i>&nbsp; Portfolio</a></li>
+              <li><a href="https://github.com/alimadhibujar" ><i class="fa fa-github" aria-hidden="true" ></i>&nbsp; GitHub</a></li>
+              <li><a href="https://codepen.io/alimadhibujar" ><i class="fa fa-codepen" aria-hidden="true"></i>&nbsp; Codepen</a></li>
+              <li><a href="https://www.linkedin.com/in/bujar-alimadhi/" ><i class="fa fa-linkedin" aria-hidden="true"></i>&nbsp;   LinkedIn</a></li>
+            </ul>
+          </address>
         </section>
   
         <section class="sidebar-section">
           <h2>Skills</h2>
           <ul class="skills-list">
             <li>HTML
-              <div class="skill-bar">
-                <div class="skill-level" style="width: 95%;"></div>
+              <div class="skill-bar" data-percentage="95">
+                <div class="skill-level"></div>
+                <div class="tooltip">95%</div>
               </div>
             </li>
             <li>CSS3/SCSS
-              <div class="skill-bar">
-                <div class="skill-level" style="width: 90%;"></div>
+              <div class="skill-bar" data-percentage="90">
+                <div class="skill-level"></div>
+                <div class="tooltip">90%</div>
               </div>
             </li>
             <li>JavaScript
-              <div class="skill-bar">
-                <div class="skill-level" style="width: 85%;"></div>
+              <div class="skill-bar" data-percentage="85">
+                <div class="skill-level"></div>
+                <div class="tooltip">85%</div>
               </div>
             </li>
             <li>REACT
-              <div class="skill-bar">
-                <div class="skill-level" style="width: 80%;"></div>
+              <div class="skill-bar" data-percentage="80">
+                <div class="skill-level"></div>
+                <div class="tooltip">80%</div>
               </div>
             </li>
             <li>REDUX
-              <div class="skill-bar">
-                <div class="skill-level" style="width: 75%;"></div>
+              <div class="skill-bar" data-percentage="75">
+                <div class="skill-level"></div>
+                <div class="tooltip">75%</div>
               </div>
             </li>
             <li>TypeScript
-              <div class="skill-bar">
-                <div class="skill-level" style="width: 70%;"></div>
+              <div class="skill-bar" data-percentage="70">
+                <div class="skill-level" ></div>
+                <div class="tooltip">70%</div>
               </div>
             </li>
           </ul>
         </section>
-        <section>
   
         <section class="sidebar-section">
           <h2>Languages</h2>
@@ -93,7 +106,7 @@
         <section class="certification-item">
           <h2>Certifications</h2>
           <ul>
-            <li>Graduation Certification for <a href="./../img/certificate.webp" target="_blank">Front-End Developer
+            <li>Graduation Certification for <a href="./../img/certificate.webp" target="_blank" >Front-End Developer
             Link Academy Lab, Tiranë</a></li>  
             <p>Six months of intensive course for front-end web developer.<span class="date-range">(February – October 10, 2019)</span></p>
           </ul>
@@ -129,18 +142,18 @@
           <div class="work-experience-item">  
             <p>Here are some of the links of my projects, for more information visit my <a href="/index.html" > Portfolio</a>,
               GitHub account or code pen account.</p>
-              <ul class="project-list" style="--sibling-count: 11">
-                  <li style="--sibling-index: 1"><a href="https://alimadhibujar.github.io/Gallery-of-Pets/"target= "_blank">Gallery of Pets</a></li>
-                  <li style="--sibling-index: 2"><a href="https://codepen.io/alimadhibujar/full/mybzoNg"target= "_blank" >Tetris React Game</a></li>
-                  <li style="--sibling-index: 3"><a href="https://alimadhibujar.github.io/linkacademy/index.html"target= "_blank">Link-Academy-Web</a></li>
-                  <li style="--sibling-index: 4"><a href="https://codepen.io/alimadhibujar/full/mybzoNg"target= "_blank">Synth Keyboard</a></li>
-                  <li style="--sibling-index: 5"><a href="https://alimadhibujar.github.io/Tik-Tok-React-App/"target= "_blank">Tik-Tok-React-App</a></li>
-                  <li style="--sibling-index: 6"><a href="https://codepen.io/alimadhibujar/pen/qBdjJqZ"target= "_blank">Neumorphic Responsive Analog Clock</a></li>
-                  <li style="--sibling-index: 7"><a href="https://alimadhibujar.github.io/Photo-Gallery/"target= "_blank">Photo-Gallery-React-App</a></li>
-                  <li style="--sibling-index: 8"><a href="https://codepen.io/alimadhibujar/pen/OJybqEd"target= "_blank">Glassmorphism-Credit-Card-Form</a></li>
-                  <li style="--sibling-index: 9"><a href="https://alimadhibujar.github.io/Rock-Paper-Scissors-React-Game/">Rock-Paper-Scissors-React-Game</a></li>
-                  <li style="--sibling-index: 10"><a href="https://codepen.io/alimadhibujar/pen/jOMjZbx"target= "_blank">Neumorphic Social Media Buttons</a></li>
-                  <li style="--sibling-index: 11"><a href="https://codepen.io/alimadhibujar/pen/raBwbZb" target="_blank">Fade-In Card Effect</a></li>
+              <ul class="project-list" style="--sibling-count: 11"> 
+                  <li style="--sibling-index: 1"><a href="https://alimadhibujar.github.io/Gallery-of-Pets/"target= "_blank" >Gallery of Pets</a></li>
+                  <li style="--sibling-index: 2"><a href="https://codepen.io/alimadhibujar/full/mybzoNg" target= "_blank" >Tetris React Game</a></li>
+                  <li style="--sibling-index: 3"><a href="https://alimadhibujar.github.io/linkacademy/index.html" target= "_blank" >Link-Academy-Web</a></li>
+                  <li style="--sibling-index: 4"><a href="https://codepen.io/alimadhibujar/pen/raBwbZb" target= "_blank" >Synth Keyboard</a></li>
+                  <li style="--sibling-index: 5"><a href="https://alimadhibujar.github.io/Tik-Tok-React-App/" target= "_blank" >Tik-Tok-React-App</a></li>
+                  <li style="--sibling-index: 6"><a href="https://codepen.io/alimadhibujar/pen/OJybqEd" target= "_blank" >Neumorphic Responsive Analog Clock</a></li>
+                  <li style="--sibling-index: 7"><a href="https://alimadhibujar.github.io/Photo-Gallery/" target= "_blank" >Photo-Gallery-React-App</a></li>
+                  <li style="--sibling-index: 8"><a href="https://codepen.io/alimadhibujar/pen/jOMjZbx" target= "_blank" >Glassmorphism-Credit-Card-Form</a></li>
+                  <li style="--sibling-index: 9"><a href="https://alimadhibujar.github.io/React-Rock-Scissors-Paper/" target="_blank" >Rock-Paper-Scissors-React-Game</a></li>
+                  <li style="--sibling-index: 10"><a href="https://codepen.io/alimadhibujar/pen/qBdjJqZ" target= "_blank" >Neumorphic Social Media Buttons</a></li>
+                  <li style="--sibling-index: 11"><a href="https://codepen.io/alimadhibujar/pen/WNqaaWb" target= "_blank" >Fade-In Card Effect</a></li>
               </ul>
             </div>
         </section>
@@ -168,7 +181,7 @@
         
       </main>
     </div>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.2/html2pdf.bundle.min.js"></script>
-    <script src="./cv.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.2/html2pdf.bundle.min.js" defer></script> <!--cdn for converting html to pdf  -->
+    <script type="module" src="./cv.js" defer></script>
   </body>
 </html>
