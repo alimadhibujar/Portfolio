@@ -573,20 +573,16 @@ section {
       position: relative;
       width: 100%;
       max-width: 100%;
-      max-height: 475px;
-      height: 50vh;
+      max-height: 478px;
+      height: auto;
+      aspect-ratio: 16/9;
       overflow: hidden;
-
-      @media (max-width: 1024px) {
-        height: 363px;
-      }
-
       @media (max-width: 480px) {
         height: 330px;
       }
-      @media (min-width: 1920px) and (max-width: 2560px) {
-        height: 540px;
-        max-height: 620px;
+
+      @media (min-width: 481px) and (max-width: 1440px) {
+        height: 400px;
       }
     }
 

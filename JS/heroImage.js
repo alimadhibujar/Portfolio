@@ -43,9 +43,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const init = () => {
     const canvas = document.getElementById("heroImage");
-    // Set canvas max dimensions
-    canvas.width = canvas.parentElement.clientWidth;
-    canvas.height = canvas.width * (9 / 16);
+    // Set consistent canvas dimensions
+    const container = canvas.parentElement;
+    canvas.width = container.clientWidth;
+    canvas.height = container.clientHeight || canvas.width * (9 / 16);
 
     const ww = window.innerWidth;
     const wh = window.innerHeight;
