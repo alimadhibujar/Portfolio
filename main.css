@@ -467,7 +467,7 @@ section {
 }
 @media (max-width: 480px) {
   .panel__main #home h1 {
-    margin-top: 35%;
+    margin-top: 25%;
   }
 }
 .panel__main #home h1:hover {
@@ -584,7 +584,7 @@ section {
 }
 @media (max-width: 480px) {
   .panel__main #home .image-container {
-    height: 330px;
+    height: 360px;
   }
 }
 @media (min-width: 481px) and (max-width: 1440px) {
