@@ -428,20 +428,31 @@ section {
   scroll-behavior: smooth;
 }
 .panel__main .panel__main-content .icon {
-  font-size: 1.5rem;
+  height: 1.5rem;
+  width: 1.5rem;
   background-color: transparent;
   border: none;
   outline: none;
   color: #7289da;
   position: fixed;
-  top: 35px;
+  bottom: 35px;
   left: 35px;
   z-index: 2;
+}
+@media (min-width: 480px) and (max-width: 768px) {
+  .panel__main .panel__main-content .icon {
+    position: fixed;
+    top: 35px;
+    left: 35px;
+  }
 }
 @media (min-width: 769px) {
   .panel__main .panel__main-content .icon {
     display: none;
   }
+}
+.panel__main .panel__main-content .icon .fa-bars {
+  font-size: 1.5rem;
 }
 .panel__main #home {
   display: flex;
@@ -463,11 +474,6 @@ section {
 @media (max-width: 920px) {
   .panel__main #home h1 {
     margin-top: 10%;
-  }
-}
-@media (max-width: 480px) {
-  .panel__main #home h1 {
-    margin-top: 25%;
   }
 }
 .panel__main #home h1:hover {

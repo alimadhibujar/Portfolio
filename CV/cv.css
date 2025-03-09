@@ -1,12 +1,14 @@
 @import "https://unpkg.com/open-props/easings.min.css";
 
 :root {
-  --primary-color: #2a5c82;
-  --secondary-color: #4a7b9d;
-  --accent-color: #ff6b6b;
+  --primary-color: #2c6e9b;
+  --secondary-color: #4a90c0;
+  --accent-color: #e67373;
   --background-color: #fff;
   --text-color: #2d3436;
+  --sidebar-bg: #f7f9fc;
   --skill-bar-bg: #e0e7ec;
+  --skill-level-bg: var(--primary-color);
   --header-bg: radial-gradient(
     circle farthest-corner at top left,
     rgba(44, 62, 80, 0.9) 0%,
@@ -26,20 +28,31 @@
   --imageFilter: grayscale(100%) drop-shadow(-4px -2px 25px rgba(0, 0, 0, 0.2));
   --containerBoxShadow: 0 10px 20px rgba(0, 0, 0, 0.1);
   --containerBoxShadowHover: 0 10px 20px rgba(0, 0, 0, 0.15);
+  --link-color: #2c6e9b;
+  --link-hover-color: #e67373;
+  --date-color: #6c757d;
 }
 
 .dark-mode {
-  --background-color: #2d3436;
-  --text-color: #f8f9fa;
-  --primary-color: hsl(206, 70%, 74%);
-  --secondary-color: hsl(204, 39%, 77%);
-  --imageFilter: grayscale(0%) drop-shadow(0px 0px 0px rgba(0, 0, 0, 0.2));
+  --background-color: #1a1f24;
+  --text-color: hsl(216, 20%, 85%);
+  --primary-color: #64a6d3;
+  --secondary-color: hsl(203, 58%, 71%);
+  --accent-color: #ff8585;
+  --sidebar-bg: #242a33;
+  --skill-bar-bg: #2c3440;
+  --skill-level-bg: var(--primary-color);
+  --imageFilter: grayscale(0%)
+    drop-shadow(0px 0px 15px rgba(100, 166, 211, 0.3));
   --containerBoxShadow: 0 10px 20px rgba(0, 0, 0, 0.4);
   --containerBoxShadowHover: 0 15px 30px rgba(0, 0, 0, 0.5);
+  --link-color: hsl(204, 56%, 75%);
+  --link-hover-color: #ff8585;
+  --date-color: #a0aec0;
 }
 
 * a:hover {
-  color: var(--accent-color) !important;
+  color: var(--link-hover-color) !important;
 }
 
 /* Improved performance */
@@ -80,6 +93,7 @@ body {
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  transition: background-color 0.3s ease;
 }
 h1,
 h2,
@@ -91,12 +105,20 @@ h3 {
 
 /* Buttons */
 
+.button-container {
+  width: 100%;
+  max-width: 832px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
 .action-button {
   display: inline-block;
   width: 150px;
   padding: 10px 5px;
-  margin: 10px;
-  background: var(--secondary-color);
+  margin: 10px 0;
+  background: #4a7b9d;
   color: #fff;
   text-decoration: none;
   border: none;
@@ -134,8 +156,9 @@ h3 {
   box-shadow: var(--containerBoxShadow);
   display: grid;
   grid-template-columns: 30% 70%;
-  transition: box-shadow 0.3s ease;
+  transition: box-shadow 0.3s ease, background-color 0.3s ease, color 0.3s ease;
   padding: 0 1em 1em;
+  border-radius: 8px;
 }
 
 .container:hover {
@@ -145,6 +168,7 @@ h3 {
 /* Sidebar Styles */
 .sidebar {
   background-color: var(--sidebar-bg);
+  transition: background-color 0.3s ease;
   padding: 20px;
 }
 
@@ -172,7 +196,11 @@ h3 {
 .sidebar-section {
   margin-bottom: 10px;
   padding-bottom: 10px;
-  border-bottom: 1px solid #ddd;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.dark-mode .sidebar-section {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .sidebar-section:last-child {
@@ -254,8 +282,8 @@ h3 {
 /* Tooltip styles */
 .tooltip {
   position: absolute;
-  background-color: var(--text-color);
-  color: var(--background-color);
+  background-color: hsl(205, 36%, 35%);
+  color: white;
   padding: 5px 10px;
   border-radius: 4px;
   font-size: 14px;
@@ -279,7 +307,7 @@ h3 {
   margin-left: -5px;
   border-width: 5px;
   border-style: solid;
-  border-color: var(--text-color) transparent transparent transparent;
+  border-color: hsl(205, 36%, 35%) transparent transparent transparent;
 }
 
 .skill-bar:hover .tooltip {
@@ -378,7 +406,7 @@ section:hover {
 
 .date-range {
   font-size: 0.75em;
-  color: #999;
+  color: var(--date-color);
   float: right;
 }
 
@@ -452,7 +480,7 @@ section:hover {
 
 hr {
   border: 0;
-  border-top: 1px solid #ddd;
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
   margin: 20px 0;
 }
 
@@ -499,6 +527,10 @@ hr {
   transition: opacity 0.3s var(--ease-3);
 }
 
+.dark-mode .loading-overlay {
+  background: rgba(26, 31, 36, 0.9);
+}
+
 .loading-overlay[aria-hidden="false"] {
   display: grid;
 }
@@ -534,13 +566,6 @@ hr {
     padding: 0;
   }
 
-  .button-container {
-    width: 100%;
-    max-width: 832px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
   .action-button {
     width: 115px;
     padding: 10px 0px;

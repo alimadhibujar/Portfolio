@@ -486,17 +486,25 @@ section {
       scroll-behavior: smooth;
     }
 
+    // Mobile toggle button
     .icon {
-      font-size: 1.5rem;
+      height: 1.5rem;
+      width: 1.5rem;
       background-color: transparent;
       border: none;
       outline: none;
       color: $blurple;
-      @include position(fixed, $left: 35px, $top: 35px);
+      @include position(fixed, $left: 35px, $bottom: 35px);
+      @media (min-width: 480px) and (max-width: 768px) {
+        @include position(fixed, $left: 35px, $top: 35px);
+      }
       z-index: 2;
       @media (min-width: 769px) {
         display: none;
-      } // Mobile toggle
+      }
+      .fa-bars {
+        font-size: 1.5rem;
+      }
     }
   }
 
@@ -510,9 +518,6 @@ section {
       margin: 30px 0;
       @media (max-width: 920px) {
         margin-top: 10%;
-      }
-      @media (max-width: 480px) {
-        margin-top: 25%;
       }
       padding: 0;
       color: transparent;
