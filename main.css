@@ -587,6 +587,7 @@ section {
   height: auto;
   aspect-ratio: 16/9;
   overflow: hidden;
+  view-transition-name: imageProfile;
 }
 @media (max-width: 480px) {
   .panel__main #home .image-container {
@@ -631,6 +632,7 @@ section {
   border: 0;
   box-shadow: 0px 2px 2px rgb(81, 107, 92);
   z-index: 1;
+  view-transition-name: hr;
 }
 @media (max-width: 1024px) {
   .panel__main #home hr {
@@ -1245,4 +1247,19 @@ footer .container div:first-of-type {
   --hover-color: rgba(255, 255, 255, 0.5);
   --font-family: monospace;
   z-index: 1;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  @view-transition {
+    navigation: auto;
+  }
+}
+::view-transition-group(imageProfile) {
+  animation-duration: 1s;
+  animation-timing-function: ease-in-out;
+}
+
+::view-transition-group(hr) {
+  animation-duration: 1s;
+  animation-timing-function: ease-in-out;
 }/*# sourceMappingURL=main.css.map */

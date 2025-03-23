@@ -582,6 +582,7 @@ section {
       height: auto;
       aspect-ratio: 16/9;
       overflow: hidden;
+      view-transition-name: imageProfile; //image transition on page change
       @media (max-width: 480px) {
         height: 360px;
       }
@@ -624,6 +625,7 @@ section {
       border: 0;
       box-shadow: 0px 2px 2px rgb(81, 107, 92);
       z-index: 1;
+      view-transition-name: hr; //hr transition on page change
       @media (max-width: 1024px) {
         width: 70vw;
       }
@@ -648,6 +650,7 @@ section {
       transform: rotateX(55deg) skewX(-20deg);
       text-transform: capitalize;
     }
+
     @keyframes cursor {
       50% {
         border-color: transparent;
@@ -1273,4 +1276,21 @@ footer {
   --hover-color: rgba(255, 255, 255, 0.5);
   --font-family: monospace;
   z-index: 1;
+}
+
+// View transition
+
+@media (prefers-reduced-motion: no-preference) {
+  @view-transition {
+    navigation: auto;
+  }
+}
+
+::view-transition-group(imageProfile) {
+  animation-duration: 1s;
+  animation-timing-function: ease-in-out;
+}
+::view-transition-group(hr) {
+  animation-duration: 1s;
+  animation-timing-function: ease-in-out;
 }
