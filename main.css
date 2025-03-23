@@ -1257,9 +1257,4 @@ footer .container div:first-of-type {
 ::view-transition-group(imageProfile) {
   animation-duration: 1s;
   animation-timing-function: ease-in-out;
-}
-
-::view-transition-group(hr) {
-  animation-duration: 1s;
-  animation-timing-function: ease-in-out;
 }/*# sourceMappingURL=main.css.map */
