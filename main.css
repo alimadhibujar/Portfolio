@@ -587,7 +587,6 @@ section {
   height: auto;
   aspect-ratio: 16/9;
   overflow: hidden;
-  view-transition-name: imageProfile;
 }
 @media (max-width: 480px) {
   .panel__main #home .image-container {
@@ -632,7 +631,7 @@ section {
   border: 0;
   box-shadow: 0px 2px 2px rgb(81, 107, 92);
   z-index: 1;
-  view-transition-name: hr;
+  view-transition-name: header-separator;
 }
 @media (max-width: 1024px) {
   .panel__main #home hr {
@@ -1249,12 +1248,66 @@ footer .container div:first-of-type {
   z-index: 1;
 }
 
+/* View Transitions - Core Setup */
 @media (prefers-reduced-motion: no-preference) {
   @view-transition {
     navigation: auto;
   }
 }
+/* Global transition settings */
+::view-transition-group(*) {
+  animation-duration: 0.8s;
+  animation-timing-function: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+/* Smooth fade for page background */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 0.6s;
+}
+
+/* Custom easing for smoother transitions */
+::view-transition-old(root) {
+  animation-name: fade-out;
+}
+
+::view-transition-new(root) {
+  animation-name: fade-in;
+}
+
+@keyframes fade-out {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+/* Image container transition */
+.image-container {
+  view-transition-name: imageProfile;
+}
+
+/* Name title transition */
+#name-title {
+  view-transition-name: title;
+}
+
+/* Specific transition timing for portfolio elements */
 ::view-transition-group(imageProfile) {
+  animation-duration: 0.7s;
+  animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+::view-transition-group(title) {
   animation-duration: 1s;
-  animation-timing-function: ease-in-out;
+  animation-timing-function: cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }/*# sourceMappingURL=main.css.map */
