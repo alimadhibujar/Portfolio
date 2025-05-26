@@ -28,6 +28,25 @@ document.addEventListener("DOMContentLoaded", () => {
     mainColor: [0.98, 0.96, 0.96],
     borderColor: [0.2, 0.5, 0.7],
     isFlatColor: false,
+    // Angry state parameters
+    angry: {
+      isAngry: false,
+      targetSize: 0.03,
+      targetSmile: 1,
+      targetMainColor: [0.98, 0.96, 0.96],
+      targetBorderColor: [0.2, 0.5, 0.7],
+      transitionSpeed: 0.1,
+      releaseStartTime: 0,
+      releaseDuration: 500, // Duration to return to normal (ms)
+    },
+  };
+
+  // Store original values for reset
+  const originalParams = {
+    size: params.size,
+    smile: params.smile,
+    mainColor: [...params.mainColor],
+    borderColor: [...params.borderColor],
   };
 
   // Create an offscreen canvas for the trail texture
@@ -54,6 +73,7 @@ document.addEventListener("DOMContentLoaded", () => {
   let uniforms;
   const gl = initShader();
   createControls();
+  setupDragEvents();
   window.addEventListener("resize", resizeCanvas);
   resizeCanvas();
   render();
@@ -85,6 +105,118 @@ document.addEventListener("DOMContentLoaded", () => {
     eY -= 0.6 * size;
     mouse.tY = eY > size ? eY : size;
     mouse.tY -= mouse.controlsPadding;
+  }
+
+  function setupDragEvents() {
+    const heroImage = document.querySelector("#heroImage");
+    if (!heroImage) return;
+
+    // Function to make ghost angry
+    function makeGhostAngry() {
+      params.angry.isAngry = true;
+      params.angry.releaseStartTime = 0;
+      // Set angry appearance
+      params.angry.targetSize = originalParams.size * 1.3; // Bigger when angry
+      params.angry.targetSmile = -0.8; // Frowning
+      params.angry.targetMainColor = [0.2, 0.4, 0.6]; // main color when angry
+      params.angry.targetBorderColor = [0.8, 0.2, 0.1]; // border color when angry
+    }
+
+    // Function to start ghost calming down
+    function calmGhostDown() {
+      if (params.angry.isAngry) {
+        params.angry.releaseStartTime = performance.now();
+        params.angry.isAngry = false;
+        // Set target back to normal
+        params.angry.targetSize = originalParams.size;
+        params.angry.targetSmile = originalParams.smile;
+        params.angry.targetMainColor = [...originalParams.mainColor];
+        params.angry.targetBorderColor = [...originalParams.borderColor];
+      }
+    }
+
+    // Mouse drag events
+    heroImage.addEventListener("mousedown", (e) => {
+      makeGhostAngry();
+
+      const handleMouseUp = () => {
+        calmGhostDown();
+        document.removeEventListener("mouseup", handleMouseUp);
+      };
+
+      document.addEventListener("mouseup", handleMouseUp);
+    });
+
+    // Touch drag events
+    heroImage.addEventListener("touchstart", (e) => {
+      makeGhostAngry();
+
+      const handleTouchEnd = () => {
+        calmGhostDown();
+        document.removeEventListener("touchend", handleTouchEnd);
+      };
+
+      document.addEventListener("touchend", handleTouchEnd);
+    });
+
+    // HTML5 drag events (if the image is draggable)
+    heroImage.addEventListener("dragstart", (e) => {
+      makeGhostAngry();
+    });
+
+    heroImage.addEventListener("dragend", (e) => {
+      calmGhostDown();
+    });
+  }
+
+  function updateAngryState(currentTime) {
+    let progress = 1;
+
+    // If we're in release phase, calculate progress based on time
+    if (!params.angry.isAngry && params.angry.releaseStartTime > 0) {
+      const elapsed = currentTime - params.angry.releaseStartTime;
+      progress = Math.max(0, 1 - elapsed / params.angry.releaseDuration);
+
+      if (elapsed >= params.angry.releaseDuration) {
+        params.angry.releaseStartTime = 0;
+        progress = 0;
+      }
+    } else if (params.angry.isAngry) {
+      // Still angry, maintain angry state
+      progress = 1;
+    } else {
+      // Not angry and no release in progress
+      progress = 0;
+    }
+
+    // Smooth interpolation using easing
+    const easeProgress = 1 - Math.pow(1 - progress, 3); // Cubic ease-out
+    const invProgress = 1 - easeProgress;
+
+    // Interpolate size
+    params.size =
+      params.angry.targetSize * easeProgress +
+      originalParams.size * invProgress;
+
+    // Interpolate smile
+    params.smile =
+      params.angry.targetSmile * easeProgress +
+      originalParams.smile * invProgress;
+
+    // Interpolate colors
+    for (let i = 0; i < 3; i++) {
+      params.mainColor[i] =
+        params.angry.targetMainColor[i] * easeProgress +
+        originalParams.mainColor[i] * invProgress;
+      params.borderColor[i] =
+        params.angry.targetBorderColor[i] * easeProgress +
+        originalParams.borderColor[i] * invProgress;
+    }
+
+    // Update dot sizes if size changed
+    for (let i = 0; i < params.tail.dotsNumber; i++) {
+      pointerTrail[i].r = dotSize(i);
+    }
   }
 
   function initShader() {
@@ -224,17 +356,21 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function render() {
     const currentTime = performance.now();
+
+    // Update angry state before rendering
+    updateAngryState(currentTime);
+
     gl.uniform1f(uniforms.u_time, currentTime);
     gl.clearColor(0.0, 0.0, 0.0, 1.0);
     gl.clear(gl.COLOR_BUFFER_BIT);
     gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
 
-    if (mouse.moving) {
+    if (mouse.moving && !params.angry.isAngry) {
       params.smile -= 0.05;
       params.smile = Math.max(params.smile, -0.1);
       params.tail.gravity -= 10 * params.size;
       params.tail.gravity = Math.max(params.tail.gravity, 0);
-    } else {
+    } else if (!params.angry.isAngry && params.angry.releaseStartTime === 0) {
       params.smile += 0.01;
       params.smile = Math.min(params.smile, 1);
       if (params.tail.gravity > 25 * params.size) {
@@ -248,7 +384,21 @@ document.addEventListener("DOMContentLoaded", () => {
     mouse.x += (mouse.tX - mouse.x) * mouseThreshold;
     mouse.y += (mouse.tY - mouse.y) * mouseThreshold;
 
+    // Update uniforms with current values (which may be interpolated during angry state)
+    gl.uniform1f(uniforms.u_size, params.size);
     gl.uniform1f(uniforms.u_smile, params.smile);
+    gl.uniform3f(
+      uniforms.u_main_color,
+      params.mainColor[0],
+      params.mainColor[1],
+      params.mainColor[2]
+    );
+    gl.uniform3f(
+      uniforms.u_border_color,
+      params.borderColor[0],
+      params.borderColor[1],
+      params.borderColor[2]
+    );
     gl.uniform2f(
       uniforms.u_pointer,
       mouse.x / window.innerWidth,
@@ -288,17 +438,20 @@ document.addEventListener("DOMContentLoaded", () => {
     const gui = new GUI();
     gui.close();
     gui.add(params, "size", 0.02, 0.3, 0.01).onChange((v) => {
+      originalParams.size = v; // Update original value when manually changed
       for (let i = 0; i < params.tail.dotsNumber; i++) {
         pointerTrail[i].r = dotSize(i);
       }
       gl.uniform1f(uniforms.u_size, params.size);
     });
     gui.addColor(params, "mainColor").onChange((v) => {
+      originalParams.mainColor = [...v]; // Update original value when manually changed
       gl.uniform3f(uniforms.u_main_color, v[0], v[1], v[2]);
     });
     const borderColorControl = gui
       .addColor(params, "borderColor")
       .onChange((v) => {
+        originalParams.borderColor = [...v]; // Update original value when manually changed
         gl.uniform3f(uniforms.u_border_color, v[0], v[1], v[2]);
       });
     gui.add(params, "isFlatColor").onFinishChange((v) => {

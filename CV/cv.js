@@ -269,6 +269,7 @@ function updateLinkColors() {
   const links = document.querySelectorAll("a");
   links.forEach((link) => {
     link.style.color = color;
+    link.style.transition = "color 0.4s ease";
   });
 }
 

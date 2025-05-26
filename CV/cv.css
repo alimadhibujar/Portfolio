@@ -51,7 +51,29 @@
   --date-color: #a0aec0;
 }
 
-* a:hover {
+/* Main animated underline effect */
+a {
+  text-decoration: none;
+  position: relative;
+}
+
+a::before {
+  content: "";
+  position: absolute;
+  width: 0;
+  height: 1px;
+  bottom: -2px;
+  left: 0;
+  background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+  transition: width 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  border-radius: 2px;
+}
+
+a:hover::before {
+  width: 100%;
+}
+
+a:hover {
   color: var(--link-hover-color) !important;
 }
 

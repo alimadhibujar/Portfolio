@@ -675,6 +675,34 @@ section {
     }
   }
 
+  .animated-link {
+    color: hsl(243, 35%, 75%);
+    text-decoration: none;
+    position: relative;
+    font-weight: 600;
+    transition: color 0.3s ease;
+  }
+
+  .animated-link::before {
+    content: "";
+    position: absolute;
+    width: 0;
+    height: 3px;
+    bottom: -2px;
+    left: 0;
+    background: linear-gradient(90deg, #6366f1, #8b5cf6, #ec4899);
+    transition: width 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    border-radius: 2px;
+  }
+
+  .animated-link:hover::before {
+    width: 100%;
+  }
+
+  .animated-link:hover {
+    color: #6366f1;
+  }
+
   @keyframes scroll-reveal {
     to {
       background-size: 100% 100%;
