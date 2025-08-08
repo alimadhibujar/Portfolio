@@ -125,32 +125,56 @@ h3 {
   font-weight: 600;
 }
 
-/* Buttons */
+/* Buttons -> Sticky Mini-Toolbar */
 
 .button-container {
-  width: 100%;
-  max-width: 832px;
+  position: sticky;
+  top: 12px;
+  z-index: 1000;
+  width: fit-content;
+  max-width: none;
   display: flex;
-  justify-content: space-between;
+  gap: 10px; /* more spacing between buttons for clarity */
+  margin-inline: auto;
   align-items: center;
+
+  /* Glassmorphism background with stronger contrast */
+  padding: 8px 10px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--background-color) 85%, #0000);
+  -webkit-backdrop-filter: saturate(120%) blur(12px);
+  backdrop-filter: saturate(120%) blur(12px);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.12);
+  border: 1px solid color-mix(in srgb, var(--text-color) 14%, #0000);
 }
 
 .action-button {
-  display: inline-block;
-  width: 150px;
-  padding: 10px 5px;
-  margin: 10px 0;
-  background: #4a7b9d;
+  inline-size: 42px; /* larger target improves readability */
+  block-size: 42px;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  place-items: center;
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--secondary-color) 92%, #0000),
+    color-mix(in srgb, var(--secondary-color) 80%, #0000)
+  );
   color: #fff;
   text-decoration: none;
   border: none;
   cursor: pointer;
-  border-radius: 5px;
-  transition: background-color 0.3s ease, transform 0.3s ease;
+  border-radius: 12px; /* softer rounded square increases legibility */
+  transition: background-color 0.25s var(--ease-out-3),
+    transform 0.2s var(--ease-out-3), box-shadow 0.25s var(--ease-out-3),
+    border-color 0.25s var(--ease-out-3);
+  position: relative;
+  border: 1px solid color-mix(in srgb, #ffffff 25%, var(--secondary-color));
 }
 .action-button:hover {
-  background-color: rgba(44, 62, 80, 0.9);
+  background-color: rgba(44, 62, 80, 0.98);
   transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.22);
 }
 
 .fa-sun-o {
@@ -168,6 +192,93 @@ h3 {
 .action-button:hover .fa-sun-o,
 .action-button:hover .fa-moon-o {
   animation-play-state: running;
+}
+
+/* Icon sizing increased for readability */
+.action-button .fa {
+  font-size: 18px;
+  line-height: 1;
+}
+
+/* Show labels (previously hidden) to increase readability on wide screens */
+@media (min-width: 992px) {
+  .action-button {
+    inline-size: auto;
+    padding: 0 12px;
+    gap: 8px;
+    display: inline-flex;
+    align-items: center;
+  }
+  .action-button .label {
+    display: inline;
+    color: #fff;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 0.2px;
+    text-shadow: 0 1px 0 rgba(0, 0, 0, 0.15);
+  }
+}
+
+/* Custom tooltips for mini-toolbar using data-tooltip (set in HTML/JS) */
+.action-button[data-tooltip]::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  bottom: -44px;
+  left: 50%;
+  transform: translateX(-50%) translateY(6px);
+  background: color-mix(in srgb, var(--background-color) 96%, #0000);
+  color: var(--text-color);
+  padding: 8px 10px; /* larger tooltip text and padding */
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s var(--ease-out-3), transform 0.2s var(--ease-out-3);
+  border: 1px solid color-mix(in srgb, var(--text-color) 16%, #0000);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.16);
+}
+
+.action-button[data-tooltip]:hover::after,
+.action-button[data-tooltip]:focus-visible::after {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+/* Keyboard focus ring with stronger contrast */
+.action-button:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--secondary-color) 55%, #0000),
+    0 6px 16px rgba(0, 0, 0, 0.2);
+}
+
+/* Hide toolbar on print */
+@media print {
+  .button-container {
+    display: none !important;
+  }
+}
+
+/* Mobile: slightly larger touch targets */
+@media (max-width: 768px) {
+  .button-container {
+    top: 6px;
+    gap: 8px;
+    padding: 6px 8px;
+  }
+  .action-button {
+    inline-size: 46px;
+    block-size: 46px;
+  }
+  .action-button .fa {
+    font-size: 20px; /* larger icons on mobile */
+  }
+  .action-button .label {
+    display: none; /* keep compact on mobile */
+  }
 }
 
 /* CV format A4 */
@@ -437,6 +548,112 @@ section:hover {
 .personal-skills ul {
   list-style: disc;
   padding-left: 20px;
+}
+
+/* Micro-interactions for list items */
+:root {
+  --li-hover-bg: rgba(76, 110, 157, 0.08);
+  --li-hover-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+  --li-focus-ring: 0 0 0 3px rgba(76, 110, 157, 0.25);
+}
+
+.dark-mode {
+  --li-hover-bg: rgba(100, 166, 211, 0.12);
+  --li-hover-shadow: 0 6px 14px rgba(0, 0, 0, 0.35);
+  --li-focus-ring: 0 0 0 3px rgba(100, 166, 211, 0.35);
+}
+
+/* Target all CV lists without affecting nested skill bars */
+.contact-list li,
+.skills-list > li,
+.languages-list li,
+.project-list > li,
+.personal-skills ul > li {
+  position: relative;
+  border-radius: 8px;
+  padding: 4px 8px;
+  transition: transform 220ms var(--ease-out-3),
+    box-shadow 220ms var(--ease-out-3), background-color 220ms var(--ease-out-3),
+    color 220ms var(--ease-out-3);
+  will-change: transform, box-shadow, background-color;
+}
+
+/* Slight lift and gentle highlight */
+@media (hover) and (prefers-reduced-motion: no-preference) {
+  .contact-list li:hover,
+  .skills-list > li:hover,
+  .languages-list li:hover,
+  .project-list > li:hover,
+  .personal-skills ul > li:hover {
+    background-color: var(--li-hover-bg);
+    transform: translateY(-2px) scale(1.01);
+    box-shadow: var(--li-hover-shadow);
+  }
+}
+
+/* Keyboard accessibility: mirror hover on focus-visible */
+.contact-list li:focus-visible,
+.skills-list > li:focus-visible,
+.languages-list li:focus-visible,
+.project-list > li:focus-visible,
+.personal-skills ul > li:focus-visible {
+  outline: none;
+  background-color: var(--li-hover-bg);
+  box-shadow: var(--li-hover-shadow), var(--li-focus-ring);
+  transform: translateY(-1px);
+}
+
+/* Ensure focusability for items without native focus targets */
+.contact-list li,
+.skills-list > li,
+.languages-list li,
+.project-list > li,
+.personal-skills ul > li {
+  /* Enable keyboard focus if there is no interactive child */
+  /* Developers can remove tabindex if list items contain links/buttons already */
+  tabindex: 0;
+}
+
+/* Subtle link color lift inside list items without breaking global underline */
+.contact-list li:hover a,
+.skills-list > li:hover a,
+.languages-list li:hover a,
+.project-list > li:hover a,
+.personal-skills ul > li:hover a {
+  color: var(--link-hover-color);
+}
+
+/* Respect reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .contact-list li,
+  .skills-list > li,
+  .languages-list li,
+  .project-list > li,
+  .personal-skills ul > li {
+    transition: background-color 150ms ease, color 150ms ease,
+      box-shadow 150ms ease;
+  }
+  .contact-list li:hover,
+  .skills-list > li:hover,
+  .languages-list li:hover,
+  .project-list > li:hover,
+  .personal-skills ul > li:hover {
+    transform: none;
+    box-shadow: var(--li-hover-shadow);
+  }
+}
+
+/* Do not show interactive highlights in print */
+@media print {
+  .contact-list li,
+  .skills-list > li,
+  .languages-list li,
+  .project-list > li,
+  .personal-skills ul > li {
+    background: transparent !important;
+    box-shadow: none !important;
+    transform: none !important;
+  }
 }
 
 .project-list {

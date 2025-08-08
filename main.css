@@ -414,8 +414,8 @@ section {
   left: min(17.85vw, 250px); /* Dynamically adjust left position */
   width: calc(100vw - min(17.85vw, 250px)); /* Adjust width accordingly */
   height: 100vh;
-  overflow-x: hidden;
   overflow-y: auto;
+  overflow-x: hidden;
   scroll-padding-bottom: 0;
 }
 @media (max-width: 768px) {
@@ -813,7 +813,7 @@ section {
   transform: rotateY(-90deg) translateX(0px) translateY(0px) translateZ(15vw);
   -moz-transform: rotateY(-90deg) translateX(0px) translateY(0px) translateZ(15vw);
   -webkit-transform: rotateY(-90deg) translateX(0px) translateY(0px) translateZ(15vw);
-  background-image: url(img/reactGame.png);
+  background-image: url(img/reactGame.webp);
   background-size: cover;
   background-position: 50% 50%;
 }
@@ -1191,6 +1191,157 @@ section {
     z-index: 1;
   }
 }
+/* Modal */
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 1001;
+  display: none;
+}
+.modal.is-open {
+  display: block;
+}
+.modal .modal__backdrop {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(5, 8, 20, 0.7);
+  -webkit-backdrop-filter: blur(2px);
+          backdrop-filter: blur(2px);
+}
+.modal .modal__dialog {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: min(920px, 92vw);
+  max-height: 88vh;
+  background: #2c2f33;
+  border: 1px solid rgba(114, 137, 218, 0.35);
+  border-radius: 14px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.45);
+  overflow: hidden;
+  display: grid;
+  grid-template-columns: 1.1fr 1fr;
+  gap: 0;
+}
+@media (max-width: 900px) {
+  .modal .modal__dialog {
+    grid-template-columns: 1fr;
+    width: min(720px, 94vw);
+  }
+}
+.modal .modal__close {
+  position: absolute;
+  top: 8px;
+  right: 10px;
+  background: transparent;
+  border: none;
+  color: hsl(240, 4%, 81%);
+  font-size: 2rem;
+  line-height: 1;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 8px;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+.modal .modal__close:hover {
+  background: rgba(114, 137, 218, 0.2);
+  color: #ffffff;
+}
+.modal .modal__media {
+  background: #393c43;
+  min-height: 260px;
+  max-height: 88vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.modal .modal__media img,
+.modal .modal__media video {
+  display: block;
+  width: 100%;
+  height: 100%;
+  -o-object-fit: cover;
+     object-fit: cover;
+}
+.modal .modal__content {
+  padding: 18px 18px 20px;
+  overflow-y: auto;
+}
+.modal .modal__content .modal__desc {
+  margin: 6px 0 10px;
+  color: hsl(240, 4%, 81%);
+}
+.modal .modal__content .modal__tech {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 10px 0 14px;
+}
+.modal .modal__content .modal__tech .tech-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: rgba(114, 137, 218, 0.15);
+  color: hsl(240, 4%, 81%);
+  border: 1px solid rgba(114, 137, 218, 0.35);
+  font-size: 0.9rem;
+}
+.modal .modal__content .modal__tech .tech-chip .fa {
+  font-size: 1rem;
+  color: #7289da;
+}
+.modal .modal__content .modal__details {
+  line-height: 1.5;
+  color: hsl(240, 4%, 81%);
+  margin-bottom: 14px;
+}
+.modal .modal__content .modal__links {
+  display: flex;
+  gap: 10px;
+  margin-top: 8px;
+}
+.modal .modal__content .modal__links .btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 14px;
+  border-radius: 10px;
+  text-decoration: none;
+  font-weight: 600;
+  transition: transform 0.15s ease, background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+  border: 1px solid transparent;
+}
+.modal .modal__content .modal__links .btn:active {
+  transform: translateY(1px);
+}
+.modal .modal__content .modal__links .btn--primary {
+  background: #7289da;
+  color: #ffffff;
+  border-color: rgba(114, 137, 218, 0.6);
+}
+.modal .modal__content .modal__links .btn--primary:hover {
+  background: #869adf;
+}
+.modal .modal__content .modal__links .btn--ghost {
+  background: transparent;
+  color: hsl(240, 4%, 81%);
+  border-color: rgba(114, 137, 218, 0.5);
+}
+.modal .modal__content .modal__links .btn--ghost:hover {
+  background: rgba(114, 137, 218, 0.2);
+  color: #ffffff;
+}
+
 footer {
   background-color: rgb(51, 73, 119);
   width: calc(100vw - min(17.85vw, 250px));

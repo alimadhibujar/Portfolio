@@ -478,8 +478,8 @@ section {
       left: 0;
     }
     // for vertical scrolling child element
-    overflow-x: hidden;
     overflow-y: auto;
+    overflow-x: hidden;
     scroll-padding-bottom: 0; // Ensure no extra padding when scrolling
     // Add fix for contact section scroll behavior
     &:not(.scrolling-to-contact) {
@@ -828,7 +828,7 @@ section {
       translateZ(15vw);
     -webkit-transform: rotateY(-90deg) translateX(0px) translateY(0px)
       translateZ(15vw);
-    background-image: url(img/reactGame.png);
+    background-image: url(img/reactGame.webp);
     background-size: cover;
     background-position: 50% 50%;
   }
@@ -1223,6 +1223,153 @@ section {
     margin-top: -7rem;
     position: relative;
     z-index: 1;
+  }
+}
+
+/* Modal */
+.modal {
+  @include position(fixed, $top: 0, $left: 0);
+  width: 100vw;
+  height: 100vh;
+  z-index: 1001;
+  display: none; // hidden by default, toggled via JS
+  &.is-open {
+    display: block;
+  }
+
+  .modal__backdrop {
+    @include position(absolute, $top: 0, $left: 0);
+    width: 100%;
+    height: 100%;
+    background: rgba(5, 8, 20, 0.7);
+    backdrop-filter: blur(2px);
+  }
+
+  .modal__dialog {
+    @include position(absolute, $top: 50%, $left: 50%);
+    transform: translate(-50%, -50%);
+    width: min(920px, 92vw);
+    max-height: 88vh;
+    background: $grey2;
+    border: 1px solid rgba($blurple, 0.35);
+    border-radius: 14px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.45);
+    overflow: hidden;
+    display: grid;
+    grid-template-columns: 1.1fr 1fr;
+    gap: 0;
+    @media (max-width: 900px) {
+      grid-template-columns: 1fr;
+      width: min(720px, 94vw);
+    }
+  }
+
+  .modal__close {
+    position: absolute;
+    top: 8px;
+    right: 10px;
+    background: transparent;
+    border: none;
+    color: $grey4;
+    font-size: 2rem;
+    line-height: 1;
+    cursor: pointer;
+    padding: 4px 8px;
+    border-radius: 8px;
+    transition: background 0.2s ease, color 0.2s ease;
+    &:hover {
+      background: rgba($blurple, 0.2);
+      color: $white;
+    }
+  }
+
+  .modal__media {
+    background: $grey3;
+    min-height: 260px;
+    max-height: 88vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    img,
+    video {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  }
+
+  .modal__content {
+    padding: 18px 18px 20px;
+    overflow-y: auto;
+    .modal__desc {
+      margin: 6px 0 10px;
+      color: $grey4;
+    }
+    .modal__tech {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 10px 0 14px;
+      .tech-chip {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 6px 10px;
+        border-radius: 999px;
+        background: rgba($blurple, 0.15);
+        color: $grey4;
+        border: 1px solid rgba($blurple, 0.35);
+        font-size: 0.9rem;
+        .fa {
+          font-size: 1rem;
+          color: $blurple;
+        }
+      }
+    }
+    .modal__details {
+      line-height: 1.5;
+      color: $grey4;
+      margin-bottom: 14px;
+    }
+    .modal__links {
+      display: flex;
+      gap: 10px;
+      margin-top: 8px;
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        padding: 10px 14px;
+        border-radius: 10px;
+        text-decoration: none;
+        font-weight: 600;
+        transition: transform 0.15s ease, background 0.2s ease, color 0.2s ease,
+          border-color 0.2s ease;
+        border: 1px solid transparent;
+        &:active {
+          transform: translateY(1px);
+        }
+      }
+      .btn--primary {
+        background: $blurple;
+        color: $white;
+        border-color: rgba($blurple, 0.6);
+        &:hover {
+          background: lighten($blurple, 5%);
+        }
+      }
+      .btn--ghost {
+        background: transparent;
+        color: $grey4;
+        border-color: rgba($blurple, 0.5);
+        &:hover {
+          background: rgba($blurple, 0.2);
+          color: $white;
+        }
+      }
+    }
   }
 }
 

@@ -295,7 +295,7 @@
               </div>
               <div
                 class="swiper-slide"
-                style="background-image: url(img/reactGame.png)"
+                style="background-image: url(img/reactGame.webp)"
               >
                 <a
                   class="swiper-container"
@@ -491,6 +491,54 @@
           </footer>
         </div>
       </main>
+    </div>
+
+    <!-- Modal -->
+    <div
+      id="projectModal"
+      class="modal"
+      aria-hidden="true"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="projectModalTitle"
+    >
+      <div class="modal__backdrop" data-close="true"></div>
+      <div class="modal__dialog" role="document">
+        <button class="modal__close" aria-label="Close modal" data-close="true">
+          &times;
+        </button>
+        <div
+          class="modal__media"
+          id="projectModalMedia"
+          aria-hidden="true"
+        ></div>
+        <div class="modal__content">
+          <h3 id="projectModalTitle"></h3>
+          <p id="projectModalDesc" class="modal__desc"></p>
+          <div
+            id="projectModalTech"
+            class="modal__tech"
+            aria-label="Technologies used"
+          ></div>
+          <div id="projectModalDetails" class="modal__details"></div>
+          <div class="modal__links">
+            <a
+              id="projectModalLive"
+              class="btn btn--primary"
+              target="_blank"
+              rel="noopener"
+              >Live Demo</a
+            >
+            <a
+              id="projectModalRepo"
+              class="btn btn--ghost"
+              target="_blank"
+              rel="noopener"
+              >GitHub</a
+            >
+          </div>
+        </div>
+      </div>
     </div>
 
     <!-- Ghost Canvas -->

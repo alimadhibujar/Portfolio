@@ -301,3 +301,57 @@ themeToggle.addEventListener("click", () => {
     : '<i class="fa fa-moon-o" aria-hidden="true"></i> Dark Mode';
   updateLinkColors();
 });
+
+/* Keyboard shortcuts for sticky mini-toolbar:
+   P -> Print, D -> Download PDF, T -> Toggle Theme
+   Works when focus is not inside an input/textarea/contenteditable and no modifier keys are pressed.
+*/
+document.addEventListener("keydown", (e) => {
+  // Ignore when user is typing in inputs or using modifiers
+  const target = e.target;
+  const tag = target && target.tagName ? target.tagName.toLowerCase() : "";
+  const isTypingContext =
+    tag === "input" || tag === "textarea" || target.isContentEditable === true;
+
+  if (isTypingContext) return;
+  if (e.ctrlKey || e.metaKey || e.altKey) return;
+
+  // Normalize key
+  const key = e.key.toLowerCase();
+
+  if (key === "p") {
+    e.preventDefault(); // avoid browser default only if we intend to print
+    window.print();
+    // Visual feedback: briefly focus the print button
+    const btn = document.getElementById("print-btn");
+    if (btn) {
+      btn.focus({ preventScroll: true });
+      setTimeout(() => btn.blur(), 600);
+    }
+  } else if (key === "d") {
+    e.preventDefault();
+    const btn = document.getElementById("download-btn");
+    if (btn) {
+      btn.click();
+      btn.focus({ preventScroll: true });
+      setTimeout(() => btn.blur(), 600);
+    } else {
+      // Fallback in case button not found
+      downloadPDF();
+    }
+  } else if (key === "t") {
+    e.preventDefault();
+    const btn = document.getElementById("theme-toggle");
+    if (btn) {
+      btn.click();
+      btn.focus({ preventScroll: true });
+      setTimeout(() => btn.blur(), 600);
+    } else {
+      // Fallback toggling
+      container.classList.toggle("dark-mode");
+      const isDark = container.classList.contains("dark-mode");
+      localStorage.setItem("theme", isDark ? "dark" : "light");
+      updateLinkColors();
+    }
+  }
+});

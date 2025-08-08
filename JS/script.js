@@ -71,8 +71,23 @@ navLinks.forEach((link) => {
         });
       }
 
+      // Update aria-current immediately for keyboard/mouse users
+      document
+        .querySelectorAll('.list__links a[aria-current="page"]')
+        .forEach((a) => a.removeAttribute("aria-current"));
+      // Mark clicked anchor as current (will be confirmed by IntersectionObserver on intersect)
+      const clickedAnchor = this.querySelector("a");
+      if (clickedAnchor) clickedAnchor.setAttribute("aria-current", "page");
+
       // Still update the URL hash for proper history/bookmarking, but without scrolling
       window.history.pushState(null, null, href);
+
+      // Proactively reflect selection for assistive tech until observer fires
+      document
+        .querySelectorAll('.list__links a[aria-current="page"]')
+        .forEach((a) => a.removeAttribute("aria-current"));
+      const clicked = this.querySelector("a");
+      if (clicked) clicked.setAttribute("aria-current", "page");
     }
   });
 });
@@ -224,6 +239,246 @@ text.addEventListener("keydown", type);
 window.addEventListener("unload", () => {
   text.removeEventListener("keydown", type);
 });
+
+/* ============ Projects Modal ============ */
+// Project metadata map
+const projectsData = {
+  side1: {
+    id: "side1",
+    title: "Gallery of Pets",
+    desc: "A responsive gallery showcasing pets with filtering and smooth animations.",
+    tech: ["React", "React-Hooks", "CSS", "Vite"],
+    details:
+      "Goal: Build a fun, responsive gallery with performance-friendly interactions. Contribution: Built layout, responsive grid, search, filter, pagination, suggestions, api, logic, lazy-loading, skeleton-css and many more smooth animations.",
+    media: {
+      type: "image",
+      src: "img/Gallery-of-Pets.webp",
+      alt: "Gallery of Pets preview",
+    },
+    live: "https://alimadhibujar.github.io/Gallery-of-Pets/",
+    repo: "https://github.com/alimadhibujar/Gallery-of-Pets",
+  },
+  side2: {
+    id: "side2",
+    title: "Rock-Paper-Scissors (React)",
+    desc: "Classic Rock-Paper-Scissors implemented in React with score persistence.",
+    tech: ["React", "CSS Modules", "Vite"],
+    details:
+      "Goal: Practice component-driven UI and state management. Contribution: Architected components, game logic, score persistence, and animations.",
+    media: {
+      type: "image",
+      src: "img/reactGame.webp",
+      alt: "React game preview",
+    },
+    live: "https://alimadhibujar.github.io/React-Rock-Scissors-Paper/",
+    repo: "https://github.com/alimadhibujar/React-Rock-Scissors-Paper",
+  },
+  side3: {
+    id: "side3",
+    title: "Tetris (React)",
+    desc: "A Tetris clone built in React with custom hooks and keyboard controls.",
+    tech: ["React", "Hooks", "Canvas"],
+    details:
+      "Goal: Implement a classic game with React patterns. Contribution: Collision, rotation, row clearing, custom hooks, and rendering optimizations.",
+    media: {
+      type: "image",
+      src: "img/Tetris-Game.webp",
+      alt: "Tetris game preview",
+    },
+    live: "https://codepen.io/alimadhibujar/full/mybzoNg",
+    repo: "https://codepen.io/alimadhibujar/pen/mybzoNg",
+  },
+  side4: {
+    id: "side4",
+    title: "TikTok React App",
+    desc: "A TikTok-like UI built with React demonstrating feed and interactions.",
+    tech: ["React", "CSS", "React-Hooks"],
+    details:
+      "Goal: Recreate a modern short-video feed interface. Contribution: UI composition, interactions, and responsive design.",
+    media: {
+      type: "image",
+      src: "img/tikTok.webp",
+      alt: "TikTok React App preview",
+    },
+    live: "https://alimadhibujar.github.io/Tik-Tok-React-App/",
+    repo: "https://github.com/alimadhibujar/Tik-Tok-React-App",
+  },
+  side5: {
+    id: "side5",
+    title: "React Photo Gallery",
+    desc: "A responsive photo gallery built in React with lightbox experience.",
+    tech: ["React", "React-hooks", "CSS", "JavaScript"],
+    details:
+      "Goal: Showcase images with pleasant UX and responsiveness. Contribution: Grid system, css-skeleton-loading, modals/lightbox, keyboard navigation.",
+    media: {
+      type: "image",
+      src: "img/Photo-Gallery.webp",
+      alt: "React Photo Gallery preview",
+    },
+    live: "https://alimadhibujar.github.io/Photo-Gallery/",
+    repo: "https://github.com/alimadhibujar/Photo-Gallery",
+  },
+};
+
+// Map Swiper slides to corresponding project ids
+const swiperMap = [
+  { selectorIndex: 0, id: "side1" },
+  { selectorIndex: 1, id: "side3" },
+  { selectorIndex: 2, id: "side2" },
+  { selectorIndex: 3, id: "side5" },
+  { selectorIndex: 4, id: "side4" },
+];
+
+// Modal elements
+const modal = document.getElementById("projectModal");
+const modalDialog = modal ? modal.querySelector(".modal__dialog") : null;
+const modalMedia = modal ? document.getElementById("projectModalMedia") : null;
+const modalTitle = modal ? document.getElementById("projectModalTitle") : null;
+const modalDesc = modal ? document.getElementById("projectModalDesc") : null;
+const modalTech = modal ? document.getElementById("projectModalTech") : null;
+const modalDetails = modal
+  ? document.getElementById("projectModalDetails")
+  : null;
+const modalLive = modal ? document.getElementById("projectModalLive") : null;
+const modalRepo = modal ? document.getElementById("projectModalRepo") : null;
+
+function createTechChip(name) {
+  // Basic icon mapping using font-awesome where possible
+  const iconMap = {
+    HTML: "fa-html5",
+    SCSS: "fa-scss",
+    CSS: "fa-css3",
+    "CSS Modules": "fa-css3",
+    JavaScript: "fa-code",
+    React: "fa-react",
+    Hooks: "fa-react",
+    Vite: "fa-bolt",
+    Canvas: "fa-picture-o",
+  };
+  const i = document.createElement("i");
+  i.className = `fa ${iconMap[name] || "fa-tag"}`;
+  const span = document.createElement("span");
+  span.textContent = name;
+  const chip = document.createElement("span");
+  chip.className = "tech-chip";
+  chip.append(i, span);
+  return chip;
+}
+
+function fillModal(data) {
+  // Media
+  modalMedia.innerHTML = "";
+  if (data.media?.type === "image") {
+    const img = document.createElement("img");
+    img.src = data.media.src;
+    img.alt = data.media.alt || data.title;
+    img.loading = "lazy";
+    modalMedia.appendChild(img);
+  } else if (data.media?.type === "video") {
+    const video = document.createElement("video");
+    video.src = data.media.src;
+    video.controls = true;
+    video.autoplay = true;
+    video.muted = true;
+    video.loop = true;
+    modalMedia.appendChild(video);
+  }
+
+  // Texts
+  modalTitle.textContent = data.title || "";
+  modalDesc.textContent = data.desc || "";
+
+  // Tech
+  modalTech.innerHTML = "";
+  (data.tech || []).forEach((t) => modalTech.appendChild(createTechChip(t)));
+
+  // Details
+  modalDetails.textContent = data.details || "";
+
+  // Links
+  if (data.live) {
+    modalLive.href = data.live;
+    modalLive.style.display = "";
+  } else {
+    modalLive.removeAttribute("href");
+    modalLive.style.display = "none";
+  }
+  if (data.repo) {
+    modalRepo.href = data.repo;
+    modalRepo.style.display = "";
+  } else {
+    modalRepo.removeAttribute("href");
+    modalRepo.style.display = "none";
+  }
+}
+
+function openProjectModal(projectId) {
+  const data = projectsData[projectId];
+  if (!modal || !data) return;
+  fillModal(data);
+  modal.classList.add("is-open");
+  modal.setAttribute("aria-hidden", "false");
+  // trap focus to modal
+  setTimeout(() => {
+    const focusable = modal.querySelector(".modal__close");
+    focusable && focusable.focus();
+  }, 0);
+  // prevent background scroll of panel
+  const panel = document.querySelector(".panel__main-content");
+  if (panel) panel.style.overflow = "hidden";
+}
+
+function closeProjectModal() {
+  if (!modal) return;
+  modal.classList.remove("is-open");
+  modal.setAttribute("aria-hidden", "true");
+  // restore background scroll
+  const panel = document.querySelector(".panel__main-content");
+  if (panel) panel.style.overflow = "auto";
+}
+
+// Close interactions
+if (modal) {
+  modal.addEventListener("click", (e) => {
+    const target = e.target;
+    if (target instanceof HTMLElement && target.dataset.close === "true") {
+      closeProjectModal();
+    }
+  });
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && modal.classList.contains("is-open")) {
+      closeProjectModal();
+    }
+  });
+}
+
+// Wire desktop cube faces
+(function wireCubeFaces() {
+  const ids = ["side1", "side2", "side3", "side4", "side5"];
+  ids.forEach((id) => {
+    const a = document.getElementById(id);
+    if (!a) return;
+    a.addEventListener("click", (e) => {
+      e.preventDefault();
+      openProjectModal(id);
+    });
+  });
+})();
+
+// Wire swiper slides (anchors inside .swiper-slide)
+(function wireSwiperSlides() {
+  const slides = document.querySelectorAll(".swiper-container .swiper-slide");
+  slides.forEach((slide, idx) => {
+    const anchor = slide.querySelector("a");
+    if (!anchor) return;
+    anchor.addEventListener("click", (e) => {
+      e.preventDefault();
+      const map = swiperMap.find((m) => m.selectorIndex === idx);
+      const id = map ? map.id : null;
+      if (id) openProjectModal(id);
+    });
+  });
+})();
 
 // creating the current year in footer
 const year = document.getElementById("year");

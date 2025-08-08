@@ -19,24 +19,38 @@
         <p>Generating PDF...</p>
       </div>
     </div>
-    <div class="button-container">
+    <div class="button-container" role="toolbar" aria-label="CV actions">
       <button
         class="action-button"
         id="print-btn"
+        aria-label="Print CV"
+        data-tooltip="Print (P)"
         title="Print CV"
         onclick="window.print()"
       >
-        <i class="fa fa-print"></i>&nbsp; Print CV
+        <i class="fa fa-print" aria-hidden="true"></i>
+        <span class="label">Print CV</span>
       </button>
-      <button class="action-button" id="download-btn" title="Download CV">
-        <i class="fa fa-download"></i>&nbsp; Download CV
+      <button
+        class="action-button"
+        id="download-btn"
+        aria-label="Download CV"
+        data-tooltip="Download PDF (D)"
+        title="Download CV"
+      >
+        <i class="fa fa-download" aria-hidden="true"></i>
+        <span class="label">Download CV</span>
       </button>
       <button
         class="action-button"
         id="theme-toggle"
         aria-label="Toggle Dark Mode"
+        data-tooltip="Toggle Theme (T)"
+        title="Toggle Dark Mode"
+        type="button"
       >
-        <i class="fa fa-moon-o" aria-hidden="true"></i> Dark Mode
+        <i class="fa fa-moon-o" aria-hidden="true"></i>
+        <span class="label">Dark Mode</span>
       </button>
     </div>
     <div id="cv-container" class="container">
