@@ -18,24 +18,23 @@ $purple: #6e48aa;
 $blue: #00071c;
 $blueButton: #3b3e50;
 $listColor: rgba(57, 60, 67, 0.35);
-$bgImgColor: radial-gradient(
-    circle at top left,
-    hsl(229, 20%, 22%),
-    transparent
-  ),
-  radial-gradient(circle at top right, hsl(323, 9%, 8%), transparent),
-  radial-gradient(
-    circle at bottom right,
-    hsl(51, 6%, 8%),
-    transparent,
-    transparent
+$bgImgColor: 
+  /* Soft aurora-like glow that harmonizes with $blurple, $purple and $blue */ radial-gradient(
+    1200px 1200px at 12% 14%,
+    rgba($blurple, 0.18) 0%,
+    rgba($blurple, 0) 55%
   ),
   radial-gradient(
-    circle at bottom left,
-    hsl(145, 9%, 5%),
-    transparent,
-    transparent
-  );
+    1000px 1000px at 88% 10%,
+    rgba($purple, 0.16) 0%,
+    rgba($purple, 0) 60%
+  ),
+  radial-gradient(
+    1100px 1100px at 14% 86%,
+    rgba(lighten($blue, 8%), 0.35) 0%,
+    rgba($blue, 0) 58%
+  ),
+  linear-gradient(180deg, rgba($blue, 0.72) 0%, rgba($grey3, 0.65) 100%);
 
 // HTML root
 html {
