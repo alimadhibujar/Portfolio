@@ -117,6 +117,9 @@ section {
   transform: translateY(0px) scale(1);
   will-change: transform, opacity;
   transition: all 1s ease;
+  // Defer rendering offscreen content for faster initial paint
+  content-visibility: auto;
+  contain-intrinsic-size: 800px 900px;
   @media (prefers-reduced-motion) {
     transition: none; // Respect user preferences
   }
@@ -1279,6 +1282,10 @@ section {
     &:hover {
       background: rgba($blurple, 0.2);
       color: $white;
+    }
+    @media (max-width: 900px) {
+      color: $grey4;
+      background-color: $grey3;
     }
   }
 

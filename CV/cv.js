@@ -23,6 +23,43 @@ document.addEventListener("DOMContentLoaded", function () {
     tooltip.textContent = percentage + "%";
     bar.style.setProperty("--skill-level", percentage + "%"); // crating var(--skill-level: "data-percentage" ) to use in css
   });
+
+  // IntersectionObserver reveal-on-scroll for CV sections
+  const prefersReduced =
+    window.matchMedia &&
+    window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const container = document.querySelector(".main-content");
+  const sections = Array.from(container.querySelectorAll("section"));
+
+  // Add reveal classes
+  sections.forEach((s) => s.classList.add("cv-reveal"));
+
+  if (prefersReduced) {
+    // Reveal immediately; no movement
+    sections.forEach((s) => s.classList.remove("is-hidden"));
+  } else {
+    sections.forEach((s) => s.classList.add("is-hidden"));
+  }
+
+  const io = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.remove("is-hidden");
+        } else if (!prefersReduced) {
+          // Allow re-entrance animation when motion allowed
+          entry.target.classList.add("is-hidden");
+        }
+      });
+    },
+    {
+      root: null,
+      rootMargin: "0px 0px -10% 0px",
+      threshold: 0.1,
+    }
+  );
+
+  sections.forEach((s) => io.observe(s));
 });
 
 // Get elements
@@ -211,6 +248,9 @@ async function downloadPDF() {
     // Get the container
     const element = document.getElementById("cv-container");
 
+    // Ensure all sections are visible for capture
+    const hiddenBefore = revealAllForOutput();
+
     // Detect if dark mode is active
     const isDarkMode = element.classList.contains("dark-mode");
 
@@ -247,6 +287,8 @@ async function downloadPDF() {
 
     // Restore the original styles
     restoreStyles(originalStyles);
+    // Restore hidden states after export
+    restoreHiddenAfterOutput(hiddenBefore);
   } catch (error) {
     console.error("PDF generation failed:", error);
     alert("Error generating PDF. Please try again or use the print option.");
@@ -260,6 +302,35 @@ async function downloadPDF() {
     });
   }
 }
+
+// Utilities to reveal/hide sections for output (print/PDF)
+function revealAllForOutput() {
+  const sections = Array.from(document.querySelectorAll(".cv-reveal"));
+  const hidden = [];
+  sections.forEach((s) => {
+    if (s.classList.contains("is-hidden")) hidden.push(s);
+    s.classList.remove("is-hidden");
+  });
+  return hidden;
+}
+
+function restoreHiddenAfterOutput(hiddenNodes) {
+  const prefersReduced =
+    window.matchMedia &&
+    window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if (prefersReduced) return; // keep visible for reduced motion users
+  (hiddenNodes || []).forEach((n) => n.classList.add("is-hidden"));
+}
+
+// Ensure visibility for native print as well
+let _hiddenForPrint = null;
+window.addEventListener("beforeprint", () => {
+  _hiddenForPrint = revealAllForOutput();
+});
+window.addEventListener("afterprint", () => {
+  restoreHiddenAfterOutput(_hiddenForPrint);
+  _hiddenForPrint = null;
+});
 
 // inline html style for better pdf download style
 function updateLinkColors() {

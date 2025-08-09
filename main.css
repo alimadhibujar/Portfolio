@@ -52,6 +52,8 @@ section {
   transform: translateY(0px) scale(1);
   will-change: transform, opacity;
   transition: all 1s ease;
+  content-visibility: auto;
+  contain-intrinsic-size: 800px 900px;
 }
 @media (prefers-reduced-motion) {
   section {
@@ -1253,6 +1255,12 @@ section {
 .modal .modal__close:hover {
   background: rgba(114, 137, 218, 0.2);
   color: #ffffff;
+}
+@media (max-width: 900px) {
+  .modal .modal__close {
+    color: hsl(240, 4%, 81%);
+    background-color: #393c43;
+  }
 }
 .modal .modal__media {
   background: #393c43;

@@ -31,6 +31,14 @@
     />
 
     <link rel="icon" type="image/webp" href="img/favicon.webp" />
+
+    <link
+      rel="preload"
+      as="image"
+      href="img/bgImg.webp"
+      imagesrcset="img/bgImg.webp"
+      fetchpriority="high"
+    />
   </head>
   <body>
     <div id="bg-js" class="panel__main">
@@ -264,7 +272,7 @@
               <a id="side6"></a>
             </div>
           </div>
-          <p>Click on picture to see the full project</p>
+          <p>Click the picture for detailed project information.</p>
 
           <!-- 3D Cube Mobile version -->
           <div class="swiper-container">
@@ -331,7 +339,8 @@
               </div>
             </div>
             <p>
-              Slide the cube left, and click on picture to see the full project.
+              Slide the cube, and click on picture for detailed project
+              information.
             </p>
           </div>
         </section>
@@ -555,25 +564,64 @@
     ></script>
     <script type="module" src="./JS/heroImage.js" defer></script>
     <script src="./JS/ghost-cursor.js" type="module" defer></script>
-    <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
-
-    <!-- Initialize Swiper -->
+    <!-- Lazy-load Swiper only on small screens and when visible -->
     <script>
-      document.addEventListener("DOMContentLoaded", function () {
-        new Swiper(".swiper-container", {
-          effect: "cube",
-          grabCursor: true,
-          cubeEffect: {
-            shadow: true,
-            slideShadows: true,
-            shadowOffset: 20,
-            shadowScale: 0.94,
+      (function () {
+        const isSmallScreen =
+          window.matchMedia && window.matchMedia("(max-width: 765px)").matches;
+        if (!isSmallScreen) return;
+        const container = document.querySelector(".swiper-container");
+        if (!container) return;
+
+        let initialized = false;
+        const initSwiper = () => {
+          if (initialized) return;
+          initialized = true;
+          // If Swiper is not yet on the page, inject it, then init
+          if (typeof window.Swiper === "undefined") {
+            const s = document.createElement("script");
+            s.src = "https://unpkg.com/swiper/swiper-bundle.min.js";
+            s.async = true;
+            s.onload = () => {
+              new window.Swiper(".swiper-container", {
+                effect: "cube",
+                grabCursor: true,
+                cubeEffect: {
+                  shadow: true,
+                  slideShadows: true,
+                  shadowOffset: 20,
+                  shadowScale: 0.94,
+                },
+              });
+            };
+            document.head.appendChild(s);
+          } else {
+            new window.Swiper(".swiper-container", {
+              effect: "cube",
+              grabCursor: true,
+              cubeEffect: {
+                shadow: true,
+                slideShadows: true,
+                shadowOffset: 20,
+                shadowScale: 0.94,
+              },
+            });
+          }
+        };
+
+        const io = new IntersectionObserver(
+          (entries, obs) => {
+            const entry = entries[0];
+            if (entry && entry.isIntersecting) {
+              obs.disconnect();
+              initSwiper();
+            }
           },
-          pagination: {
-            el: ".swiper-pagination",
-          },
-        });
-      });
+          { rootMargin: "200px" }
+        );
+
+        io.observe(container);
+      })();
     </script>
   </body>
 </html>

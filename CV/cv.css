@@ -538,6 +538,32 @@ section:hover {
   transform: translateX(5px);
 }
 
+/* Reveal-on-scroll micro animation for sections */
+.cv-reveal {
+  opacity: 1;
+  transform: translateY(0);
+  filter: none;
+  will-change: opacity, transform, filter;
+  transition: opacity 600ms var(--ease-out-3), transform 600ms var(--ease-out-3),
+    filter 600ms var(--ease-out-3);
+}
+.cv-reveal.is-hidden {
+  opacity: 0;
+  transform: translateY(16px);
+  filter: blur(2px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cv-reveal {
+    transition: none !important;
+  }
+  .cv-reveal.is-hidden {
+    opacity: 1;
+    transform: none;
+    filter: none;
+  }
+}
+
 .date-range {
   font-size: 0.75em;
   color: var(--date-color);
@@ -729,6 +755,12 @@ hr {
   body {
     padding: 0;
     background-color: white;
+  }
+  /* Ensure reveal-on-scroll content is fully visible in print */
+  .cv-reveal.is-hidden {
+    opacity: 1 !important;
+    transform: none !important;
+    filter: none !important;
   }
   .container {
     box-shadow: none;
