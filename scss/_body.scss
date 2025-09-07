@@ -308,7 +308,14 @@ section {
         box-shadow: -2px 0 0 rgb(94, 100, 85);
         a {
           color: $white;
+          transition: color 0.25s linear;
         }
+
+        a .fa {
+          transform: translateX(2px);
+          transition: transform 0.25s linear;
+        }
+
         span {
           background-color: $blue;
           background-image: radial-gradient(

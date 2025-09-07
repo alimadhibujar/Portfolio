@@ -87,7 +87,7 @@ section {
 
 .panel__main {
   background-color: #393c43;
-  background-image: radial-gradient(1200px 1200px at 12% 14%, rgba(114, 137, 218, 0.18) 0%, rgba(114, 137, 218, 0) 55%), radial-gradient(1000px 1000px at 88% 10%, rgba(110, 72, 170, 0.16) 0%, rgba(110, 72, 170, 0) 60%), radial-gradient(1100px 1100px at 14% 86%, rgba(0, 17, 69, 0.35) 0%, rgba(0, 7, 28, 0) 58%), linear-gradient(180deg, rgba(0, 7, 28, 0.72) 0%, rgba(57, 60, 67, 0.65) 100%), url(img/bgImg.webp);
+  background-image: radial-gradient(1200px 1200px at 12% 14%, rgba(114, 137, 218, 0.18) 0%, rgba(114, 137, 218, 0) 55%), radial-gradient(1000px 1000px at 88% 10%, rgba(110, 72, 170, 0.16) 0%, rgba(110, 72, 170, 0) 60%), radial-gradient(1100px 1100px at 14% 86%, rgba(0, 17.2, 68.8, 0.35) 0%, rgba(0, 7, 28, 0) 58%), linear-gradient(180deg, rgba(0, 7, 28, 0.72) 0%, rgba(57, 60, 67, 0.65) 100%), url(img/bgImg.webp);
   background-repeat: no-repeat;
   background-size: cover;
   height: 100vh;
@@ -252,6 +252,11 @@ section {
 }
 .panel__main .panel__main-side .list__links li:hover a {
   color: #ffffff;
+  transition: color 0.25s linear;
+}
+.panel__main .panel__main-side .list__links li:hover a .fa {
+  transform: translateX(2px);
+  transition: transform 0.25s linear;
 }
 .panel__main .panel__main-side .list__links li:hover span {
   background-color: #00071c;
@@ -923,7 +928,7 @@ section {
 #contact .form-horizontal .message {
   top: 151px;
 }
-#contact .form-horizontal input:not(:-moz-placeholder-shown) + label, #contact .form-horizontal textarea:not(:-moz-placeholder-shown) + label {
+#contact .form-horizontal input:not(:-moz-placeholder) + label, #contact .form-horizontal textarea:not(:-moz-placeholder) + label {
   background-image: repeating-linear-gradient(55deg, #ffffff, #ffffff 1px, transparent 5px, transparent 6px, #ffffff 16px), repeating-linear-gradient(145deg, #ffffff, #ffffff 1px, transparent 5px, transparent 6px, #ffffff 16px), repeating-linear-gradient(235deg, #ffffff, #ffffff 1px, transparent 5px, transparent 6px, #ffffff 16px), repeating-linear-gradient(325deg, #ffffff, #ffffff 1px, transparent 5px, transparent 6px, #ffffff 16px);
   background-position: 0 0, 0 0, 100% 0, 0 100%;
   background-repeat: no-repeat;
@@ -936,7 +941,7 @@ section {
   background-position: 0 0, 0 0, 100% 0, 0 100%;
   background-repeat: no-repeat;
 }
-#contact .form-horizontal input:not(:-moz-placeholder-shown) + label {
+#contact .form-horizontal input:not(:-moz-placeholder) + label {
   transform: translateY(-22px) translateX(10px) scale(0.75);
   transform-origin: 0 50%;
   color: inherit;
@@ -954,7 +959,7 @@ section {
   background-size: 0px, 0px, 0px, calc(100% + 16px) 1px;
   border-bottom: 2px solid #6e48aa;
 }
-#contact .form-horizontal input:not(:-moz-placeholder-shown) {
+#contact .form-horizontal input:not(:-moz-placeholder) {
   border: 1px solid #6e48aa;
   background-color: #2c2f33;
 }
@@ -987,7 +992,7 @@ section {
 #contact textarea:focus + label {
   animation-play-state: running;
 }
-#contact textarea:not(:-moz-placeholder-shown) + label {
+#contact textarea:not(:-moz-placeholder) + label {
   color: inherit;
   background-color: hsl(228, 9%, 33%);
   background-size: 0px, 0px, 0px, calc(100% + 16px) 1px;
@@ -1003,7 +1008,7 @@ section {
   transform: translateY(-20px) translateX(10px) scale(0.75);
   transform-origin: 0 50%;
 }
-#contact textarea:not(:-moz-placeholder-shown) {
+#contact textarea:not(:-moz-placeholder) {
   border: 1px solid #6e48aa;
   background-color: #2c2f33;
 }
@@ -1338,7 +1343,7 @@ section {
   border-color: rgba(114, 137, 218, 0.6);
 }
 .modal .modal__content .modal__links .btn--primary:hover {
-  background: #869adf;
+  background: rgb(134.1994382022, 153.904494382, 223.3005617978);
 }
 .modal .modal__content .modal__links .btn--ghost {
   background: transparent;

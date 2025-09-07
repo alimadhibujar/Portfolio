@@ -629,17 +629,6 @@ section:hover {
   transform: translateY(-1px);
 }
 
-/* Ensure focusability for items without native focus targets */
-.contact-list li,
-.skills-list > li,
-.languages-list li,
-.project-list > li,
-.personal-skills ul > li {
-  /* Enable keyboard focus if there is no interactive child */
-  /* Developers can remove tabindex if list items contain links/buttons already */
-  tabindex: 0;
-}
-
 /* Subtle link color lift inside list items without breaking global underline */
 .contact-list li:hover a,
 .skills-list > li:hover a,
