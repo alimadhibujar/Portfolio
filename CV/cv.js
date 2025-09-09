@@ -1,6 +1,9 @@
 import { imgData } from "./../JS/dataImage.js";
 
 document.addEventListener("DOMContentLoaded", function () {
+  // Initialize toast notifications for print
+  initializePrintToasts();
+
   document
     .getElementById("download-btn")
     .addEventListener("click", downloadPDF);
@@ -60,6 +63,9 @@ document.addEventListener("DOMContentLoaded", function () {
   );
 
   sections.forEach((s) => io.observe(s));
+
+  // Initialize copy email functionality
+  initializeCopyEmail();
 });
 
 // Get elements
@@ -67,6 +73,7 @@ const loadingOverlay = document.querySelector(".loading-overlay");
 const profileImage = document.getElementById("imageProfile");
 profileImage.src = imgData;
 profileImage.style.animationName = "scale-in-center";
+const copyBtn = document.getElementById("copy-email-btn");
 
 function showLoading() {
   loadingOverlay.setAttribute("aria-hidden", "false");
@@ -241,9 +248,13 @@ function restoreStyles(originalStyles) {
   mainHeader.style.background = originalStyles.mainHeader.background;
 }
 
-// DownLoad Pdf
+// DownLoad Pdf with toast notifications
 async function downloadPDF() {
   showLoading();
+
+  // Show starting toast
+  toastNotification.show("Generating PDF...", "success", 4000);
+
   try {
     // Get the container
     const element = document.getElementById("cv-container");
@@ -257,11 +268,13 @@ async function downloadPDF() {
     // Remove animation in downloaded version
     profileImage.style.animationName = "";
 
-    // Hide tooltips
+    // Hide tooltips and copy button for clean output in PDF
     const toolTips = document.querySelectorAll(".tooltip");
     toolTips.forEach((tooltip) => {
       tooltip.style.display = "none";
     });
+
+    copyBtn.style.display = "none";
 
     // Apply explicit styles for PDF generation based on current theme
     const originalStyles = applyPdfStyles(isDarkMode);
@@ -285,13 +298,21 @@ async function downloadPDF() {
 
     await html2pdf().set(opt).from(element).save();
 
+    // Show success toast
+    toastNotification.show("CV downloaded successfully!", "success", 3000);
+
     // Restore the original styles
     restoreStyles(originalStyles);
     // Restore hidden states after export
     restoreHiddenAfterOutput(hiddenBefore);
   } catch (error) {
     console.error("PDF generation failed:", error);
-    alert("Error generating PDF. Please try again or use the print option.");
+    // Show error toast
+    toastNotification.show(
+      "Error generating PDF. Please try again.",
+      "error",
+      4000
+    );
   } finally {
     hideLoading();
     // Returning previous styles
@@ -299,6 +320,19 @@ async function downloadPDF() {
     const toolTips = document.querySelectorAll(".tooltip");
     toolTips.forEach((tooltip) => {
       tooltip.style.display = "block";
+    });
+
+    copyBtn.style.display = "inline-block";
+  }
+}
+
+// Initialize print toast notifications
+function initializePrintToasts() {
+  const printBtn = document.getElementById("print-btn");
+
+  if (printBtn) {
+    printBtn.addEventListener("click", () => {
+      toastNotification.show("Opening print dialog...", "success", 2500);
     });
   }
 }
@@ -322,14 +356,20 @@ function restoreHiddenAfterOutput(hiddenNodes) {
   (hiddenNodes || []).forEach((n) => n.classList.add("is-hidden"));
 }
 
-// Ensure visibility for native print as well
+// Enhanced print event listeners with toasts
 let _hiddenForPrint = null;
 window.addEventListener("beforeprint", () => {
   _hiddenForPrint = revealAllForOutput();
+  toastNotification.show("Preparing CV for printing...", "success", 2000);
 });
+
 window.addEventListener("afterprint", () => {
   restoreHiddenAfterOutput(_hiddenForPrint);
   _hiddenForPrint = null;
+  // Small delay to ensure print dialog has closed
+  setTimeout(() => {
+    toastNotification.show("Print dialog closed", "success", 2000);
+  }, 500);
 });
 
 // inline html style for better pdf download style
@@ -373,7 +413,7 @@ themeToggle.addEventListener("click", () => {
   updateLinkColors();
 });
 
-/* Keyboard shortcuts for sticky mini-toolbar:
+/* Keyboard shortcuts for sticky mini-toolbar with toast notifications:
    P -> Print, D -> Download PDF, T -> Toggle Theme
    Works when focus is not inside an input/textarea/contenteditable and no modifier keys are pressed.
 */
@@ -392,6 +432,11 @@ document.addEventListener("keydown", (e) => {
 
   if (key === "p") {
     e.preventDefault(); // avoid browser default only if we intend to print
+    toastNotification.show(
+      "Opening print dialog... (Shortcut: P)",
+      "success",
+      2500
+    );
     window.print();
     // Visual feedback: briefly focus the print button
     const btn = document.getElementById("print-btn");
@@ -401,6 +446,11 @@ document.addEventListener("keydown", (e) => {
     }
   } else if (key === "d") {
     e.preventDefault();
+    toastNotification.show(
+      "Starting PDF download... (Shortcut: D)",
+      "success",
+      3000
+    );
     const btn = document.getElementById("download-btn");
     if (btn) {
       btn.click();
@@ -412,6 +462,14 @@ document.addEventListener("keydown", (e) => {
     }
   } else if (key === "t") {
     e.preventDefault();
+    const isDarkMode = container.classList.contains("dark-mode");
+    const newTheme = isDarkMode ? "light" : "dark";
+    toastNotification.show(
+      `Switched to ${newTheme} mode (Shortcut: T)`,
+      "success",
+      2000
+    );
+
     const btn = document.getElementById("theme-toggle");
     if (btn) {
       btn.click();
@@ -423,6 +481,171 @@ document.addEventListener("keydown", (e) => {
       const isDark = container.classList.contains("dark-mode");
       localStorage.setItem("theme", isDark ? "dark" : "light");
       updateLinkColors();
+    }
+  }
+});
+
+// Toast Notification System
+class ToastNotification {
+  constructor() {
+    this.container = document.getElementById("toast-container");
+    this.toasts = [];
+  }
+
+  show(message, type = "success", duration = 3000) {
+    const toast = document.createElement("div");
+    toast.className = `toast ${type}`;
+
+    const icon =
+      type === "success" ? "fa-check-circle" : "fa-exclamation-circle";
+
+    toast.innerHTML = `
+      <i class="fa ${icon} toast-icon" aria-hidden="true"></i>
+      <span class="toast-message">${message}</span>
+    `;
+
+    this.container.appendChild(toast);
+
+    // Trigger animation
+    requestAnimationFrame(() => {
+      toast.classList.add("show");
+    });
+
+    // Auto-remove after duration
+    const timeoutId = setTimeout(() => {
+      this.hide(toast);
+    }, duration);
+
+    // Store toast info
+    this.toasts.push({ element: toast, timeoutId });
+
+    return toast;
+  }
+
+  hide(toast) {
+    toast.classList.remove("show");
+
+    setTimeout(() => {
+      if (toast.parentNode) {
+        toast.parentNode.removeChild(toast);
+      }
+
+      // Remove from toasts array
+      const index = this.toasts.findIndex((t) => t.element === toast);
+      if (index > -1) {
+        this.toasts.splice(index, 1);
+      }
+    }, 300);
+  }
+
+  hideAll() {
+    this.toasts.forEach(({ element, timeoutId }) => {
+      clearTimeout(timeoutId);
+      this.hide(element);
+    });
+  }
+}
+
+// Initialize toast system
+const toastNotification = new ToastNotification();
+
+// Copy Email Functionality
+function initializeCopyEmail() {
+  const copyBtn = document.getElementById("copy-email-btn");
+  const emailAddress = document.getElementById("email-address");
+
+  if (!copyBtn || !emailAddress) return;
+
+  copyBtn.addEventListener("click", async (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    const email = emailAddress.textContent.trim();
+
+    try {
+      // Modern clipboard API
+      if (navigator.clipboard && window.isSecureContext) {
+        await navigator.clipboard.writeText(email);
+        handleCopySuccess();
+      } else {
+        // Fallback for older browsers or non-secure contexts
+        const textArea = document.createElement("textarea");
+        textArea.value = email;
+        textArea.style.position = "fixed";
+        textArea.style.left = "-999999px";
+        textArea.style.top = "-999999px";
+        document.body.appendChild(textArea);
+        textArea.focus();
+        textArea.select();
+
+        try {
+          const successful = document.execCommand("copy");
+          if (successful) {
+            handleCopySuccess();
+          } else {
+            throw new Error("Copy command failed");
+          }
+        } finally {
+          document.body.removeChild(textArea);
+        }
+      }
+    } catch (err) {
+      console.error("Failed to copy email:", err);
+      toastNotification.show("Failed to copy email", "error");
+    }
+  });
+
+  function handleCopySuccess() {
+    // Update button appearance
+    copyBtn.classList.add("copied");
+    const originalIcon = copyBtn.innerHTML;
+    copyBtn.innerHTML = '<i class="fa fa-check" aria-hidden="true"></i>';
+
+    // Show success toast
+    toastNotification.show("Email copied to clipboard!", "success");
+
+    // Reset button after animation
+    setTimeout(() => {
+      copyBtn.classList.remove("copied");
+      copyBtn.innerHTML = originalIcon;
+    }, 2000);
+
+    // Optional: Add haptic feedback on mobile
+    if ("vibrate" in navigator) {
+      navigator.vibrate(50);
+    }
+  }
+
+  // Add keyboard support (Enter/Space)
+  copyBtn.addEventListener("keydown", (e) => {
+    if (e.key === "Enter" || e.key === " ") {
+      e.preventDefault();
+      copyBtn.click();
+    }
+  });
+
+  // Add tooltip on hover (optional enhancement)
+  let tooltipTimeout;
+
+  copyBtn.addEventListener("mouseenter", () => {
+    clearTimeout(tooltipTimeout);
+    copyBtn.setAttribute("data-tooltip", "Copy email");
+  });
+
+  copyBtn.addEventListener("mouseleave", () => {
+    tooltipTimeout = setTimeout(() => {
+      copyBtn.removeAttribute("data-tooltip");
+    }, 100);
+  });
+}
+
+// Keyboard shortcut (Ctrl/Cmd + Shift + C) to copy email
+document.addEventListener("keydown", (e) => {
+  if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key === "C") {
+    e.preventDefault();
+    const copyBtn = document.getElementById("copy-email-btn");
+    if (copyBtn) {
+      copyBtn.click();
     }
   }
 });
