@@ -39,6 +39,16 @@ document.addEventListener("DOMContentLoaded", () => {
       releaseStartTime: 0,
       releaseDuration: 500, // Duration to return to normal (ms)
     },
+    // Curious state parameters (activates on link hover)
+    curious: {
+      isCurious: false,
+      targetSize: 0.03,
+      targetSmile: 1,
+      targetMainColor: [0.98, 0.96, 0.96],
+      targetBorderColor: [0.2, 0.5, 0.7],
+      releaseStartTime: 0,
+      releaseDuration: 300, // Shorter transition for quick hovers
+    },
   };
 
   // Store original values for reset
@@ -47,6 +57,14 @@ document.addEventListener("DOMContentLoaded", () => {
     smile: params.smile,
     mainColor: [...params.mainColor],
     borderColor: [...params.borderColor],
+  };
+
+  // Original values for moods - Updated for thinking expression
+  const originalCuriousParams = {
+    size: params.size * 0.8, // Slightly smaller for contemplative look
+    smile: -0.02, // Slight frown/neutral expression for thinking
+    mainColor: [1.0, 0.8, 0.3], // Golden yellow like the thinking emoji
+    borderColor: [0.3, 0.6, 0.8], // Soft blue for curiosity
   };
 
   // Create an offscreen canvas for the trail texture
@@ -122,7 +140,7 @@ document.addEventListener("DOMContentLoaded", () => {
       params.angry.targetBorderColor = [0.8, 0.2, 0.1]; // border color when angry
     }
 
-    // Function to start ghost calming down
+    // Function to start ghost calming down (for angry)
     function calmGhostDown() {
       if (params.angry.isAngry) {
         params.angry.releaseStartTime = performance.now();
@@ -135,7 +153,31 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     }
 
-    // Mouse drag events
+    // Function to make ghost curious (for link hover) - Updated for thinking expression
+    function makeGhostCurious() {
+      params.curious.isCurious = true;
+      params.curious.releaseStartTime = 0;
+      // Set curious/thinking appearance
+      params.curious.targetSize = originalCuriousParams.size;
+      params.curious.targetSmile = originalCuriousParams.smile;
+      params.curious.targetMainColor = [...originalCuriousParams.mainColor];
+      params.curious.targetBorderColor = [...originalCuriousParams.borderColor];
+    }
+
+    // Function to calm ghost from curious state
+    function calmCuriousDown() {
+      if (params.curious.isCurious) {
+        params.curious.releaseStartTime = performance.now();
+        params.curious.isCurious = false;
+        // Set target back to normal
+        params.curious.targetSize = originalParams.size;
+        params.curious.targetSmile = originalParams.smile;
+        params.curious.targetMainColor = [...originalParams.mainColor];
+        params.curious.targetBorderColor = [...originalParams.borderColor];
+      }
+    }
+
+    // Mouse drag events (angry)
     heroImage.addEventListener("mousedown", (e) => {
       makeGhostAngry();
 
@@ -147,7 +189,7 @@ document.addEventListener("DOMContentLoaded", () => {
       document.addEventListener("mouseup", handleMouseUp);
     });
 
-    // Touch drag events
+    // Touch drag events (angry)
     heroImage.addEventListener("touchstart", (e) => {
       makeGhostAngry();
 
@@ -159,13 +201,26 @@ document.addEventListener("DOMContentLoaded", () => {
       document.addEventListener("touchend", handleTouchEnd);
     });
 
-    // HTML5 drag events (if the image is draggable)
+    // HTML5 drag events (angry)
     heroImage.addEventListener("dragstart", (e) => {
       makeGhostAngry();
     });
 
     heroImage.addEventListener("dragend", (e) => {
       calmGhostDown();
+    });
+
+    // Link hover events (curious)
+    const links = document.querySelectorAll(
+      'a[href*="#"], a[href="CV/cv.html"], .social-links a, #D3Cube a, .swiper-container a, .contact-text a, .animated-link, .modal__links a'
+    );
+    links.forEach((link) => {
+      link.addEventListener("mouseenter", () => {
+        makeGhostCurious();
+      });
+      link.addEventListener("mouseleave", () => {
+        calmCuriousDown();
+      });
     });
   }
 
@@ -211,6 +266,65 @@ document.addEventListener("DOMContentLoaded", () => {
       params.borderColor[i] =
         params.angry.targetBorderColor[i] * easeProgress +
         originalParams.borderColor[i] * invProgress;
+    }
+
+    // Update dot sizes if size changed
+    for (let i = 0; i < params.tail.dotsNumber; i++) {
+      pointerTrail[i].r = dotSize(i);
+    }
+  }
+
+  function updateCuriousState(currentTime) {
+    let progress = 1;
+
+    // If we're in release phase, calculate progress based on time
+    if (!params.curious.isCurious && params.curious.releaseStartTime > 0) {
+      const elapsed = currentTime - params.curious.releaseStartTime;
+      progress = Math.max(0, 1 - elapsed / params.curious.releaseDuration);
+
+      if (elapsed >= params.curious.releaseDuration) {
+        params.curious.releaseStartTime = 0;
+        progress = 0;
+      }
+    } else if (params.curious.isCurious) {
+      // Still curious, maintain state
+      progress = 1;
+    } else {
+      // Not curious and no release in progress
+      progress = 0;
+    }
+
+    // Smooth interpolation using easing
+    const easeProgress = 1 - Math.pow(1 - progress, 3); // Cubic ease-out
+    const invProgress = 1 - easeProgress;
+
+    // Interpolate size (only if not overridden by angry)
+    if (!params.angry.isAngry) {
+      params.size =
+        params.curious.targetSize * easeProgress +
+        originalParams.size * invProgress;
+    }
+
+    // Interpolate smile (only if not overridden by angry)
+    if (!params.angry.isAngry) {
+      params.smile =
+        params.curious.targetSmile * easeProgress +
+        originalParams.smile * invProgress;
+    }
+
+    // Interpolate colors (prioritize angry if active, else curious)
+    const activeColorSource = params.angry.isAngry
+      ? originalParams
+      : originalCuriousParams;
+    for (let i = 0; i < 3; i++) {
+      if (!params.angry.isAngry) {
+        params.mainColor[i] =
+          params.curious.targetMainColor[i] * easeProgress +
+          originalParams.mainColor[i] * invProgress;
+        params.borderColor[i] =
+          params.curious.targetBorderColor[i] * easeProgress +
+          originalParams.borderColor[i] * invProgress;
+      }
     }
 
     // Update dot sizes if size changed
@@ -357,20 +471,26 @@ document.addEventListener("DOMContentLoaded", () => {
   function render() {
     const currentTime = performance.now();
 
-    // Update angry state before rendering
+    // Update states before rendering
     updateAngryState(currentTime);
+    updateCuriousState(currentTime);
 
     gl.uniform1f(uniforms.u_time, currentTime);
     gl.clearColor(0.0, 0.0, 0.0, 1.0);
     gl.clear(gl.COLOR_BUFFER_BIT);
     gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
 
-    if (mouse.moving && !params.angry.isAngry) {
+    if (mouse.moving && !params.angry.isAngry && !params.curious.isCurious) {
       params.smile -= 0.05;
       params.smile = Math.max(params.smile, -0.1);
       params.tail.gravity -= 10 * params.size;
       params.tail.gravity = Math.max(params.tail.gravity, 0);
-    } else if (!params.angry.isAngry && params.angry.releaseStartTime === 0) {
+    } else if (
+      !params.angry.isAngry &&
+      !params.curious.isCurious &&
+      params.angry.releaseStartTime === 0 &&
+      params.curious.releaseStartTime === 0
+    ) {
       params.smile += 0.01;
       params.smile = Math.min(params.smile, 1);
       if (params.tail.gravity > 25 * params.size) {
@@ -384,7 +504,7 @@ document.addEventListener("DOMContentLoaded", () => {
     mouse.x += (mouse.tX - mouse.x) * mouseThreshold;
     mouse.y += (mouse.tY - mouse.y) * mouseThreshold;
 
-    // Update uniforms with current values (which may be interpolated during angry state)
+    // Update uniforms with current values (interpolated by moods)
     gl.uniform1f(uniforms.u_size, params.size);
     gl.uniform1f(uniforms.u_smile, params.smile);
     gl.uniform3f(
