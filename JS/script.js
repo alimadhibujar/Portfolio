@@ -1,173 +1,106 @@
+// ============ Mobile Navigation ============
 const openNav = document.querySelector(".icon");
 const panelSaid = document.querySelector(".panel__main-side");
 const overLay = document.querySelector(".overlay");
+
 // Opening mobile nav menu
 openNav.addEventListener("click", () => {
   panelSaid.style.width = "200px";
   overLay.style.width = "100vw";
 });
-// Closing mobile nav menu when we clicking to closeBtn or to overlay
+
+// Closing mobile nav menu when clicking closeBtn or overlay
 window.addEventListener("click", (e) => {
   const closeNav = document.querySelector(".closeBtn");
   if (e.target === overLay || e.target === closeNav) {
     overLay.style.width = "0vw";
     panelSaid.style.width = "0vw";
   }
-  // Shorthand
-  // if ([overLay, closeNav].includes(e.target)) {
-  //   overLay.style.width = "0vw";
-  //   panelSaid.style.width = "0vw";
-  // }
 });
-// Closing mobile nav menu when we clicking to nav links
+
+// Closing mobile nav menu when clicking nav links
 const navLinks = document.querySelectorAll(".navlink");
-document.body.clientWidth <= 768 &&
+if (document.body.clientWidth <= 768) {
   navLinks.forEach((link) => {
-    link.addEventListener("click", (e) => {
+    link.addEventListener("click", () => {
       overLay.style.width = "0vw";
       panelSaid.style.width = "0vw";
     });
   });
+}
 
-// Custom smooth scrolling for all navigation links to prevent layout issues
-navLinks.forEach((link) => {
-  link.addEventListener("click", function (e) {
-    const href = this.querySelector("a").getAttribute("href");
-
-    // Only handle internal hash links
-    if (href.charAt(0) === "#") {
-      e.preventDefault();
-
-      const targetSection = document.querySelector(href);
-      if (!targetSection) return;
-
-      // Get correct scroll position
-      const mainContent = document.querySelector(".panel__main-content");
-      const offsetTop = targetSection.offsetTop;
-
-      // Special handling for contact section to prevent gap issues
-      if (href === "#contact") {
-        // For contact section, use a slightly different scroll approach to prevent the gap
-        const mainContent = document.querySelector(".panel__main-content");
-
-        // Add class to disable smooth scrolling temporarily
-        mainContent.classList.add("scrolling-to-contact");
-
-        // Apply scroll
-        mainContent.scrollTo({
-          top: offsetTop - 10, // Small offset to prevent the gap
-          behavior: "smooth",
-        });
-
-        // Remove class after animation completes
-        setTimeout(() => {
-          mainContent.classList.remove("scrolling-to-contact");
-        }, 1000);
-      } else {
-        // Normal smooth scroll for other sections
-        mainContent.scrollTo({
-          top: offsetTop,
-          behavior: "smooth",
-        });
-      }
-
-      // Update aria-current immediately for keyboard/mouse users
-      document
-        .querySelectorAll('.list__links a[aria-current="page"]')
-        .forEach((a) => a.removeAttribute("aria-current"));
-      // Mark clicked anchor as current (will be confirmed by IntersectionObserver on intersect)
-      const clickedAnchor = this.querySelector("a");
-      if (clickedAnchor) clickedAnchor.setAttribute("aria-current", "page");
-
-      // Still update the URL hash for proper history/bookmarking, but without scrolling
-      window.history.pushState(null, null, href);
-
-      // Proactively reflect selection for assistive tech until observer fires
-      document
-        .querySelectorAll('.list__links a[aria-current="page"]')
-        .forEach((a) => a.removeAttribute("aria-current"));
-      const clicked = this.querySelector("a");
-      if (clicked) clicked.setAttribute("aria-current", "page");
-    }
-  });
-});
-
-// shadow effect when mouse over and out of image-container.
-// Self-Invoked Function
+// ============ Hero Image Shadow Effect ============
 (function titleShadow() {
   const heroImg = document.querySelector(".image-container");
   const nameTitle = document.getElementById("name-title");
 
-  heroImg.addEventListener("mouseover", (e) => {
-    nameTitleStyle = `text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1),
-      -1px -1px 2px rgb(41, 40, 40), 2px 1px 2px rgba(0, 0, 0, 0.7);
-      transform: translate(0, 0)`;
-    nameTitle.style = nameTitleStyle;
+  if (!heroImg || !nameTitle) return;
+
+  const hoverStyle = `text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1),
+    -1px -1px 2px rgb(41, 40, 40), 2px 1px 2px rgba(0, 0, 0, 0.7);
+    transform: translate(0, 0)`;
+
+  const defaultStyle = `transform: translate(-1px, -1px);
+    text-shadow: 0 -1px 0 #7289da, 1px 1px 1px black,
+    2px 2px 10px rgba(0, 0, 0, 0.15), 4px 5px 10px rgba(0, 0, 0, 0.15),
+    6px 9px 10px rgba(0, 0, 0, 0.15), 8px 15px 10px rgba(0, 0, 0, 0.15),
+    10px 20px 10px rgba(0, 0, 0, 0.15), 15px 30px 10px rgba(0, 0, 0, 0.15)`;
+
+  heroImg.addEventListener("mouseover", () => {
+    nameTitle.style.cssText = hoverStyle;
   });
 
-  heroImg.addEventListener("mouseout", (e) => {
-    const nameTitleStyle = `transform: translate(-1px, -1px);textShadow = 0 -1px 0 #7289da, 1px 1px 1px black,
-      2px 2px 10px rgba(0, 0, 0, 0.15), 4px 5px 10px rgba(0, 0, 0, 0.15),
-      6px 9px 10px rgba(0, 0, 0, 0.15), 8px 15px 10px rgba(0, 0, 0, 0.15),
-      10px 20px 10px rgba(0, 0, 0, 0.15), 15px 30px 10px rgba(0, 0, 0, 0.15)`;
-    nameTitle.style = nameTitleStyle;
+  heroImg.addEventListener("mouseout", () => {
+    nameTitle.style.cssText = defaultStyle;
   });
 })();
 
-// sections fade in effect and setActiveLink.
+// ============ Section Fade Effect & Active Link ============
 function sectionFadeEffect() {
-  /* because of "rootMargin: -275px"
-  let option = {
-    root: null,
-    rootMargin: "-275px 0px",
-    threshold: 0.05,
-  }
-  section dose not appear in mobile
-  making responsive intersection*/
   const options =
     window.innerHeight > 768
       ? { rootMargin: "-275px 0px", threshold: 0.05 }
       : { rootMargin: "0px", threshold: 0.2 };
 
-  let observer = new IntersectionObserver(beTouching, options);
-  document.querySelectorAll(".hidden").forEach((section) => {
-    observer.observe(section);
-  });
-  function beTouching(entries, observe) {
+  const observer = new IntersectionObserver((entries) => {
     entries.forEach((entry) => {
-      // variables for setActiveLink
       const id = entry.target.getAttribute("id");
-      let link = document.querySelector(`.list__links li a[href="#${id}"]`);
+      const link = document.querySelector(`.list__links li a[href="#${id}"]`);
 
       if (entry.isIntersecting) {
         entry.target.classList.remove("hidden");
-        // prevent errors when link is null
-        if (!link) return;
-        link.parentElement.classList.add("active");
+        if (link) {
+          link.parentElement.classList.add("active");
+        }
       } else {
         entry.target.classList.add("hidden");
-        link.parentElement.classList.remove("active");
+        if (link) {
+          link.parentElement.classList.remove("active");
+        }
       }
     });
-  }
+  }, options);
+
+  document.querySelectorAll(".hidden").forEach((section) => {
+    observer.observe(section);
+  });
 }
 sectionFadeEffect();
 
-// Typing effect in the home section
+// ============ Typing Effect ============
 (function typingEffect() {
   const textDisplay = document.getElementById("text");
-  let phrases = [];
-  document.body.clientWidth < 500
-    ? (phrases = [
-        "Welcome to my page",
-        "I'm a web developer !",
-        "Nice to meet you !",
-      ])
-    : (phrases = [
-        "Welcome to my portfolio !",
-        "I'm a front-end web developer !",
-        "Nice to meet you !",
-      ]);
+  if (!textDisplay) return;
+
+  const phrases =
+    document.body.clientWidth < 500
+      ? ["Welcome to my page", "I'm a web developer !", "Nice to meet you !"]
+      : [
+          "Welcome to my portfolio !",
+          "I'm a front-end web developer !",
+          "Nice to meet you !",
+        ];
+
   let i = 0;
   let j = 0;
   let currentPhrase = [];
@@ -182,16 +115,14 @@ sectionFadeEffect();
       if (!isDeleting && j <= phrases[i].length) {
         currentPhrase.push(phrases[i][j]);
         j++;
-        textDisplay.innerHTML = currentPhrase.join("");
       }
 
       if (isDeleting && j <= phrases[i].length) {
-        currentPhrase.pop(phrases[i][j]);
+        currentPhrase.pop();
         j--;
-        textDisplay.innerHTML = currentPhrase.join("");
       }
 
-      if (j == phrases[i].length) {
+      if (j === phrases[i].length) {
         isEnd = true;
         isDeleting = true;
       }
@@ -205,43 +136,45 @@ sectionFadeEffect();
         }
       }
     }
-    const spedUp = Math.random() * (80 - 50) + 50;
+
+    const speedUp = Math.random() * (80 - 50) + 50;
     const normalSpeed = Math.random() * (300 - 200) + 200;
-    const time = isEnd ? 2000 : isDeleting ? spedUp : normalSpeed;
+    const time = isEnd ? 2000 : isDeleting ? speedUp : normalSpeed;
     setTimeout(() => requestAnimationFrame(loop), time);
   }
 
   requestAnimationFrame(loop);
 })();
 
-//  text area letter flying effect
-// https://codepen.io/chris22smith/pen/MWKXbvx
+// ============ Text Area Letter Flying Effect ============
 const text = document.querySelector("#letters");
 const keypress = document.querySelector("#keypress");
-function type(event) {
-  if (
-    event.keyCode &&
-    ((event.keyCode >= 48 && event.keyCode <= 90) ||
-      (event.keyCode >= 186 && event.keyCode <= 222))
-  ) {
-    const char = event.key;
-    const span = document.createElement("span");
-    span.textContent = char;
-    keypress.appendChild(span);
-    setTimeout(function () {
-      span.parentNode.removeChild(span);
-    }, 750);
+
+if (text && keypress) {
+  function type(event) {
+    if (
+      event.keyCode &&
+      ((event.keyCode >= 48 && event.keyCode <= 90) ||
+        (event.keyCode >= 186 && event.keyCode <= 222))
+    ) {
+      const char = event.key;
+      const span = document.createElement("span");
+      span.textContent = char;
+      keypress.appendChild(span);
+      setTimeout(() => {
+        span.remove();
+      }, 750);
+    }
   }
+
+  text.addEventListener("keydown", type);
+
+  window.addEventListener("unload", () => {
+    text.removeEventListener("keydown", type);
+  });
 }
 
-text.addEventListener("keydown", type);
-// Cleanup on page unload
-window.addEventListener("unload", () => {
-  text.removeEventListener("keydown", type);
-});
-
-/* ============ Projects Modal ============ */
-// Project metadata map
+// ============ Projects Data ============
 const projectsData = {
   side1: {
     id: "side1",
@@ -320,7 +253,7 @@ const projectsData = {
   },
 };
 
-// Map Swiper slides to corresponding project ids
+// Map Swiper slides to project ids
 const swiperMap = [
   { selectorIndex: 0, id: "side1" },
   { selectorIndex: 1, id: "side3" },
@@ -329,21 +262,18 @@ const swiperMap = [
   { selectorIndex: 4, id: "side4" },
 ];
 
-// Modal elements
+// ============ Project Modal ============
 const modal = document.getElementById("projectModal");
-const modalDialog = modal ? modal.querySelector(".modal__dialog") : null;
-const modalMedia = modal ? document.getElementById("projectModalMedia") : null;
-const modalTitle = modal ? document.getElementById("projectModalTitle") : null;
-const modalDesc = modal ? document.getElementById("projectModalDesc") : null;
-const modalTech = modal ? document.getElementById("projectModalTech") : null;
-const modalDetails = modal
-  ? document.getElementById("projectModalDetails")
-  : null;
-const modalLive = modal ? document.getElementById("projectModalLive") : null;
-const modalRepo = modal ? document.getElementById("projectModalRepo") : null;
+const modalDialog = modal?.querySelector(".modal__dialog");
+const modalMedia = modal?.querySelector("#projectModalMedia");
+const modalTitle = modal?.querySelector("#projectModalTitle");
+const modalDesc = modal?.querySelector("#projectModalDesc");
+const modalTech = modal?.querySelector("#projectModalTech");
+const modalDetails = modal?.querySelector("#projectModalDetails");
+const modalLive = modal?.querySelector("#projectModalLive");
+const modalRepo = modal?.querySelector("#projectModalRepo");
 
 function createTechChip(name) {
-  // Basic icon mapping using font-awesome where possible
   const iconMap = {
     HTML: "fa-html5",
     SCSS: "fa-scss",
@@ -352,20 +282,36 @@ function createTechChip(name) {
     JavaScript: "fa-code",
     React: "fa-react",
     Hooks: "fa-react",
+    "React-Hooks": "fa-react",
     Vite: "fa-bolt",
     Canvas: "fa-picture-o",
   };
+
   const i = document.createElement("i");
   i.className = `fa ${iconMap[name] || "fa-tag"}`;
+
   const span = document.createElement("span");
   span.textContent = name;
+
   const chip = document.createElement("span");
   chip.className = "tech-chip";
   chip.append(i, span);
+
   return chip;
 }
 
 function fillModal(data) {
+  if (
+    !modalMedia ||
+    !modalTitle ||
+    !modalDesc ||
+    !modalTech ||
+    !modalDetails ||
+    !modalLive ||
+    !modalRepo
+  )
+    return;
+
   // Media
   modalMedia.innerHTML = "";
   if (data.media?.type === "image") {
@@ -384,16 +330,16 @@ function fillModal(data) {
     modalMedia.appendChild(video);
   }
 
-  // Texts
+  // Text content
   modalTitle.textContent = data.title || "";
   modalDesc.textContent = data.desc || "";
-
-  // Tech
-  modalTech.innerHTML = "";
-  (data.tech || []).forEach((t) => modalTech.appendChild(createTechChip(t)));
-
-  // Details
   modalDetails.textContent = data.details || "";
+
+  // Tech chips
+  modalTech.innerHTML = "";
+  (data.tech || []).forEach((tech) => {
+    modalTech.appendChild(createTechChip(tech));
+  });
 
   // Links
   if (data.live) {
@@ -403,6 +349,7 @@ function fillModal(data) {
     modalLive.removeAttribute("href");
     modalLive.style.display = "none";
   }
+
   if (data.repo) {
     modalRepo.href = data.repo;
     modalRepo.style.display = "";
@@ -415,36 +362,63 @@ function fillModal(data) {
 function openProjectModal(projectId) {
   const data = projectsData[projectId];
   if (!modal || !data) return;
+
   fillModal(data);
-  modal.classList.add("is-open");
-  modal.setAttribute("aria-hidden", "false");
-  // trap focus to modal
-  setTimeout(() => {
-    const focusable = modal.querySelector(".modal__close");
-    focusable && focusable.focus();
-  }, 0);
-  // prevent background scroll of panel
-  const panel = document.querySelector(".panel__main-content");
-  if (panel) panel.style.overflow = "hidden";
+
+  // Set view-transition-name for thumbnail expansion effect
+  const thumbnail = document.querySelector(
+    `[view-transition-name="project-${projectId}-thumb"]`
+  );
+  const modalImg = modalMedia?.querySelector("img");
+
+  if (thumbnail && modalImg) {
+    thumbnail.style.viewTransitionName = `project-${projectId}-thumb`;
+    modalImg.style.viewTransitionName = `project-${projectId}-thumb`;
+  }
+
+  // Use view transition if supported
+  if (document.startViewTransition) {
+    document.startViewTransition(() => {
+      modal.classList.add("is-open");
+      modal.setAttribute("aria-hidden", "false");
+    });
+  } else {
+    modal.classList.add("is-open");
+    modal.setAttribute("aria-hidden", "false");
+  }
 }
 
 function closeProjectModal() {
   if (!modal) return;
-  modal.classList.remove("is-open");
-  modal.setAttribute("aria-hidden", "true");
-  // restore background scroll
-  const panel = document.querySelector(".panel__main-content");
-  if (panel) panel.style.overflow = "auto";
+
+  if (document.startViewTransition) {
+    document.startViewTransition(() => {
+      modal.classList.remove("is-open");
+      modal.setAttribute("aria-hidden", "true");
+    });
+  } else {
+    modal.classList.remove("is-open");
+    modal.setAttribute("aria-hidden", "true");
+  }
+
+  // Cleanup view-transition-names after transition
+  setTimeout(() => {
+    document
+      .querySelectorAll('[style*="view-transition-name"]')
+      .forEach((el) => {
+        el.style.viewTransitionName = "";
+      });
+  }, 700);
 }
 
-// Close interactions
+// Modal close interactions
 if (modal) {
   modal.addEventListener("click", (e) => {
-    const target = e.target;
-    if (target instanceof HTMLElement && target.dataset.close === "true") {
+    if (e.target instanceof HTMLElement && e.target.dataset.close === "true") {
       closeProjectModal();
     }
   });
+
   document.addEventListener("keydown", (e) => {
     if (e.key === "Escape" && modal.classList.contains("is-open")) {
       closeProjectModal();
@@ -452,44 +426,98 @@ if (modal) {
   });
 }
 
-// Wire desktop cube faces
+// ============ Wire Project Interactions ============
+// Desktop cube faces
 (function wireCubeFaces() {
   const ids = ["side1", "side2", "side3", "side4", "side5"];
   ids.forEach((id) => {
-    const a = document.getElementById(id);
-    if (!a) return;
-    a.addEventListener("click", (e) => {
-      e.preventDefault();
-      openProjectModal(id);
-    });
+    const element = document.getElementById(id);
+    if (element) {
+      element.addEventListener("click", (e) => {
+        e.preventDefault();
+        openProjectModal(id);
+      });
+    }
   });
 })();
 
-// Wire swiper slides (anchors inside .swiper-slide)
+// Swiper slides
 (function wireSwiperSlides() {
   const slides = document.querySelectorAll(".swiper-container .swiper-slide");
   slides.forEach((slide, idx) => {
     const anchor = slide.querySelector("a");
-    if (!anchor) return;
-    anchor.addEventListener("click", (e) => {
-      e.preventDefault();
-      const map = swiperMap.find((m) => m.selectorIndex === idx);
-      const id = map ? map.id : null;
-      if (id) openProjectModal(id);
-    });
+    if (anchor) {
+      anchor.addEventListener("click", (e) => {
+        e.preventDefault();
+        const map = swiperMap.find((m) => m.selectorIndex === idx);
+        if (map?.id) {
+          openProjectModal(map.id);
+        }
+      });
+    }
   });
 })();
 
-// creating the current year in footer
+// ============ Footer Year ============
 const year = document.getElementById("year");
-year.textContent = new Date().getFullYear();
-year.style.fontSize = "1rem";
+if (year) {
+  year.textContent = new Date().getFullYear();
+  year.style.fontSize = "1rem";
+}
 
-// Window resize handler to maintain proper scroll behavior
-window.addEventListener("resize", function () {
-  // Reset any scroll-related classes when window is resized
-  const mainContent = document.querySelector(".panel__main-content");
-  if (mainContent.classList.contains("scrolling-to-contact")) {
+// ============ Section Navigation ============
+const mainContent = document.querySelector(".panel__main-content");
+
+// Window resize handler
+window.addEventListener("resize", () => {
+  if (mainContent?.classList.contains("scrolling-to-contact")) {
     mainContent.classList.remove("scrolling-to-contact");
   }
+});
+
+// Enhanced navigation with view transitions
+navLinks.forEach((link) => {
+  link.addEventListener("click", function (e) {
+    const anchor = this.querySelector("a");
+    if (!anchor) return;
+
+    const href = anchor.getAttribute("href");
+    if (!href || href.charAt(0) !== "#") return;
+
+    e.preventDefault();
+
+    const targetSection = document.querySelector(href);
+    if (!targetSection || !mainContent) return;
+
+    const scrollToSection = () => {
+      targetSection.classList.remove("hidden");
+      const offsetTop = targetSection.offsetTop;
+
+      if (href === "#contact") {
+        mainContent.classList.add("scrolling-to-contact");
+        mainContent.scrollTo({ top: offsetTop - 10, behavior: "smooth" });
+        setTimeout(() => {
+          mainContent.classList.remove("scrolling-to-contact");
+        }, 1000);
+      } else {
+        mainContent.scrollTo({ top: offsetTop, behavior: "smooth" });
+      }
+    };
+
+    // Use view transition if supported
+    if (document.startViewTransition) {
+      document.startViewTransition(scrollToSection);
+    } else {
+      scrollToSection();
+    }
+
+    // Update aria-current for accessibility
+    document
+      .querySelectorAll('.list__links a[aria-current="page"]')
+      .forEach((a) => a.removeAttribute("aria-current"));
+    anchor.setAttribute("aria-current", "page");
+
+    // Update URL hash
+    window.history.pushState(null, null, href);
+  });
 });

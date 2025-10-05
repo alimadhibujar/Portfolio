@@ -1496,17 +1496,21 @@ footer {
 @keyframes fade-out {
   from {
     opacity: 1;
+    filter: blur(0);
   }
   to {
     opacity: 0;
+    filter: blur(2px);
   }
 }
 @keyframes fade-in {
   from {
     opacity: 0;
+    filter: blur(2px);
   }
   to {
     opacity: 1;
+    filter: blur(0);
   }
 }
 
@@ -1528,4 +1532,20 @@ footer {
 ::view-transition-group(title) {
   animation-duration: 1s;
   animation-timing-function: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+/* Project thumbnail transitions */
+::view-transition-group(*[style*="project-"]) {
+  animation-duration: 0.7s;
+  animation-timing-function: cubic-bezier(
+    0.4,
+    0,
+    0.2,
+    1
+  ); // Ease for expand effect
+}
+
+/* Modal media specific */
+.modal__media img {
+  view-transition-name: none; // Override dynamically in JS
 }
