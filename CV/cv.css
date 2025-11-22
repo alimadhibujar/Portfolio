@@ -4,9 +4,9 @@
   --primary-color: #2c6e9b;
   --secondary-color: #4a90c0;
   --accent-color: #e67373;
-  --background-color: #fff;
+  --background-color: rgba(255, 255, 255, 0.65);
   --text-color: #2d3436;
-  --sidebar-bg: #f7f9fc;
+  --sidebar-bg: rgba(247, 249, 252, 0.6);
   --skill-bar-bg: #e0e7ec;
   --skill-level-bg: var(--primary-color);
   --header-bg: radial-gradient(
@@ -31,15 +31,21 @@
   --link-color: #2c6e9b;
   --link-hover-color: #e67373;
   --date-color: #6c757d;
+
+  /* Mesh Gradient Colors - Light Mode */
+  --orb-1: hsl(219, 82%, 93%);
+  --orb-2: hsl(215, 60%, 88%);
+  --orb-3: hsl(199, 88%, 87%);
+  --orb-4: hsl(217, 96%, 81%);
 }
 
 .dark-mode {
-  --background-color: #1a1f24;
+  --background-color: rgba(26, 31, 36, 0.65);
   --text-color: hsl(216, 20%, 85%);
   --primary-color: #64a6d3;
   --secondary-color: hsl(203, 58%, 71%);
   --accent-color: #ff8585;
-  --sidebar-bg: #242a33;
+  --sidebar-bg: rgba(36, 42, 51, 0.6);
   --skill-bar-bg: #2c3440;
   --skill-level-bg: var(--primary-color);
   --imageFilter: grayscale(0%)
@@ -49,6 +55,12 @@
   --link-color: hsl(204, 56%, 75%);
   --link-hover-color: #ff8585;
   --date-color: #a0aec0;
+
+  /* Mesh Gradient Colors - Dark Mode */
+  --orb-1: hsl(198, 44%, 11%);
+  --orb-2: hsl(195, 35%, 19%);
+  --orb-3: hsl(198, 39%, 28%);
+  --orb-4: hsl(204, 31%, 13%);
 }
 
 /* Main animated underline effect */
@@ -108,14 +120,102 @@ a:hover {
 body {
   font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
   line-height: 1.6;
-  background-color: #f8f9fa;
+  background-color: var(--orb-1); /* Fallback */
   margin: 0;
   padding: 20px;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  transition: background-color 0.3s ease;
+  min-height: 100vh;
+  position: relative;
+  z-index: 1;
+}
+
+body.dark-mode {
+  background-color: var(--orb-1);
+}
+
+/* Mesh Background */
+#mesh-background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: -1;
+  overflow: hidden;
+  background: var(--orb-1);
+  transition: background-color 0.5s ease;
+}
+
+.mesh-orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  opacity: 0.9;
+  animation: moveOrb 20s infinite alternate ease-in-out;
+  transition: background-color 0.5s ease;
+}
+
+.orb-1 {
+  top: -10%;
+  left: -10%;
+  width: 50vw;
+  height: 50vw;
+  background: var(--orb-1);
+  animation-duration: 25s;
+}
+
+.orb-2 {
+  bottom: -10%;
+  right: -10%;
+  width: 60vw;
+  height: 60vw;
+  background: var(--orb-2);
+  animation-duration: 28s;
+  animation-delay: -5s;
+}
+
+.orb-3 {
+  top: 20%;
+  right: 10%;
+  width: 40vw;
+  height: 40vw;
+  background: var(--orb-3);
+  animation-duration: 32s;
+  animation-delay: -10s;
+}
+
+.orb-4 {
+  bottom: 10%;
+  left: 10%;
+  width: 45vw;
+  height: 45vw;
+  background: var(--orb-4);
+  animation-duration: 30s;
+  animation-delay: -15s;
+}
+
+@keyframes moveOrb {
+  0% {
+    transform: translate(0, 0) scale(1);
+  }
+  33% {
+    transform: translate(30px, 50px) scale(1.1);
+  }
+  66% {
+    transform: translate(-20px, 20px) scale(0.9);
+  }
+  100% {
+    transform: translate(10px, -30px) scale(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mesh-orb {
+    animation: none;
+  }
 }
 h1,
 h2,
@@ -292,6 +392,24 @@ h3 {
   transition: box-shadow 0.3s ease, background-color 0.3s ease, color 0.3s ease;
   padding: 0 1em 1em;
   border-radius: 8px;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  position: relative;
+  overflow: hidden;
+}
+/* Noise background for the container in dark mode */
+.container::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.4'/%3E%3C/svg%3E");
+  pointer-events: none;
+  opacity: 0.25;
+  mix-blend-mode: overlay;
 }
 
 .container:hover {
@@ -303,6 +421,7 @@ h3 {
   background-color: var(--sidebar-bg);
   transition: background-color 0.3s ease;
   padding: 20px;
+  border-right: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .profile-image {

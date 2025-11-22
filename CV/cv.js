@@ -374,8 +374,7 @@ window.addEventListener("afterprint", () => {
 
 // inline html style for better pdf download style
 function updateLinkColors() {
-  const container = document.querySelector(".container");
-  const isDark = container.classList.contains("dark-mode");
+  const isDark = document.body.classList.contains("dark-mode");
   const color = isDark ? "hsl(204, 56%, 75%)" : "#2c6e9b";
   const links = document.querySelectorAll("a");
   links.forEach((link) => {
@@ -393,19 +392,19 @@ if (
   savedTheme === "dark" ||
   (!savedTheme && window.matchMedia("(prefers-color-scheme: dark)").matches) // Check for saved theme preference or respect OS preference
 ) {
-  container.classList.add("dark-mode");
+  document.body.classList.add("dark-mode");
   themeToggle.innerHTML =
     '<i class="fa fa-sun-o" aria-hidden="true"></i> Light Mode';
 } else {
-  container.classList.remove("dark-mode");
+  document.body.classList.remove("dark-mode");
   themeToggle.innerHTML =
     '<i class="fa fa-moon-o" aria-hidden="true"></i> Dark Mode';
 }
 updateLinkColors();
 
 themeToggle.addEventListener("click", () => {
-  container.classList.toggle("dark-mode");
-  const isDark = container.classList.contains("dark-mode");
+  document.body.classList.toggle("dark-mode");
+  const isDark = document.body.classList.contains("dark-mode");
   localStorage.setItem("theme", isDark ? "dark" : "light");
   themeToggle.innerHTML = isDark
     ? '<i class="fa fa-sun-o" aria-hidden="true"></i> Light Mode'
@@ -462,7 +461,7 @@ document.addEventListener("keydown", (e) => {
     }
   } else if (key === "t") {
     e.preventDefault();
-    const isDarkMode = container.classList.contains("dark-mode");
+    const isDarkMode = document.body.classList.contains("dark-mode");
     const newTheme = isDarkMode ? "light" : "dark";
     toastNotification.show(
       `Switched to ${newTheme} mode (Shortcut: T)`,
@@ -477,8 +476,8 @@ document.addEventListener("keydown", (e) => {
       setTimeout(() => btn.blur(), 600);
     } else {
       // Fallback toggling
-      container.classList.toggle("dark-mode");
-      const isDark = container.classList.contains("dark-mode");
+      document.body.classList.toggle("dark-mode");
+      const isDark = document.body.classList.contains("dark-mode");
       localStorage.setItem("theme", isDark ? "dark" : "light");
       updateLinkColors();
     }
