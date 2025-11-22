@@ -1259,8 +1259,10 @@ section {
     transform: translate(-50%, -50%);
     width: min(920px, 92vw);
     max-height: 88vh;
-    background: $grey2;
-    border: 1px solid rgba($blurple, 0.35);
+    background: rgba(31, 34, 37, 0.6);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 14px;
     box-shadow: 0 20px 60px rgba(0, 0, 0, 0.45);
     overflow: hidden;
