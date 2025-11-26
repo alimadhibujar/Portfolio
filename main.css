@@ -634,6 +634,9 @@ h3 {
     width: 100% !important;
   }
 }
+.panel__main #home #heroImage:active {
+  cursor: grabbing;
+}
 .panel__main #home hr {
   width: 50vw;
   height: 1px;

@@ -628,6 +628,9 @@ h3 {
         width: 100% !important;
       }
     }
+    #heroImage:active {
+      cursor: grabbing;
+    }
 
     hr {
       width: 50vw;
