@@ -1,10 +1,32 @@
 @import "https://unpkg.com/open-props/easings.min.css";
 
+/* Added @property definitions to enable the browser to interpolate the color values smoothly instead of snapping instantly, during the theme transition */
+@property --orb-1 {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: #000000;
+}
+@property --orb-2 {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: #000000;
+}
+@property --orb-3 {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: #000000;
+}
+@property --orb-4 {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: #000000;
+}
+
 :root {
   --primary-color: #2c6e9b;
   --secondary-color: #4a90c0;
   --accent-color: #e67373;
-  --background-color: rgba(255, 255, 255, 0.65);
+  --background-color: rgba(255, 255, 255, 0.7);
   --text-color: #2d3436;
   --sidebar-bg: rgba(247, 249, 252, 0.6);
   --skill-bar-bg: #e0e7ec;
@@ -33,10 +55,27 @@
   --date-color: #6c757d;
 
   /* Mesh Gradient Colors - Light Mode */
-  --orb-1: hsl(219, 82%, 93%);
-  --orb-2: hsl(215, 60%, 88%);
-  --orb-3: hsl(199, 88%, 87%);
-  --orb-4: hsl(217, 96%, 81%);
+  --mesh-strength: 0.55; /* overall orb opacity multiplier */
+  --mesh-blur: 110px; /* how frosted / diffused the orbs are */
+  --mesh-overlay-tint: color-mix(
+    in srgb,
+    var(--primary-color) 22%,
+    #ffffff 78%
+  );
+  --mesh-noise-opacity: 0.035;
+  /* create orb colors that harmonize with primary / secondary */
+  --orb-1: color-mix(in srgb, var(--primary-color) 40%, #ffffff 60%);
+  --orb-2: color-mix(in srgb, var(--secondary-color) 35%, #ffffff 65%);
+  --orb-3: color-mix(
+    in srgb,
+    var(--accent-color) 38%,
+    var(--secondary-color) 62%
+  );
+  --orb-4: color-mix(
+    in srgb,
+    var(--primary-color) 30%,
+    var(--accent-color) 70%
+  );
 }
 
 .dark-mode {
@@ -57,10 +96,18 @@
   --date-color: #a0aec0;
 
   /* Mesh Gradient Colors - Dark Mode */
-  --orb-1: hsl(198, 44%, 11%);
-  --orb-2: hsl(195, 35%, 19%);
-  --orb-3: hsl(198, 39%, 28%);
-  --orb-4: hsl(204, 31%, 13%);
+  --orb-1: color-mix(in srgb, var(--primary-color) 40%, #000 60%);
+  --orb-2: color-mix(in srgb, var(--secondary-color) 35%, #000 65%);
+  --orb-3: color-mix(
+    in srgb,
+    var(--accent-color) 25%,
+    var(--secondary-color) 75%
+  );
+  --orb-4: color-mix(
+    in srgb,
+    var(--primary-color) 40%,
+    var(--accent-color) 60%
+  );
 }
 
 /* Main animated underline effect */
@@ -118,9 +165,20 @@ a:hover {
 }
 
 body {
-  font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+  font-family:
+    system-ui,
+    -apple-system,
+    Segoe UI,
+    Roboto,
+    sans-serif;
   line-height: 1.6;
-  background-color: var(--orb-1); /* Fallback */
+  background-color: var(--orb-1);
+  transition:
+    background-color 0.3s ease,
+    --orb-1 0.3s ease,
+    --orb-2 0.3s ease,
+    --orb-3 0.3s ease,
+    --orb-4 0.3s ease;
   margin: 0;
   padding: 20px;
   display: flex;
@@ -132,91 +190,228 @@ body {
   z-index: 1;
 }
 
-body.dark-mode {
-  background-color: var(--orb-1);
-}
-
 /* Mesh Background */
 #mesh-background {
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  z-index: -1;
+  inset: 0;
+  z-index: -2;
+  pointer-events: none;
   overflow: hidden;
-  background: var(--orb-1);
-  transition: background-color 0.5s ease;
+  display: block;
+  /* base gradient as subtle foundation */
+  background:
+    radial-gradient(1200px 800px at 10% 10%, var(--orb-1) 0%, transparent 30%),
+    radial-gradient(1000px 600px at 90% 20%, var(--orb-2) 0%, transparent 32%),
+    linear-gradient(
+      135deg,
+      color-mix(in srgb, var(--orb-1) 8%, #0000),
+      color-mix(in srgb, var(--orb-2) 6%, #0000)
+    );
+  transition: background-color 0.3s ease;
+}
+
+/* frosted glass overlay that sits above the orbs, creates separation */
+#mesh-background::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  /* subtle cool-white tint + slight saturation to hint freezer glass */
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.02),
+    rgba(255, 255, 255, 0.03)
+  );
+  mix-blend-mode: overlay;
+  backdrop-filter: blur(18px) saturate(120%);
+  -webkit-backdrop-filter: blur(18px) saturate(120%);
+  opacity: 1;
+}
+
+/* subtle noise to avoid perfectly smooth blur */
+#mesh-background::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200' viewBox='0 0 200 200'%3E%3Cfilter id='n'%3E%3CfeTurbulence baseFrequency='0.8' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.12'/%3E%3C/svg%3E");
+  opacity: var(--mesh-noise-opacity);
+  mix-blend-mode: overlay;
+  pointer-events: none;
 }
 
 .mesh-orb {
   position: absolute;
   border-radius: 50%;
-  filter: blur(80px);
-  opacity: 0.9;
-  animation: moveOrb 20s infinite alternate ease-in-out;
-  transition: background-color 0.5s ease;
-}
-
-.orb-1 {
-  top: -10%;
-  left: -10%;
-  width: 50vw;
-  height: 50vw;
-  background: var(--orb-1);
-  animation-duration: 25s;
+  filter: blur(var(--mesh-blur));
+  opacity: calc(0.75 * var(--mesh-strength));
+  mix-blend-mode: screen; /* screen helps them brighten underlying page colors gently */
+  transform-origin: center;
+  will-change: transform, opacity, filter;
 }
 
 .orb-2 {
-  bottom: -10%;
-  right: -10%;
-  width: 60vw;
-  height: 60vw;
+  width: 50vw;
+  height: 50vw;
+  max-width: 700px;
+  max-height: 700px;
   background: var(--orb-2);
-  animation-duration: 28s;
-  animation-delay: -5s;
+  top: 50%;
+  right: -15%;
+  animation: float2 17s ease-in-out infinite;
 }
 
 .orb-3 {
-  top: 20%;
-  right: 10%;
-  width: 40vw;
-  height: 40vw;
+  width: 55vw;
+  height: 55vw;
+  max-width: 750px;
+  max-height: 750px;
   background: var(--orb-3);
-  animation-duration: 32s;
-  animation-delay: -10s;
+  bottom: -25%;
+  left: 20%;
+  animation: float3 19s ease-in-out infinite;
 }
 
 .orb-4 {
-  bottom: 10%;
-  left: 10%;
   width: 45vw;
   height: 45vw;
+  max-width: 600px;
+  max-height: 600px;
   background: var(--orb-4);
-  animation-duration: 30s;
-  animation-delay: -15s;
+  top: 30%;
+  left: 40%;
+  animation: float4 13s ease-in-out infinite;
+}
+.orb-1 {
+  width: 58vw;
+  height: 58vw;
+  max-width: 900px;
+  max-height: 900px;
+  background: radial-gradient(circle at 35% 30%, var(--orb-1), transparent 55%);
+  top: -18%;
+  left: -12%;
+  animation: float1 48s cubic-bezier(0.22, 0.9, 0.27, 0.99) infinite;
 }
 
-@keyframes moveOrb {
+.orb-2 {
+  width: 45vw;
+  height: 45vw;
+  max-width: 720px;
+  max-height: 720px;
+  background: radial-gradient(circle at 65% 40%, var(--orb-2), transparent 55%);
+  top: 52%;
+  right: -18%;
+  animation: float2 62s cubic-bezier(0.22, 0.9, 0.27, 0.99) infinite;
+}
+
+.orb-3 {
+  width: 52vw;
+  height: 52vw;
+  max-width: 780px;
+  max-height: 780px;
+  background: radial-gradient(circle at 30% 70%, var(--orb-3), transparent 55%);
+  bottom: -28%;
+  left: 18%;
+  animation: float3 56s cubic-bezier(0.22, 0.9, 0.27, 0.99) infinite;
+}
+
+.orb-4 {
+  width: 42vw;
+  height: 42vw;
+  max-width: 640px;
+  max-height: 640px;
+  background: radial-gradient(circle at 60% 60%, var(--orb-4), transparent 55%);
+  top: 32%;
+  left: 40%;
+  animation: float4 44s cubic-bezier(0.22, 0.9, 0.27, 0.99) infinite;
+  opacity: calc(0.7 * var(--mesh-strength));
+}
+
+@keyframes float1 {
   0% {
-    transform: translate(0, 0) scale(1);
+    transform: translate(0, 0) scale(1) rotate(0deg);
+    opacity: 1;
   }
   33% {
-    transform: translate(30px, 50px) scale(1.1);
+    transform: translate(10%, 8%) scale(1.05) rotate(1.2deg);
+    opacity: 0.95;
   }
   66% {
-    transform: translate(-20px, 20px) scale(0.9);
+    transform: translate(20%, 18%) scale(1) rotate(-0.8deg);
+    opacity: 0.9;
   }
   100% {
-    transform: translate(10px, -30px) scale(1);
+    transform: translate(0, 0) scale(1) rotate(0deg);
+    opacity: 1;
+  }
+}
+@keyframes float2 {
+  0% {
+    transform: translate(0, 0) scale(1) rotate(0deg);
+    opacity: 1;
+  }
+  33% {
+    transform: translate(-12%, -10%) scale(1.03) rotate(-1.4deg);
+    opacity: 0.92;
+  }
+  66% {
+    transform: translate(-22%, 6%) scale(1.08) rotate(0.9deg);
+    opacity: 0.9;
+  }
+  100% {
+    transform: translate(0, 0) scale(1) rotate(0deg);
+    opacity: 1;
+  }
+}
+@keyframes float3 {
+  0% {
+    transform: translate(0, 0) scale(1) rotate(0deg);
+    opacity: 1;
+  }
+  33% {
+    transform: translate(-10%, -20%) scale(1.06) rotate(1.1deg);
+    opacity: 0.96;
+  }
+  66% {
+    transform: translate(6%, -32%) scale(0.98) rotate(-1deg);
+    opacity: 0.92;
+  }
+  100% {
+    transform: translate(0, 0) scale(1) rotate(0deg);
+    opacity: 1;
+  }
+}
+@keyframes float4 {
+  0% {
+    transform: translate(0, 0) scale(1) rotate(0deg);
+    opacity: 1;
+  }
+  33% {
+    transform: translate(-18%, 16%) scale(1.08) rotate(2deg);
+    opacity: 0.94;
+  }
+  66% {
+    transform: translate(-12%, -22%) scale(0.95) rotate(-1.5deg);
+    opacity: 0.9;
+  }
+  100% {
+    transform: translate(0, 0) scale(1) rotate(0deg);
+    opacity: 1;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .mesh-orb {
-    animation: none;
+    animation: none !important;
+  }
+  #mesh-background::before {
+    display: none;
+  }
+  #mesh-background::after {
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
   }
 }
+
 h1,
 h2,
 h3 {
@@ -234,7 +429,7 @@ h3 {
   width: fit-content;
   max-width: none;
   display: flex;
-  gap: 10px; /* more spacing between buttons for clarity */
+  gap: 10px;
   margin-inline: auto;
   align-items: center;
 
@@ -242,6 +437,7 @@ h3 {
   padding: 8px 10px;
   border-radius: 999px;
   background: color-mix(in srgb, var(--background-color) 85%, #0000);
+  transition: background-color 0.3s ease;
   -webkit-backdrop-filter: saturate(120%) blur(12px);
   backdrop-filter: saturate(120%) blur(12px);
   box-shadow: 0 12px 28px rgba(0, 0, 0, 0.12);
@@ -265,9 +461,11 @@ h3 {
   border: none;
   cursor: pointer;
   border-radius: 12px; /* softer rounded square increases legibility */
-  transition: background-color 0.25s var(--ease-out-3),
-    transform 0.2s var(--ease-out-3), box-shadow 0.25s var(--ease-out-3),
-    border-color 0.25s var(--ease-out-3);
+  transition:
+    background-color 0.3s var(--ease-out-3),
+    transform 0.3s var(--ease-out-3),
+    box-shadow 0.3s var(--ease-out-3),
+    border-color 0.3s var(--ease-out-3);
   position: relative;
   border: 1px solid color-mix(in srgb, #ffffff 25%, var(--secondary-color));
 }
@@ -328,14 +526,18 @@ h3 {
   transform: translateX(-50%) translateY(6px);
   background: color-mix(in srgb, var(--background-color) 96%, #0000);
   color: var(--text-color);
-  padding: 8px 10px; /* larger tooltip text and padding */
+  padding: 8px 10px;
   border-radius: 8px;
   font-size: 13px;
   font-weight: 600;
   white-space: nowrap;
   opacity: 0;
   pointer-events: none;
-  transition: opacity 0.2s var(--ease-out-3), transform 0.2s var(--ease-out-3);
+  transition:
+    opacity 0.2s var(--ease-out-3),
+    transform 0.2s var(--ease-out-3),
+    background-color 0.3s ease,
+    color 0.3s ease;
   border: 1px solid color-mix(in srgb, var(--text-color) 16%, #0000);
   -webkit-backdrop-filter: blur(12px);
   backdrop-filter: blur(12px);
@@ -351,7 +553,8 @@ h3 {
 /* Keyboard focus ring with stronger contrast */
 .action-button:focus-visible {
   outline: none;
-  box-shadow: 0 0 0 3px color-mix(in srgb, var(--secondary-color) 55%, #0000),
+  box-shadow:
+    0 0 0 3px color-mix(in srgb, var(--secondary-color) 55%, #0000),
     0 6px 16px rgba(0, 0, 0, 0.2);
 }
 
@@ -389,11 +592,14 @@ h3 {
   box-shadow: var(--containerBoxShadow);
   display: grid;
   grid-template-columns: 30% 70%;
-  transition: box-shadow 0.3s ease, background-color 0.3s ease, color 0.3s ease;
+  transition:
+    box-shadow 0.3s ease,
+    background-color 0.3s ease,
+    color 0.3s ease;
   padding: 0 1em 1em;
   border-radius: 8px;
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(18px) saturate(120%);
+  -webkit-backdrop-filter: blur(18px) saturate(120%);
   border: 1px solid rgba(255, 255, 255, 0.3);
   position: relative;
   overflow: hidden;
@@ -418,7 +624,13 @@ h3 {
 
 /* Sidebar Styles */
 .sidebar {
-  background-color: var(--sidebar-bg);
+  background: color-mix(
+    in srgb,
+    var(--sidebar-bg) 72%,
+    rgba(255, 255, 255, 0.06)
+  );
+  backdrop-filter: blur(10px) saturate(110%);
+  -webkit-backdrop-filter: blur(10px) saturate(110%);
   transition: background-color 0.3s ease;
   padding: 20px;
   border-right: 1px solid rgba(255, 255, 255, 0.1);
@@ -428,7 +640,9 @@ h3 {
   width: 100%;
   margin-bottom: 10px;
   filter: var(--imageFilter);
-  transition: filter 0.3s ease, transform 0.3s ease;
+  transition:
+    filter 0.3s ease,
+    transform 0.3s ease;
   animation: 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 @keyframes scale-in-center {
@@ -490,6 +704,7 @@ h3 {
 
 .skill-bar {
   background-color: var(--skill-bar-bg);
+  transition: background-color 0.3s ease;
   height: 8px;
   border-radius: 4px;
   margin-top: 10px;
@@ -663,7 +878,9 @@ section:hover {
   transform: translateY(0);
   filter: none;
   will-change: opacity, transform, filter;
-  transition: opacity 600ms var(--ease-out-3), transform 600ms var(--ease-out-3),
+  transition:
+    opacity 600ms var(--ease-out-3),
+    transform 600ms var(--ease-out-3),
     filter 600ms var(--ease-out-3);
 }
 .cv-reveal.is-hidden {
@@ -687,6 +904,10 @@ section:hover {
   font-size: 0.75em;
   color: var(--date-color);
   float: right;
+}
+
+.project-list {
+  color: var(--secondary-color);
 }
 
 .project-list,
@@ -717,8 +938,10 @@ section:hover {
   position: relative;
   border-radius: 8px;
   padding: 4px 8px;
-  transition: transform 220ms var(--ease-out-3),
-    box-shadow 220ms var(--ease-out-3), background-color 220ms var(--ease-out-3),
+  transition:
+    transform 220ms var(--ease-out-3),
+    box-shadow 220ms var(--ease-out-3),
+    background-color 220ms var(--ease-out-3),
     color 220ms var(--ease-out-3);
   will-change: transform, box-shadow, background-color;
 }
@@ -764,7 +987,9 @@ section:hover {
   .languages-list li,
   .project-list > li,
   .personal-skills ul > li {
-    transition: background-color 150ms ease, color 150ms ease,
+    transition:
+      background-color 150ms ease,
+      color 150ms ease,
       box-shadow 150ms ease;
   }
   .contact-list li:hover,
@@ -831,7 +1056,9 @@ section:hover {
 
     & > li {
       transform-origin: -200% 50%;
-      transition: transform 0.7s var(--bounce-soft), opacity 0.7s var(--ease-3);
+      transition:
+        transform 0.7s var(--bounce-soft),
+        opacity 0.7s var(--ease-3);
     }
 
     &:hover > li:not(:hover) {
@@ -1182,7 +1409,9 @@ hr {
   border-radius: 50%;
   background: rgba(255, 255, 255, 0.3);
   transform: translate(-50%, -50%);
-  transition: width 0.6s, height 0.6s;
+  transition:
+    width 0.6s,
+    height 0.6s;
 }
 
 .copy-btn:hover {
