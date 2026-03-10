@@ -552,7 +552,7 @@ h3 {
   width: 0;
   height: 100vh;
   position: absolute;
-  z-index: 3;
+  z-index: 2;
   transition: all 0.6s linear;
 }
 
@@ -1216,16 +1216,15 @@ h3 {
   background-color: var(--bg-button);
   border-radius: 5px;
   transition: transform 0.2s ease-in-out;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
-#contact .button i {
-  margin-top: 8px;
-}
-#contact .button:hover {
-  transform: translate3d(0, -43px, 0);
+#contact .send-button:hover .button {
+  transform: translate3d(0, -100%, 0);
 }
 #contact .send-text {
-  display: block;
-  margin-top: 20px;
   font: 300 16px "Lato", sans-serif;
   letter-spacing: 2px;
 }
