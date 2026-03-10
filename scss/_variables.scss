@@ -1,0 +1,241 @@
+// ======================
+//  (Variables)
+// ======================
+
+$side-width: 17.85vw;
+$max-side-width: 250px;
+$font1: "Josefin Slab", serif;
+$font2: "Mr De Haviland";
+$base-font-size: clamp(1rem, 2vw, 1.5rem); // Fluid typography
+$blurple: #7289da;
+$activeColor: hsl(230, 12%, 45%);
+$activeShadow: rgba($activeColor, 0.75);
+
+$grey1: rgba(#23272a, 0.75);
+$grey2: #2c2f33;
+$grey3: #393c43;
+$grey4: hsl(240, 4%, 81%);
+$grey5: #99aab5;
+$social: hsl(0, 0%, 36%);
+$white: #ffffff;
+$purple: #6e48aa;
+$blue: #00071c;
+$blueButton: #3b3e50;
+
+$radius-sm: 8px;
+$radius-md: 10px;
+$radius-lg: 14px;
+$side-radius: 60px;
+
+$dur-fast: 0.2s;
+$dur-mid: 0.3s;
+$dur-slow: 0.6s;
+$dur-xl: 1s;
+
+$ease-standard: ease;
+$ease-soft: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+$ease-bouncy: cubic-bezier(0.52, 1.64, 0.37, 0.66);
+
+$bgImgColor:
+  /* Aurora-like glow harmonising with $blurple, $purple and $blue */
+  radial-gradient(
+    1200px 1200px at 12% 14%,
+    rgba($blurple, 0.18) 0%,
+    rgba($blurple, 0) 55%
+  ),
+  radial-gradient(
+    1000px 1000px at 88% 10%,
+    rgba($purple, 0.16) 0%,
+    rgba($purple, 0) 60%
+  ),
+  radial-gradient(
+    1100px 1100px at 14% 86%,
+    rgba(lighten($blue, 8%), 0.35) 0%,
+    rgba($blue, 0) 58%
+  ),
+  linear-gradient(180deg, rgba($blue, 0.72) 0%, rgba($grey3, 0.65) 100%);
+
+// ======================
+// Mixins
+// ======================
+
+@mixin flex-layout($direction: row, $justify-content: "", $align-items: "") {
+  display: flex;
+  flex-direction: $direction;
+  justify-content: $justify-content;
+  align-items: $align-items;
+}
+
+@mixin position(
+  $position,
+  $top: null,
+  $right: null,
+  $bottom: null,
+  $left: null
+) {
+  position: $position;
+  top: $top;
+  right: $right;
+  bottom: $bottom;
+  left: $left;
+}
+
+@mixin glass-panel($blur: 16px, $saturate: 120%) {
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  box-shadow: 0 5px 15px var(--glass-shadow);
+  backdrop-filter: blur($blur) saturate($saturate);
+  -webkit-backdrop-filter: blur($blur) saturate($saturate);
+}
+
+// ======================
+// Base
+// ======================
+
+html {
+  color-scheme: light dark;
+}
+
+// ======================
+// Theme: Dark (default)
+// ======================
+
+:root {
+  // Background
+  --bg-blend-mode: normal;
+  --bg-primary: #{$grey3};
+  --bg-sidebar: #{$blue};
+  --bg-surface: #{$grey2};
+  --bg-social: #{$social};
+  --bg-button: #{$blueButton};
+  --snow-filter: invert(0) brightness(0.8);
+  --confetti-filter: none;
+
+  // Text
+  --text-primary: #{$grey4};
+  --text-secondary: #{$grey5};
+  --text-heading: #{$grey3};
+  --about-text-color: hsl(0 0% 100% / 0.4);
+  --nav-link-color: rgb(118, 161, 241);
+  --social-link-color: hsl(219, 81%, 75%);
+
+  // Accent
+  --accent: #{$blurple};
+  --accent-purple: #{$purple};
+
+  // Surfaces / Glass
+  --glass-bg: rgba(31, 34, 37, 0.5);
+  --glass-border: rgba(255, 255, 255, 0.1);
+  --glass-shadow: rgba(0, 0, 0, 0.45);
+
+  // Background image overlay
+  --bg-gradient: #{$bgImgColor};
+
+  // Footer
+  --footer-bg: rgb(51, 73, 119);
+  --footer-wave-1: rgba(51, 73, 119, 0.7);
+  --footer-wave-2: rgba(51, 73, 119, 0.5);
+  --footer-wave-3: rgba(51, 73, 119, 0.3);
+  --footer-wave-4: rgba(51, 73, 119, 1);
+
+  // Modal
+  --modal-backdrop: rgba(5, 8, 20, 0.7);
+  --modal-bg: rgba(31, 34, 37, 0.6);
+
+  // Contact form
+  --input-focus-bg: #{$blueButton};
+  --input-filled-bg: #{$grey2};
+  --label-bg: hsl(228, 9%, 33%);
+
+  // Scrollbar
+  --scrollbar-track: #{$activeColor};
+  --scrollbar-thumb: #{$grey1};
+  --scrollbar-border: #{$grey2};
+
+  // Misc
+  --active-link-color: #{$activeColor};
+  --list-hover-shadow: rgb(94, 100, 85);
+  --nav-hover-glow-start: #{rgba($blurple, 0.4)};
+  --nav-hover-glow-end: #{rgba($purple, 0.4)};
+}
+
+// ======================
+// Theme: Light overrides
+// ======================
+
+[data-theme="light"] {
+  // Background
+  --bg-primary: #e8ecf1;
+  --bg-sidebar: #1a2744;
+  --bg-surface: #ffffff;
+  --bg-social: #d4d8e0;
+  --bg-button: #bfc5d2;
+  --snow-filter: invert(0.2) brightness(1.1);
+  --confetti-filter: invert(1);
+
+  // Text
+  --text-primary: #1a2744;
+  --text-secondary: #55607a;
+  --text-heading: #e8ecf1;
+  --about-text-color: hsl(0 0% 5% / 0.4);
+  --nav-link-color: hsl(239, 72%, 85%);
+  --social-link-color: hsl(228, 92%, 70%);
+
+  // Accent
+  --accent: #4a6cf7;
+  --accent-purple: #7c4dff;
+
+  // Surfaces / Glass
+  --glass-bg: rgba(255, 255, 255, 0.65);
+  --glass-border: rgba(0, 30, 80, 0.1);
+  --glass-shadow: rgba(0, 0, 0, 0.2);
+
+  --bg-gradient:
+    radial-gradient(
+      1200px 1200px at 12% 14%,
+      rgba(74, 108, 247, 0.05) 0%,
+      transparent 55%
+    ),
+    radial-gradient(
+      1000px 1000px at 88% 10%,
+      rgba(124, 77, 255, 0.1) 0%,
+      transparent 60%
+    ),
+    radial-gradient(
+      1100px 1100px at 14% 76%,
+      rgba(26, 39, 68, 0.05) 0%,
+      transparent 58%
+    ),
+    linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.65) 0%,
+      rgba(232, 236, 241, 0.55) 100%
+    );
+
+  // Footer
+  --footer-bg: rgb(51, 73, 119);
+  --footer-wave-1: rgba(180, 195, 220, 0.7);
+  --footer-wave-2: rgba(180, 195, 220, 0.5);
+  --footer-wave-3: rgba(180, 195, 220, 0.3);
+  --footer-wave-4: rgba(180, 195, 220, 1);
+
+  // Modal
+  --modal-backdrop: rgba(200, 210, 230, 0.6);
+  --modal-bg: rgba(255, 255, 255, 0.85);
+
+  // Contact form
+  --input-focus-bg: #e0e4ee;
+  --input-filled-bg: #f5f6fa;
+  --label-bg: #dfe3eb;
+
+  // Scrollbar
+  --scrollbar-track: #c5cad4;
+  --scrollbar-thumb: rgba(44, 47, 51, 0.45);
+  --scrollbar-border: #e8ecf1;
+
+  // Misc
+  --active-link-color: hsl(230, 12%, 65%);
+  --list-hover-shadow: rgb(160, 165, 155);
+  --nav-hover-glow-start: rgba(74, 108, 247, 0.25);
+  --nav-hover-glow-end: rgba(124, 77, 255, 0.25);
+}

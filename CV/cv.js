@@ -59,7 +59,7 @@ document.addEventListener("DOMContentLoaded", function () {
       root: null,
       rootMargin: "0px 0px -10% 0px",
       threshold: 0.1,
-    }
+    },
   );
 
   sections.forEach((s) => io.observe(s));
@@ -311,7 +311,7 @@ async function downloadPDF() {
     toastNotification.show(
       "Error generating PDF. Please try again.",
       "error",
-      4000
+      4000,
     );
   } finally {
     hideLoading();
@@ -388,28 +388,78 @@ const container = document.querySelector(".container");
 const themeToggle = document.getElementById("theme-toggle");
 const savedTheme = localStorage.getItem("theme");
 
+function updateThemeUI() {
+  const isDark = document.body.classList.contains("dark-mode");
+  const sunIcon = themeToggle.querySelector(".theme-toggle__sun");
+  const moonIcon = themeToggle.querySelector(".theme-toggle__moon");
+  const label = themeToggle.querySelector(".label");
+  if (sunIcon) sunIcon.style.display = isDark ? "" : "none";
+  if (moonIcon) moonIcon.style.display = isDark ? "none" : "";
+  if (label) label.textContent = isDark ? "Light Mode" : "Dark Mode";
+  themeToggle.setAttribute(
+    "aria-label",
+    isDark ? "Switch to light mode" : "Switch to dark mode",
+  );
+}
+
 if (
   savedTheme === "dark" ||
   (!savedTheme && window.matchMedia("(prefers-color-scheme: dark)").matches) // Check for saved theme preference or respect OS preference
 ) {
   document.body.classList.add("dark-mode");
-  themeToggle.innerHTML =
-    '<i class="fa fa-sun-o" aria-hidden="true"></i> Light Mode';
 } else {
   document.body.classList.remove("dark-mode");
-  themeToggle.innerHTML =
-    '<i class="fa fa-moon-o" aria-hidden="true"></i> Dark Mode';
 }
+updateThemeUI();
 updateLinkColors();
 
-themeToggle.addEventListener("click", () => {
-  document.body.classList.toggle("dark-mode");
-  const isDark = document.body.classList.contains("dark-mode");
-  localStorage.setItem("theme", isDark ? "dark" : "light");
-  themeToggle.innerHTML = isDark
-    ? '<i class="fa fa-sun-o" aria-hidden="true"></i> Light Mode'
-    : '<i class="fa fa-moon-o" aria-hidden="true"></i> Dark Mode';
-  updateLinkColors();
+themeToggle.addEventListener("click", (e) => {
+  const isDark = !document.body.classList.contains("dark-mode");
+
+  // Helper that performs the actual DOM mutation
+  function applyTheme() {
+    document.body.classList.toggle("dark-mode");
+    localStorage.setItem("theme", isDark ? "dark" : "light");
+    updateThemeUI();
+    updateLinkColors();
+  }
+
+  // Respect reduced-motion preference or unsupported browsers → instant switch
+  const prefersReduced =
+    window.matchMedia &&
+    window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  if (!document.startViewTransition || prefersReduced) {
+    applyTheme();
+    return;
+  }
+
+  // --- View Transition API: circular reveal from button position ---
+  // Get the button centre in viewport coordinates
+  const rect = themeToggle.getBoundingClientRect();
+  const cx = Math.round(rect.left + rect.width / 2);
+  const cy = Math.round(rect.top + rect.height / 2);
+
+  // Maximum radius needed to cover the entire viewport from that point
+  const maxR = Math.hypot(
+    Math.max(cx, window.innerWidth - cx),
+    Math.max(cy, window.innerHeight - cy),
+  );
+
+  // Expose the clip origin as CSS custom properties so the keyframe can use them
+  document.documentElement.style.setProperty("--vt-cx", `${cx}px`);
+  document.documentElement.style.setProperty("--vt-cy", `${cy}px`);
+  document.documentElement.style.setProperty("--vt-r", `${maxR}px`);
+
+  document.documentElement.classList.add("spa-transition");
+  const transition = document.startViewTransition(applyTheme);
+
+  transition.ready.catch(() => {
+    /* If the transition fails for any reason, the theme was already applied. */
+  });
+  transition.finished.finally(() => {
+    document.documentElement.classList.remove("spa-transition");
+  });
 });
 
 /* Keyboard shortcuts for sticky mini-toolbar with toast notifications:
@@ -434,7 +484,7 @@ document.addEventListener("keydown", (e) => {
     toastNotification.show(
       "Opening print dialog... (Shortcut: P)",
       "success",
-      2500
+      2500,
     );
     window.print();
     // Visual feedback: briefly focus the print button
@@ -448,7 +498,7 @@ document.addEventListener("keydown", (e) => {
     toastNotification.show(
       "Starting PDF download... (Shortcut: D)",
       "success",
-      3000
+      3000,
     );
     const btn = document.getElementById("download-btn");
     if (btn) {
@@ -466,7 +516,7 @@ document.addEventListener("keydown", (e) => {
     toastNotification.show(
       `Switched to ${newTheme} mode (Shortcut: T)`,
       "success",
-      2000
+      2000,
     );
 
     const btn = document.getElementById("theme-toggle");

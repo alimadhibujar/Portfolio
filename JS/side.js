@@ -68,15 +68,15 @@ particlesJS("side-js", {
     },
   },
   interactivity: {
-    detect_on: "canvas",
+    detect_on: "window",
     events: {
       onhover: {
         enable: true,
-        mode: "bubble",
+        mode: "repulse",
       },
       onclick: {
         enable: true,
-        mode: "repulse",
+        mode: "bubble",
       },
       resize: true,
     },
@@ -88,14 +88,14 @@ particlesJS("side-js", {
         },
       },
       bubble: {
-        distance: 120,
-        size: 5,
+        distance: 300,
+        size: 6,
         duration: 2,
         opacity: 0,
         speed: 3,
       },
       repulse: {
-        distance: 400,
+        distance: 130,
         duration: 0.4,
       },
       push: {

@@ -92,7 +92,7 @@ if (window.innerWidth < 768) {
         },
       },
       interactivity: {
-        detect_on: "canvas",
+        detect_on: "window",
         events: {
           onhover: {
             enable: true,
@@ -131,7 +131,7 @@ if (window.innerWidth < 768) {
         },
       },
       retina_detect: true,
-    }
+    },
   );
 } else {
   // Load desktop configuration (original with value: 80 and speed: 5)
@@ -182,7 +182,7 @@ if (window.innerWidth < 768) {
           },
         },
         size: {
-          value: 7,
+          value: 8,
           //value: 35,
           random: true,
           anim: {
@@ -216,45 +216,33 @@ if (window.innerWidth < 768) {
         },
       },
       interactivity: {
-        detect_on: "canvas",
+        detect_on: "window",
         events: {
           onhover: {
             enable: true,
-            mode: "bubble",
+            mode: "repulse",
           },
           onclick: {
             enable: true,
-            mode: "repulse",
+            mode: "bubble",
           },
           resize: true,
         },
         modes: {
-          grab: {
-            distance: 400,
-            line_linked: {
-              opacity: 1,
-            },
-          },
           bubble: {
-            distance: 250,
-            size: 0,
+            distance: 400,
+            size: 12,
             duration: 2,
-            opacity: 0,
-            speed: 3,
+            opacity: 0.8,
+            speed: 2,
           },
           repulse: {
-            distance: 400,
+            distance: 300,
             duration: 0.4,
-          },
-          push: {
-            particles_nb: 4,
-          },
-          remove: {
-            particles_nb: 2,
           },
         },
       },
       retina_detect: true,
-    }
+    },
   );
 }

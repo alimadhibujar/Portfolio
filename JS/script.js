@@ -94,7 +94,7 @@ sectionFadeEffect();
 
   const phrases =
     document.body.clientWidth < 500
-      ? ["Welcome to my page", "I'm a web developer !", "Nice to meet you !"]
+      ? ["Welcome to my page !", "I'm a web developer !", "Nice to meet you !"]
       : [
           "Welcome to my portfolio !",
           "I'm a front-end web developer !",
@@ -109,7 +109,7 @@ sectionFadeEffect();
 
   function loop() {
     isEnd = false;
-    textDisplay.innerHTML = currentPhrase.join("");
+    textDisplay.textContent = currentPhrase.join("");
 
     if (i < phrases.length) {
       if (!isDeleting && j <= phrases[i].length) {
@@ -140,10 +140,10 @@ sectionFadeEffect();
     const speedUp = Math.random() * (80 - 50) + 50;
     const normalSpeed = Math.random() * (300 - 200) + 200;
     const time = isEnd ? 2000 : isDeleting ? speedUp : normalSpeed;
-    setTimeout(() => requestAnimationFrame(loop), time);
+    setTimeout(loop, time);
   }
 
-  requestAnimationFrame(loop);
+  loop();
 })();
 
 // ============ Text Area Letter Flying Effect ============
@@ -367,7 +367,7 @@ function openProjectModal(projectId) {
 
   // Set view-transition-name for thumbnail expansion effect
   const thumbnail = document.querySelector(
-    `[view-transition-name="project-${projectId}-thumb"]`
+    `[view-transition-name="project-${projectId}-thumb"]`,
   );
   const modalImg = modalMedia?.querySelector("img");
 
@@ -378,9 +378,13 @@ function openProjectModal(projectId) {
 
   // Use view transition if supported
   if (document.startViewTransition) {
-    document.startViewTransition(() => {
+    document.documentElement.classList.add("spa-transition");
+    const transition = document.startViewTransition(() => {
       modal.classList.add("is-open");
       modal.setAttribute("aria-hidden", "false");
+    });
+    transition.finished.finally(() => {
+      document.documentElement.classList.remove("spa-transition");
     });
   } else {
     modal.classList.add("is-open");
@@ -392,9 +396,13 @@ function closeProjectModal() {
   if (!modal) return;
 
   if (document.startViewTransition) {
-    document.startViewTransition(() => {
+    document.documentElement.classList.add("spa-transition");
+    const transition = document.startViewTransition(() => {
       modal.classList.remove("is-open");
       modal.setAttribute("aria-hidden", "true");
+    });
+    transition.finished.finally(() => {
+      document.documentElement.classList.remove("spa-transition");
     });
   } else {
     modal.classList.remove("is-open");
@@ -506,7 +514,11 @@ navLinks.forEach((link) => {
 
     // Use view transition if supported
     if (document.startViewTransition) {
-      document.startViewTransition(scrollToSection);
+      document.documentElement.classList.add("spa-transition");
+      const transition = document.startViewTransition(scrollToSection);
+      transition.finished.finally(() => {
+        document.documentElement.classList.remove("spa-transition");
+      });
     } else {
       scrollToSection();
     }
