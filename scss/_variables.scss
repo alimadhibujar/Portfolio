@@ -9,7 +9,6 @@ $font2: "Mr De Haviland";
 $base-font-size: clamp(1rem, 2vw, 1.5rem); // Fluid typography
 $blurple: #7289da;
 $activeColor: hsl(230, 12%, 45%);
-$activeShadow: rgba($activeColor, 0.75);
 
 $grey1: rgba(#23272a, 0.75);
 $grey2: #2c2f33;
@@ -110,7 +109,6 @@ html {
   --bg-button: #{$blueButton};
   --snow-filter: invert(0) brightness(0.8);
   --confetti-filter: none;
-
   // Text
   --text-primary: #{$grey4};
   --text-secondary: #{$grey5};
@@ -155,8 +153,9 @@ html {
   // Misc
   --active-link-color: #{$activeColor};
   --list-hover-shadow: rgb(94, 100, 85);
-  --nav-hover-glow-start: #{rgba($blurple, 0.4)};
-  --nav-hover-glow-end: #{rgba($purple, 0.4)};
+  --nav-hover-glow-start: #{rgba($blurple, 0.25)};
+  --nav-hover-glow-end: #{rgba($purple, 0.5)};
+  --active-bg: #{$activeColor};
 }
 
 // ======================
@@ -172,7 +171,6 @@ html {
   --bg-button: #bfc5d2;
   --snow-filter: invert(0.2) brightness(1.1);
   --confetti-filter: invert(1);
-
   // Text
   --text-primary: #1a2744;
   --text-secondary: #55607a;
@@ -237,5 +235,6 @@ html {
   --active-link-color: hsl(230, 12%, 65%);
   --list-hover-shadow: rgb(160, 165, 155);
   --nav-hover-glow-start: rgba(74, 108, 247, 0.25);
-  --nav-hover-glow-end: rgba(124, 77, 255, 0.25);
+  --nav-hover-glow-end: rgba(124, 77, 255, 0.5);
+  --active-bg: var(--bg-surface);
 }

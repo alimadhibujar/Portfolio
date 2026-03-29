@@ -285,34 +285,35 @@ h3 {
         background-image:
           radial-gradient(
             ellipse at left center,
-            var(--nav-hover-glow-start),
-            transparent
+            transparent,
+            var(--nav-hover-glow-start)
           ),
           radial-gradient(
             ellipse at right center,
-            var(--nav-hover-glow-end),
-            transparent
+            transparent,
+            var(--nav-hover-glow-end)
           );
         transition: background-image $dur-mid ease-in-out;
       }
     }
 
     li.active a {
-      color: $blue;
+      color: var(--text-primary);
+      transition: color 0.4s linear;
       cursor: default;
     }
 
     a {
       color: var(--nav-link-color);
       text-decoration: none;
-      transition: color 0.25s linear;
+      transition: color 0.3s linear;
     }
 
     .active {
       background-image:
-        radial-gradient(ellipse at right center, $activeColor, transparent),
-        radial-gradient(ellipse at left center, $activeColor, transparent);
-      box-shadow: -2px 0 0 $blurple;
+        radial-gradient(circle at right center, var(--active-bg), transparent),
+        radial-gradient(ellipse at left center, var(--active-bg), transparent);
+      box-shadow: -2px 0 0 var(--nav-link-color);
       transition: box-shadow 0.3s ease-in-out;
 
       span {
@@ -328,14 +329,14 @@ h3 {
         height: 17px;
         width: 8px;
         border-bottom-right-radius: $radius-sm;
-        box-shadow: 0 8px 0 hsla(231, 12%, 31%, 0.75);
+        box-shadow: 0 8px 0 var(--active-bg);
       }
 
       &::before {
         content: "";
         background-color: transparent;
         border-top-right-radius: $radius-sm;
-        box-shadow: 0 -8px 0 hsla(231, 12%, 31%, 0.75);
+        box-shadow: 0 -8px 0 var(--active-bg);
         @include position(absolute, $bottom: -21px, $right: 0);
         height: 20px;
         width: 8px;
@@ -1180,6 +1181,15 @@ h3 {
   }
 
   .button {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .send-button i {
     position: absolute;
     width: 100%;
     height: 100%;
@@ -1189,12 +1199,11 @@ h3 {
     border-radius: 5px;
     transition: transform $dur-fast ease-in-out;
     display: flex;
-    flex-direction: column;
     align-items: center;
     justify-content: center;
   }
 
-  .send-button:hover .button {
+  .send-button:hover i {
     transform: translate3d(0, -100%, 0);
   }
 

@@ -4,11 +4,20 @@ particlesJS("side-js", {
       value: 240,
       density: {
         enable: true,
-        value_area: 200,
+        value_area: 150,
       },
     },
     color: {
-      value: ["#FFEA00", "#ffffff", "#FF0000", "#BA181B", "#008000", "#FF0054"],
+      value: [
+        "#FFEA00",
+        "#ffffff",
+        "#FF0000",
+        "#BA181B",
+        "#008000",
+        "#00C2FF",
+        "#FF2D95",
+        "#7C3AED",
+      ],
     },
     shape: {
       type: "circle",
@@ -30,18 +39,18 @@ particlesJS("side-js", {
       random: true,
       anim: {
         enable: true,
-        speed: 20,
-        opacity_min: 0,
+        speed: 5,
+        opacity_min: 0.3,
         sync: false,
       },
     },
     size: {
-      value: 0.75,
+      value: 1,
       random: true,
       anim: {
         enable: true,
-        speed: 20,
-        size_min: 0.3,
+        speed: 5,
+        size_min: 0.5,
         sync: false,
       },
     },
