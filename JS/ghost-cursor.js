@@ -90,6 +90,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   let uniforms;
   const gl = initShader();
+  if (!gl) return; // WebGL unsupported — skip ghost cursor entirely
   createControls();
   setupDragEvents();
   window.addEventListener("resize", resizeCanvas);
@@ -340,7 +341,8 @@ document.addEventListener("DOMContentLoaded", () => {
       canvasEl.getContext("webgl") || canvasEl.getContext("experimental-webgl");
 
     if (!gl) {
-      alert("WebGL is not supported by your browser.");
+      console.error("WebGL is not supported by your browser.");
+      return null;
     }
 
     function createShader(gl, sourceCode, type) {

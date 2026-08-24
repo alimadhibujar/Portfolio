@@ -32,14 +32,14 @@
 }
 
 @media (max-width: 768px) and (min-aspect-ratio: 16 / 9) {
-  videoBG {
+  .videoBG {
     width: 100%;
     height: auto;
   }
 }
 
 @media (max-width: 768px) and (max-aspect-ratio: 16 / 9) {
-  videoBG {
+  .videoBG {
     width: auto;
     height: 100%;
   }

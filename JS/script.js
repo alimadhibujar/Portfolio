@@ -18,16 +18,17 @@ window.addEventListener("click", (e) => {
   }
 });
 
-// Closing mobile nav menu when clicking nav links
+// Closing mobile nav menu when clicking nav links (re-checked live via
+// matchMedia so resizing / rotating the device keeps behaviour correct)
 const navLinks = document.querySelectorAll(".navlink");
-if (document.body.clientWidth <= 768) {
-  navLinks.forEach((link) => {
-    link.addEventListener("click", () => {
-      overLay.style.width = "0vw";
-      panelSaid.style.width = "0vw";
-    });
+const isMobileNav = () => window.matchMedia("(max-width: 768px)").matches;
+navLinks.forEach((link) => {
+  link.addEventListener("click", () => {
+    if (!isMobileNav()) return;
+    overLay.style.width = "0vw";
+    panelSaid.style.width = "0vw";
   });
-}
+});
 
 // ============ Hero Image Shadow Effect ============
 (function titleShadow() {
@@ -152,10 +153,13 @@ const keypress = document.querySelector("#keypress");
 
 if (text && keypress) {
   function type(event) {
+    // Only printable single characters (ignores modifier combos & shortcuts)
     if (
-      event.keyCode &&
-      ((event.keyCode >= 48 && event.keyCode <= 90) ||
-        (event.keyCode >= 186 && event.keyCode <= 222))
+      event.key &&
+      event.key.length === 1 &&
+      !event.ctrlKey &&
+      !event.metaKey &&
+      !event.altKey
     ) {
       const char = event.key;
       const span = document.createElement("span");
@@ -168,10 +172,6 @@ if (text && keypress) {
   }
 
   text.addEventListener("keydown", type);
-
-  window.addEventListener("unload", () => {
-    text.removeEventListener("keydown", type);
-  });
 }
 
 // ============ Projects Data ============
@@ -219,6 +219,8 @@ const projectsData = {
       alt: "Tetris game preview",
     },
     live: "https://codepen.io/alimadhibujar/full/mybzoNg",
+    // Embeddable full-page variant of the CodePen demo
+    previewUrl: "https://cdpn.io/alimadhibujar/fullpage/mybzoNg",
     repo: "https://codepen.io/alimadhibujar/pen/mybzoNg",
   },
   side4: {
@@ -273,6 +275,10 @@ const modalDetails = modal?.querySelector("#projectModalDetails");
 const modalLive = modal?.querySelector("#projectModalLive");
 const modalRepo = modal?.querySelector("#projectModalRepo");
 
+// Elements that currently carry an inline view-transition-name for the
+// project-thumbnail expansion (tracked so we only clean up what we set)
+let vtThumbElements = [];
+
 function createTechChip(name) {
   const iconMap = {
     HTML: "fa-html5",
@@ -312,23 +318,9 @@ function fillModal(data) {
   )
     return;
 
-  // Media
+  // Media / Live Preview
   modalMedia.innerHTML = "";
-  if (data.media?.type === "image") {
-    const img = document.createElement("img");
-    img.src = data.media.src;
-    img.alt = data.media.alt || data.title;
-    img.loading = "lazy";
-    modalMedia.appendChild(img);
-  } else if (data.media?.type === "video") {
-    const video = document.createElement("video");
-    video.src = data.media.src;
-    video.controls = true;
-    video.autoplay = true;
-    video.muted = true;
-    video.loop = true;
-    modalMedia.appendChild(video);
-  }
+  renderProjectPreview(data);
 
   // Text content
   modalTitle.textContent = data.title || "";
@@ -359,21 +351,183 @@ function fillModal(data) {
   }
 }
 
+// ============ Project Live Preview ============
+const DEVICE_MODES = {
+  desktop: { width: null },
+  tablet: { width: 768 },
+  mobile: { width: 390 },
+};
+const PREVIEW_LOAD_TIMEOUT = 4000; // ms before falling back to the screenshot
+
+/**
+ * Renders an interactive live-site preview inside the modal media area:
+ * a mock browser chrome (traffic lights + URL pill + device toggles)
+ * wrapping an iframe of the project's live URL. Falls back to the static
+ * screenshot if the site blocks framing / fails to load in time.
+ */
+function renderProjectPreview(data) {
+  const previewUrl = data.previewUrl || data.live;
+
+  // No embeddable URL available → plain static media
+  if (!previewUrl) {
+    appendStaticMedia(data);
+    return;
+  }
+
+  modalMedia.classList.add("has-preview");
+
+  const shell = document.createElement("div");
+  shell.className = "preview-shell";
+
+  // --- Browser chrome bar ---
+  const chrome = document.createElement("div");
+  chrome.className = "preview-chrome";
+  chrome.innerHTML = `
+    <span class="preview-dots" aria-hidden="true"><i></i><i></i><i></i></span>
+    <span class="preview-url" title="${previewUrl}">${getHostname(
+      previewUrl,
+    )}</span>
+    <span class="preview-devices">
+      <button type="button" class="preview-device active" data-mode="desktop"
+        aria-label="Desktop preview" title="Desktop"><i class="fa fa-desktop"></i></button>
+      <button type="button" class="preview-device" data-mode="tablet"
+        aria-label="Tablet preview" title="Tablet"><i class="fa fa-tablet"></i></button>
+      <button type="button" class="preview-device" data-mode="mobile"
+        aria-label="Mobile preview" title="Mobile"><i class="fa fa-mobile"></i></button>
+      <a class="preview-open" href="${data.live || previewUrl}" target="_blank"
+        rel="noopener" aria-label="Open live site in a new tab" title="Open in new tab">
+        <i class="fa fa-external-link"></i>
+      </a>
+    </span>`;
+
+  // --- Viewport with iframe ---
+  const viewport = document.createElement("div");
+  viewport.className = "preview-viewport";
+
+  const loader = document.createElement("div");
+  loader.className = "preview-loader";
+  loader.innerHTML = '<i class="fa fa-circle-o-notch fa-spin"></i>';
+
+  const iframe = document.createElement("iframe");
+  iframe.className = "preview-frame";
+  iframe.src = previewUrl;
+  iframe.title = `${data.title} live preview`;
+  iframe.loading = "lazy";
+  iframe.allow = "fullscreen";
+
+  viewport.append(loader, iframe);
+  shell.append(chrome, viewport);
+  modalMedia.appendChild(shell);
+
+  // Loading state → success, or fallback after timeout
+  let loaded = false;
+  iframe.addEventListener("load", () => {
+    loaded = true;
+    loader.remove();
+  });
+  const failTimer = setTimeout(() => {
+    if (!loaded) showPreviewFallback(data);
+  }, PREVIEW_LOAD_TIMEOUT);
+
+  // --- Device switching ---
+  chrome.querySelectorAll(".preview-device").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      chrome
+        .querySelectorAll(".preview-device")
+        .forEach((b) => b.classList.remove("active"));
+      btn.classList.add("active");
+
+      const mode = DEVICE_MODES[btn.dataset.mode] || DEVICE_MODES.desktop;
+      const narrow = Boolean(mode.width);
+      viewport.classList.toggle("is-narrow", narrow);
+      viewport.style.setProperty(
+        "--device-width",
+        narrow ? `${mode.width}px` : "100%",
+      );
+    });
+  });
+
+  // Stop pending fallback timer if the modal closes mid-load
+  modal.addEventListener("modal-closed", () => clearTimeout(failTimer), {
+    once: true,
+  });
+}
+
+/** Static media fallback (original image/video behaviour). */
+function appendStaticMedia(data) {
+  if (data.media?.type === "image") {
+    const img = document.createElement("img");
+    img.src = data.media.src;
+    img.alt = data.media.alt || data.title;
+    img.loading = "lazy";
+    modalMedia.appendChild(img);
+  } else if (data.media?.type === "video") {
+    const video = document.createElement("video");
+    video.src = data.media.src;
+    video.controls = true;
+    video.autoplay = true;
+    video.muted = true;
+    video.loop = true;
+    modalMedia.appendChild(video);
+  }
+}
+
+/** Graceful fallback: screenshot + hint when the live site can't be embedded. */
+function showPreviewFallback(data) {
+  modalMedia.innerHTML = "";
+  modalMedia.classList.remove("has-preview");
+
+  const wrap = document.createElement("div");
+  wrap.className = "preview-fallback";
+
+  if (data.media?.src) {
+    const img = document.createElement("img");
+    img.src = data.media.src;
+    img.alt = data.media.alt || data.title;
+    wrap.appendChild(img);
+  }
+
+  const note = document.createElement("p");
+  note.textContent = "Live preview unavailable here — ";
+  const link = document.createElement("a");
+  link.href = data.live || "#";
+  link.target = "_blank";
+  link.rel = "noopener";
+  link.textContent = "open it in a new tab";
+  note.appendChild(link);
+  note.appendChild(document.createTextNode("."));
+  wrap.appendChild(note);
+
+  modalMedia.appendChild(wrap);
+}
+
+function getHostname(url) {
+  try {
+    return new URL(url).hostname.replace(/^www\./, "");
+  } catch {
+    return url;
+  }
+}
+
 function openProjectModal(projectId) {
   const data = projectsData[projectId];
   if (!modal || !data) return;
 
   fillModal(data);
 
-  // Set view-transition-name for thumbnail expansion effect
-  const thumbnail = document.querySelector(
-    `[view-transition-name="project-${projectId}-thumb"]`,
-  );
+  // Set view-transition-name for thumbnail expansion effect.
+  // NOTE: view-transition-name is an inline *style* property, not an HTML
+  // attribute, so we look up the element by id / data-project instead.
+  const thumbnail =
+    document.getElementById(projectId) ||
+    document.querySelector(`a[data-project="${projectId}"]`);
   const modalImg = modalMedia?.querySelector("img");
 
+  vtThumbElements = [];
   if (thumbnail && modalImg) {
     thumbnail.style.viewTransitionName = `project-${projectId}-thumb`;
     modalImg.style.viewTransitionName = `project-${projectId}-thumb`;
+    vtThumbElements.push(thumbnail, modalImg);
   }
 
   // Use view transition if supported
@@ -409,13 +563,16 @@ function closeProjectModal() {
     modal.setAttribute("aria-hidden", "true");
   }
 
-  // Cleanup view-transition-names after transition
+  // Notify listeners (e.g. live-preview timers) that the modal is closing
+  modal.dispatchEvent(new CustomEvent("modal-closed"));
+
+  // Cleanup view-transition-names after transition — only the elements we
+  // set them on, not every element with an inline style
   setTimeout(() => {
-    document
-      .querySelectorAll('[style*="view-transition-name"]')
-      .forEach((el) => {
-        el.style.viewTransitionName = "";
-      });
+    vtThumbElements.forEach((el) => {
+      el.style.viewTransitionName = "";
+    });
+    vtThumbElements = [];
   }, 700);
 }
 

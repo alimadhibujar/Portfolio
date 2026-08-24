@@ -62,6 +62,19 @@ document.addEventListener("DOMContentLoaded", () => {
   // Natural color enhancement (subtle glow/brightness)
   let colorEnhancement = 0; // Amount of color enhancement (0 to 1)
   const colorEnhanceSpeed = 0.03; // Speed of color transition
+
+  // Spotlight color-reveal effect
+  let grayscaleColors = null; // desaturated copy of original colors (resting state)
+  let spotlightActive = false; // whether the spotlight follows the cursor
+  let spotlightX = 0; // eased spotlight position (world coords)
+  let spotlightY = 0;
+  const spotlightEase = 0.12; // trailing smoothness of the spotlight
+  const spotlightRadius = 140; // fully-colored core radius
+  const spotlightSoftness = 70; // soft falloff band beyond the core
+  // Respect reduced-motion: disable the animated spotlight entirely
+  const prefersReducedMotion =
+    window.matchMedia &&
+    window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   const maxBrightnessBoost = 0.15; // Maximum brightness increase (subtle)
   const warmthFactor = 0.05; // Slight warm tint during interaction
 
@@ -153,9 +166,20 @@ document.addEventListener("DOMContentLoaded", () => {
     // Create startPositions for the scattered state.
     startPositions = new Float32Array(positions.length);
     currentPositions = new Float32Array(positions.length);
-    // Store original colors and create current colors array
+    // Store original colors, build grayscale resting colors, create current
+    // colors (start desaturated – the spotlight reveals the real colors)
     originalColors = new Float32Array(colors);
-    currentColors = new Float32Array(colors);
+    grayscaleColors = new Float32Array(colors.length);
+    for (let i = 0; i < colors.length; i += 3) {
+      const luminance =
+        0.299 * originalColors[i] +
+        0.587 * originalColors[i + 1] +
+        0.114 * originalColors[i + 2];
+      grayscaleColors[i] = luminance;
+      grayscaleColors[i + 1] = luminance;
+      grayscaleColors[i + 2] = luminance;
+    }
+    currentColors = new Float32Array(grayscaleColors);
 
     // Initialize particle history for trail effect
     for (let i = 0; i < historyLength; i++) {
@@ -241,6 +265,7 @@ document.addEventListener("DOMContentLoaded", () => {
       dragStart = { x: e.clientX, y: e.clientY };
       currentDragDelta = { x: 0, y: 0 };
       isMagneticActive = false; // Disable magnetic effect during drag
+      spotlightActive = false; // Disable spotlight during drag (vortex takes over)
     });
 
     canvas.addEventListener("mousemove", (e) => {
@@ -261,9 +286,15 @@ document.addEventListener("DOMContentLoaded", () => {
       mouseWorldX = worldPos.x;
       mouseWorldY = worldPos.y;
 
-      // Enable magnetic effect when not dragging
+      // Enable magnetic + spotlight effects when not dragging
       if (!isDragging && loadAnimationDone) {
         isMagneticActive = true;
+        spotlightActive = true;
+        // Snap spotlight on first activation to avoid sweeping from (0,0)
+        if (spotlightX === 0 && spotlightY === 0) {
+          spotlightX = mouseWorldX;
+          spotlightY = mouseWorldY;
+        }
       }
     });
 
@@ -276,20 +307,23 @@ document.addEventListener("DOMContentLoaded", () => {
       dragReleaseAnimating = true;
       dragReleaseStartTime = performance.now();
       isMagneticActive = true; // Re-enable magnetic effect
+      spotlightActive = true; // Re-enable spotlight effect
     };
 
     canvas.addEventListener("mouseup", endDrag, false);
     canvas.addEventListener("mouseleave", () => {
       endDrag();
-      // Reset tilt and magnetic effect when mouse leaves canvas
+      // Reset tilt, magnetic and spotlight effects when mouse leaves canvas
       mouseX = 0;
       mouseY = 0;
       isMagneticActive = false;
+      spotlightActive = false;
     });
 
     canvas.addEventListener("mouseenter", () => {
       if (!isDragging && loadAnimationDone) {
         isMagneticActive = true;
+        spotlightActive = true;
       }
     });
 
@@ -302,6 +336,7 @@ document.addEventListener("DOMContentLoaded", () => {
         dragStart = { x: touch.clientX, y: touch.clientY };
         currentDragDelta = { x: 0, y: 0 };
         isMagneticActive = false;
+        spotlightActive = false;
 
         // Trigger wave on touch
         const rect = canvas.getBoundingClientRect();
@@ -331,7 +366,10 @@ document.addEventListener("DOMContentLoaded", () => {
       mouseY = ((touch.clientY - rect.top) / rect.height) * 2 - 1;
     });
 
-    canvas.addEventListener("touchend", endDrag, false);
+    canvas.addEventListener("touchend", (e) => {
+      spotlightActive = false;
+      endDrag(e);
+    }, false);
   };
 
   // Update particle history for trail effect
@@ -344,12 +382,19 @@ document.addEventListener("DOMContentLoaded", () => {
     particleHistory.push(oldestHistory);
   };
 
-  // Apply natural color enhancement (subtle brightness and warmth)
+  // Apply natural color enhancement (subtle brightness and warmth).
+  // Blends from the grayscale resting state towards the original colors,
+  // with a slight warm tint, proportional to `intensity` (0..1).
   const applyNaturalColorEnhancement = (intensity) => {
-    for (let i = 0; i < originalColors.length; i += 3) {
-      const r = originalColors[i];
-      const g = originalColors[i + 1];
-      const b = originalColors[i + 2];
+    for (let i = 0; i < grayscaleColors.length; i += 3) {
+      // Blend between desaturated and original color
+      let r = grayscaleColors[i] + (originalColors[i] - grayscaleColors[i]) * intensity;
+      let g =
+        grayscaleColors[i + 1] +
+        (originalColors[i + 1] - grayscaleColors[i + 1]) * intensity;
+      let b =
+        grayscaleColors[i + 2] +
+        (originalColors[i + 2] - grayscaleColors[i + 2]) * intensity;
 
       // Calculate luminance for adaptive enhancement
       const luminance = 0.299 * r + 0.587 * g + 0.114 * b;
@@ -359,15 +404,43 @@ document.addEventListener("DOMContentLoaded", () => {
         maxBrightnessBoost * intensity * (1 - luminance * 0.5);
 
       // Add slight warm tint (increase red/yellow slightly)
-      currentColors[i] = Math.min(
-        1,
-        r + brightnessBoost + warmthFactor * intensity
-      ); // Red
+      currentColors[i] = Math.min(1, r + brightnessBoost + warmthFactor * intensity); // Red
       currentColors[i + 1] = Math.min(
         1,
         g + brightnessBoost + warmthFactor * intensity * 0.7
       ); // Green (less for warmth)
       currentColors[i + 2] = Math.min(1, b + brightnessBoost); // Blue (no warmth added)
+    }
+  };
+
+  // Spotlight color-reveal: blend each particle between grayscale and its
+  // original color based on distance to the (eased) cursor position.
+  const applySpotlightReveal = () => {
+    const outerRadius = spotlightRadius + spotlightSoftness;
+    for (let i = 0; i < grayscaleColors.length; i += 3) {
+      const dx = targetPositions[i] - spotlightX;
+      const dy = targetPositions[i + 1] - spotlightY;
+      const distance = Math.sqrt(dx * dx + dy * dy);
+
+      if (distance >= outerRadius) {
+        currentColors[i] = grayscaleColors[i];
+        currentColors[i + 1] = grayscaleColors[i + 1];
+        currentColors[i + 2] = grayscaleColors[i + 2];
+        continue;
+      }
+
+      // Smoothstep falloff: 1 inside the core, easing to 0 at the edge
+      let falloff = distance <= spotlightRadius ? 1 : 1 - (distance - spotlightRadius) / spotlightSoftness;
+      falloff = falloff * falloff * (3 - 2 * falloff);
+
+      currentColors[i] =
+        grayscaleColors[i] + (originalColors[i] - grayscaleColors[i]) * falloff;
+      currentColors[i + 1] =
+        grayscaleColors[i + 1] +
+        (originalColors[i + 1] - grayscaleColors[i + 1]) * falloff;
+      currentColors[i + 2] =
+        grayscaleColors[i + 2] +
+        (originalColors[i + 2] - grayscaleColors[i + 2]) * falloff;
     }
   };
 
@@ -431,10 +504,13 @@ document.addEventListener("DOMContentLoaded", () => {
             // Displace particles perpendicular to wave
             currentPositions[i + 2] += waveEffect;
 
-            // Add slight radial displacement
-            const radialFactor = waveEffect * 0.2;
-            currentPositions[i] += (dx / distance) * radialFactor;
-            currentPositions[i + 1] += (dy / distance) * radialFactor;
+            // Add slight radial displacement (guard against distance === 0,
+            // which would produce NaN and corrupt the particle position)
+            if (distance > 0) {
+              const radialFactor = waveEffect * 0.2;
+              currentPositions[i] += (dx / distance) * radialFactor;
+              currentPositions[i + 1] += (dy / distance) * radialFactor;
+            }
           }
         }
 
@@ -597,14 +673,29 @@ document.addEventListener("DOMContentLoaded", () => {
         colorEnhancement = Math.max(0, colorEnhancement - colorEnhanceSpeed);
       }
 
-      // Apply natural color enhancement
-      if (colorEnhancement > 0) {
+      // Ease spotlight position towards cursor for a slick trailing feel
+      if (spotlightActive) {
+        spotlightX += (mouseWorldX - spotlightX) * spotlightEase;
+        spotlightY += (mouseWorldY - spotlightY) * spotlightEase;
+      }
+
+      // Apply natural color enhancement / spotlight reveal
+      if (
+        spotlightActive &&
+        !prefersReducedMotion &&
+        !isDragging &&
+        !dragReleaseAnimating
+      ) {
+        applySpotlightReveal();
+        points.geometry.attributes.color.array.set(currentColors);
+        points.geometry.attributes.color.needsUpdate = true;
+      } else if (colorEnhancement > 0) {
         applyNaturalColorEnhancement(colorEnhancement);
         points.geometry.attributes.color.array.set(currentColors);
         points.geometry.attributes.color.needsUpdate = true;
       } else {
-        // Reset to original colors when no enhancement
-        points.geometry.attributes.color.array.set(originalColors);
+        // Resting state: desaturated until the spotlight reveals colors
+        points.geometry.attributes.color.array.set(grayscaleColors);
         points.geometry.attributes.color.needsUpdate = true;
       }
 

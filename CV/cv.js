@@ -262,8 +262,8 @@ async function downloadPDF() {
     // Ensure all sections are visible for capture
     const hiddenBefore = revealAllForOutput();
 
-    // Detect if dark mode is active
-    const isDarkMode = element.classList.contains("dark-mode");
+    // Detect if dark mode is active (class lives on <html>, set early to avoid FOUC)
+    const isDarkMode = isDarkModeActive();
 
     // Remove animation in downloaded version
     profileImage.style.animationName = "";
@@ -374,7 +374,7 @@ window.addEventListener("afterprint", () => {
 
 // inline html style for better pdf download style
 function updateLinkColors() {
-  const isDark = document.body.classList.contains("dark-mode");
+  const isDark = isDarkModeActive();
   const color = isDark ? "hsl(204, 56%, 75%)" : "#2c6e9b";
   const links = document.querySelectorAll("a");
   links.forEach((link) => {
@@ -384,12 +384,22 @@ function updateLinkColors() {
 }
 
 // Dark - Mode Toggle
+// NOTE: the dark-mode class is applied to <html> (not <body>) so an inline
+// head script can set it before first paint and avoid a light-mode flash.
 const container = document.querySelector(".container");
 const themeToggle = document.getElementById("theme-toggle");
 const savedTheme = localStorage.getItem("theme");
 
+/** True when dark mode is active on either root element. */
+function isDarkModeActive() {
+  return (
+    document.body.classList.contains("dark-mode") ||
+    document.documentElement.classList.contains("dark-mode")
+  );
+}
+
 function updateThemeUI() {
-  const isDark = document.body.classList.contains("dark-mode");
+  const isDark = isDarkModeActive();
   const sunIcon = themeToggle.querySelector(".theme-toggle__sun");
   const moonIcon = themeToggle.querySelector(".theme-toggle__moon");
   const label = themeToggle.querySelector(".label");
@@ -402,23 +412,24 @@ function updateThemeUI() {
   );
 }
 
-if (
-  savedTheme === "dark" ||
-  (!savedTheme && window.matchMedia("(prefers-color-scheme: dark)").matches) // Check for saved theme preference or respect OS preference
-) {
-  document.body.classList.add("dark-mode");
-} else {
-  document.body.classList.remove("dark-mode");
-}
+// Apply saved theme / OS preference immediately (module runs deferred, but
+// the inline head script has usually already set this — this is a safety net)
+(function applyInitialTheme() {
+  const stored = localStorage.getItem("theme");
+  const dark = stored
+    ? stored === "dark"
+    : window.matchMedia("(prefers-color-scheme: dark)").matches;
+  document.documentElement.classList.toggle("dark-mode", dark);
+})();
 updateThemeUI();
 updateLinkColors();
 
 themeToggle.addEventListener("click", (e) => {
-  const isDark = !document.body.classList.contains("dark-mode");
+  const isDark = !isDarkModeActive();
 
   // Helper that performs the actual DOM mutation
   function applyTheme() {
-    document.body.classList.toggle("dark-mode");
+    document.documentElement.classList.toggle("dark-mode", isDark);
     localStorage.setItem("theme", isDark ? "dark" : "light");
     updateThemeUI();
     updateLinkColors();
@@ -526,9 +537,10 @@ document.addEventListener("keydown", (e) => {
       setTimeout(() => btn.blur(), 600);
     } else {
       // Fallback toggling
-      document.body.classList.toggle("dark-mode");
-      const isDark = document.body.classList.contains("dark-mode");
-      localStorage.setItem("theme", isDark ? "dark" : "light");
+      const nextDark = !isDarkModeActive();
+      document.documentElement.classList.toggle("dark-mode", nextDark);
+      localStorage.setItem("theme", nextDark ? "dark" : "light");
+      updateThemeUI();
       updateLinkColors();
     }
   }

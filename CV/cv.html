@@ -5,6 +5,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Bujar Alimadhi - CV</title>
 
+    <!-- Apply saved theme before first paint to avoid a light-mode flash -->
+    <script>
+      (function () {
+        try {
+          var t = localStorage.getItem("theme");
+          var dark = t
+            ? t === "dark"
+            : window.matchMedia("(prefers-color-scheme: dark)").matches;
+          document.documentElement.classList.toggle("dark-mode", dark);
+        } catch (e) {}
+      })();
+    </script>
+
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
@@ -226,10 +239,8 @@
             <li>
               Albanian :<span class="language-level">Native Language</span>
             </li>
-            <div class="row">
-              <li>English :<span class="language-level">B2</span></li>
-              <li>Italian :<span class="language-level">B1</span></li>
-            </div>
+            <li>English :<span class="language-level">B2</span></li>
+            <li>Italian :<span class="language-level">B1</span></li>
           </ul>
         </section>
         <section class="certification-item">
@@ -240,13 +251,13 @@
                 Link Academy Lab</a
               >, Tiranë. Graduation Certification for Front-End Developer.
             </li>
-            <p>
-              Six months of intensive course for front-end web developer.<span
-                class="date-range"
-                >(February – October 10, 2019)</span
-              >
-            </p>
           </ul>
+          <p>
+            Six months of intensive course for front-end web developer.<span
+              class="date-range"
+              >(February – October 10, 2019)</span
+            >
+          </p>
         </section>
       </aside>
 

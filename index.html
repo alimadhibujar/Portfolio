@@ -9,6 +9,21 @@
     />
     <title>Bujar Alimadhi Portfolio</title>
 
+    <!-- Apply saved theme before first paint to avoid a light-mode flash -->
+    <script>
+      (function () {
+        try {
+          var t = localStorage.getItem("theme-preference");
+          if (!t) {
+            t = window.matchMedia("(prefers-color-scheme: light)").matches
+              ? "light"
+              : "dark";
+          }
+          document.documentElement.setAttribute("data-theme", t);
+        } catch (e) {}
+      })();
+    </script>
+
     <!-- Preload critical fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -312,7 +327,9 @@
               <a id="side6"></a>
             </div>
           </div>
-          <p>Click the picture for detailed project information.</p>
+          <p>
+            Click on the image for a project preview and detailed information.
+          </p>
 
           <!-- 3D Cube Mobile version -->
           <div class="swiper-container">
@@ -322,7 +339,8 @@
                 style="background-image: url(img/Gallery-of-Pets.webp)"
               >
                 <a
-                  class="swiper-container"
+                  class="swiper-slide-link"
+                  data-project="side1"
                   href="https://alimadhibujar.github.io/Gallery-of-Pets/"
                   target="_blank"
                   rel="noopener"
@@ -334,7 +352,8 @@
                 style="background-image: url(img/Tetris-Game.webp)"
               >
                 <a
-                  class="swiper-container"
+                  class="swiper-slide-link"
+                  data-project="side3"
                   href="https://codepen.io/alimadhibujar/full/mybzoNg"
                   target="_blank"
                   rel="noopener"
@@ -346,8 +365,9 @@
                 style="background-image: url(img/reactGame.webp)"
               >
                 <a
-                  class="swiper-container"
-                  href="https://alimadhibujar.github.io/Rock-Paper-Scissors-React-Game/"
+                  class="swiper-slide-link"
+                  data-project="side2"
+                  href="https://alimadhibujar.github.io/React-Rock-Scissors-Paper/"
                   target="_blank"
                   rel="noopener"
                   title="Rock-Paper-Scissors-React-Game"
@@ -358,7 +378,8 @@
                 style="background-image: url(img/Photo-Gallery.webp)"
               >
                 <a
-                  class="swiper-container"
+                  class="swiper-slide-link"
+                  data-project="side5"
                   href="https://alimadhibujar.github.io/Photo-Gallery/"
                   target="_blank"
                   rel="noopener"
@@ -370,7 +391,8 @@
                 style="background-image: url(img/tikTok.webp)"
               >
                 <a
-                  class="swiper-container"
+                  class="swiper-slide-link"
+                  data-project="side4"
                   href="https://alimadhibujar.github.io/Tik-Tok-React-App/"
                   target="_blank"
                   rel="noopener"
@@ -379,7 +401,7 @@
               </div>
             </div>
             <p>
-              Slide the cube, and click on picture for detailed project
+              Slide the cube, and click on the image for detailed project
               information.
             </p>
           </div>

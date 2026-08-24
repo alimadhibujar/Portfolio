@@ -609,8 +609,7 @@ h3 {
   }
 
   #heroImage {
-    filter: contrast(120%) grayscale(100%)
-      drop-shadow(-5px -3px 25px rgba(0, 0, 0, 0.4));
+    filter: contrast(120%) drop-shadow(-5px -3px 25px rgba(0, 0, 0, 0.4));
     will-change: filter;
     @include position(absolute, $left: 50%, $top: 55%);
     transform: translate(-50%, -50%);
@@ -620,10 +619,8 @@ h3 {
     &:active {
       cursor: grabbing;
     }
-
-    &:hover {
-      filter: contrast(120%) grayscale(0%) drop-shadow(0 0 0 rgba(0, 0, 0, 0.4));
-    }
+    // Note: color reveal is handled per-particle in JS (spotlight effect),
+    // so no grayscale hover flip here anymore.
 
     @media (max-width: 1024px) {
       height: 780px !important;
@@ -1730,5 +1727,178 @@ html:not(.spa-transition) {
         }
       }
     }
+  }
+}
+
+// ======================
+// Project Live Preview
+// ======================
+
+.modal__media.has-preview {
+  display: block;
+  min-height: 320px;
+}
+
+.preview-shell {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 320px;
+  max-height: 88vh;
+  background: var(--bg-surface);
+}
+
+.preview-chrome {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 12px;
+  flex-shrink: 0;
+  background: var(--bg-sidebar);
+  border-bottom: 1px solid var(--glass-border);
+
+  .preview-dots {
+    display: inline-flex;
+    gap: 5px;
+
+    i {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+
+      &:nth-child(1) {
+        background: #ff5f57;
+      }
+      &:nth-child(2) {
+        background: #febc2e;
+      }
+      &:nth-child(3) {
+        background: #28c840;
+      }
+    }
+  }
+
+  .preview-url {
+    flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    border-radius: 999px;
+    padding: 4px 12px;
+  }
+
+  .preview-devices {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .preview-device,
+  .preview-open {
+    width: 28px;
+    height: 28px;
+    display: grid;
+    place-items: center;
+    padding: 0;
+    border: 1px solid transparent;
+    border-radius: $radius-sm;
+    background: transparent;
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+    text-decoration: none;
+    cursor: pointer;
+    transition:
+      background $dur-fast ease,
+      color $dur-fast ease,
+      border-color $dur-fast ease;
+
+    &:hover {
+      background: rgba($blurple, 0.25);
+      color: $white;
+    }
+    &.active {
+      background: $blurple;
+      color: $white;
+    }
+    &:focus-visible {
+      outline: none;
+      border-color: rgba($blurple, 0.6);
+    }
+  }
+}
+
+.preview-viewport {
+  position: relative;
+  flex: 1;
+  min-height: 280px;
+  max-height: calc(88vh - 45px); // viewport minus chrome bar height
+  display: flex;
+  justify-content: center;
+  overflow: auto;
+  background: var(--bg-primary);
+  border-top: 1px solid var(--glass-border);
+
+  .preview-frame {
+    width: var(--device-width, 100%);
+    height: 100%;
+    min-height: 280px;
+    border: 0;
+    background: #fff;
+    transition: width $dur-mid $ease-standard;
+  }
+
+  // Device frame styling when a narrow device mode is active
+  &.is-narrow .preview-frame {
+    border-inline: 1px solid var(--glass-border);
+    border-radius: $radius-sm;
+    box-shadow: 0 10px 30px var(--glass-shadow);
+  }
+
+  .preview-loader {
+    @include position(absolute, $top: 0, $left: 0);
+    width: 100%;
+    height: 100%;
+    display: grid;
+    place-items: center;
+    z-index: 2;
+    pointer-events: none;
+    background: var(--bg-primary);
+    color: var(--accent);
+    font-size: 2rem;
+  }
+}
+
+.preview-fallback {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  height: 100%;
+  min-height: 280px;
+  padding: 16px;
+  text-align: center;
+
+  img {
+    width: 100%;
+    height: auto;
+    max-height: 70vh;
+    object-fit: contain;
+    border-radius: $radius-sm;
+  }
+
+  p {
+    margin: 0;
+    font-size: 0.9rem;
+    color: var(--text-primary);
+  }
+
+  a {
+    color: var(--accent);
+    font-weight: 600;
   }
 }
