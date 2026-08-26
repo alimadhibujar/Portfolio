@@ -458,6 +458,9 @@ document.addEventListener("DOMContentLoaded", () => {
       }
       if (progress === 1) {
         loadAnimationDone = true;
+        // Notify other components (e.g. the digital clock) that the
+        // hero image has finished its entrance animation.
+        document.dispatchEvent(new CustomEvent("hero-image-ready"));
       }
       points.geometry.attributes.position.array.set(currentPositions);
       points.geometry.attributes.position.needsUpdate = true;

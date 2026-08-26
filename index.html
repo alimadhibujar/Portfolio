@@ -169,6 +169,133 @@
         </div>
       </aside>
 
+      <!-- Digital Clock (bottom-right overlay) -->
+      <div class="digital-clock" role="timer" aria-label="Digital clock">
+        <div class="ClockHolder">
+          <div class="WeekDays">
+            <span>sat</span>
+            <span>sun</span>
+            <span>mon</span>
+            <span>tue</span>
+            <span>wed</span>
+            <span>thu</span>
+            <span>fri</span>
+          </div>
+
+          <div class="TimeHolder">
+            <div class="TimeOptions">
+              <i class="home-icon" data-title="Back to Clock">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="13"
+                  height="13"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <circle cx="12" cy="12" r="9"></circle>
+                  <path d="M12 7v5l3 2"></path>
+                </svg>
+              </i>
+              <i
+                class="stopwatch-icon"
+                data-title="StopWatch"
+                aria-hidden="true"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="13"
+                  height="13"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <circle cx="12" cy="13" r="8"></circle>
+                  <path d="M12 9v4l3 2"></path>
+                  <path d="M9 2h6"></path>
+                  <path d="M19 5l1.5 1.5"></path>
+                </svg>
+              </i>
+              <i class="fa fa-clock-o" data-title="CountDown"></i>
+            </div>
+
+            <div class="Numbers">
+              <div class="NumberHolder H1" data-base="NumberHolder H1">
+                <span class="d1"></span><span class="d2"></span
+                ><span class="d3"></span><span class="d4"></span
+                ><span class="d5"></span><span class="d6"></span
+                ><span class="d7"></span>
+              </div>
+              <div class="NumberHolder H2" data-base="NumberHolder H2">
+                <span class="d1"></span><span class="d2"></span
+                ><span class="d3"></span><span class="d4"></span
+                ><span class="d5"></span><span class="d6"></span
+                ><span class="d7"></span>
+              </div>
+              <span>:</span>
+              <div class="NumberHolder M1" data-base="NumberHolder M1">
+                <span class="d1"></span><span class="d2"></span
+                ><span class="d3"></span><span class="d4"></span
+                ><span class="d5"></span><span class="d6"></span
+                ><span class="d7"></span>
+              </div>
+              <div class="NumberHolder M2" data-base="NumberHolder M2">
+                <span class="d1"></span><span class="d2"></span
+                ><span class="d3"></span><span class="d4"></span
+                ><span class="d5"></span><span class="d6"></span
+                ><span class="d7"></span>
+              </div>
+              <span>:</span>
+              <div class="NumberHolder S1" data-base="NumberHolder S1">
+                <span class="d1"></span><span class="d2"></span
+                ><span class="d3"></span><span class="d4"></span
+                ><span class="d5"></span><span class="d6"></span
+                ><span class="d7"></span>
+              </div>
+              <div class="NumberHolder S2" data-base="NumberHolder S2">
+                <span class="d1"></span><span class="d2"></span
+                ><span class="d3"></span><span class="d4"></span
+                ><span class="d5"></span><span class="d6"></span
+                ><span class="d7"></span>
+              </div>
+            </div>
+
+            <div class="AlarmInput">
+              <input
+                type="number"
+                placeholder="Seconds"
+                min="1"
+                aria-label="Countdown seconds"
+              />
+            </div>
+
+            <div class="TimeFormat">
+              <div class="Type">
+                <span>12hr</span>
+                <span class="active">24hr</span>
+              </div>
+              <div class="Formats">
+                <span>am</span>
+                <span>pm</span>
+              </div>
+              <div class="control">
+                <span class="Start active"
+                  ><i class="fa fa-play"></i>Start</span
+                >
+                <span class="Pause"><i class="fa fa-pause"></i>Pause</span>
+                <span class="Stop active"><i class="fa fa-stop"></i>Stop</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <div class="overlay" aria-hidden="true"></div>
 
       <!-- Main Content -->
@@ -458,7 +585,7 @@
               ></textarea>
               <label for="letters" class="message">message</label>
 
-              <input type="hidden" name="_captcha" value="false" />
+              <input type="hidden" id="captcha" name="_captcha" value="false" />
 
               <button class="send-button" id="submit" type="submit">
                 <div class="button">
@@ -627,6 +754,7 @@
     <script type="module" src="./JS/heroImage.js" defer></script>
     <script src="./JS/ghost-cursor.js" type="module" defer></script>
     <script src="./JS/theme-toggle.js" defer></script>
+    <script src="./JS/clock.js" defer></script>
     <!-- Lazy-load Swiper only on small screens and when visible -->
     <script>
       (function () {
