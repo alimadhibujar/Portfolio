@@ -48,6 +48,7 @@
     gap: 6px;
     text-transform: uppercase;
     font-size: 0.62rem;
+    font-weight: 700;
     letter-spacing: 0.5px;
     cursor: default;
     color: var(--text-primary);
@@ -286,7 +287,7 @@
         top: 50%;
         right: -14px;
         transform: translateY(-50%);
-        font-size: 0.65rem;
+        font-size: 0.75rem;
       }
     }
   }
@@ -378,13 +379,13 @@
   // instead of stepping between fixed sizes.
   --clock-scale: clamp(0.55, calc(100vw / 900), 1);
   // Initial position: fully pushed out of the panel (bottom-right corner)
-  transform: translate(130%, 130%) scale(var(--clock-scale));
+  transform: translate(0%, 130%) scale(0.8);
   opacity: 0;
   pointer-events: none;
 
   // Revealed by clock.js once the hero image load animation completes
   &.is-visible {
-    transform: scale(var(--clock-scale));
+    transform: translate(0, 0) scale(var(--clock-scale));
     opacity: 1;
     pointer-events: auto;
   }
@@ -423,24 +424,9 @@
     }
   }
 
-  // Extra-small / short screens (e.g. landscape phones)
-  @media (max-width: 480px), (max-height: 480px) and (orientation: landscape) {
-    right: 6px;
-    bottom: 6px;
-
-    .ClockHolder {
-      padding: 8px 9px 10px;
-    }
-    .WeekDays {
-      gap: 2px;
-      letter-spacing: 0;
-    }
-    .NumberHolder {
-      margin: 0 2px;
-    }
-    .TimeHolder {
-      padding: 10px 0 2px;
-    }
+  // Hide on mobile devices
+  @media (max-width: 480px) {
+    display: none;
   }
 }
 
@@ -452,7 +438,7 @@
   }
   50%,
   100% {
-    opacity: 0.15;
+    opacity: 0.2;
   }
 }
 

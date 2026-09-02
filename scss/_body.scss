@@ -417,6 +417,56 @@ h3 {
       transform: skewY(-46deg);
     }
 
+    ul li a {
+      display: block;
+      width: 100%;
+      height: 100%;
+      position: relative;
+
+      // Tooltip matching _clock.scss style
+      &::after {
+        display: block;
+        opacity: 0;
+        pointer-events: none;
+        position: absolute;
+        background: var(--bg-surface);
+        color: var(--text-secondary);
+        content: attr(data-title);
+        font-size: 11px;
+        font-family: $font1;
+        font-weight: 600;
+        padding: 3px 10px;
+        top: -10px;
+        left: 50%;
+        white-space: nowrap;
+        transform: skew(-17deg) rotate(28deg) translate(-50%, -50%)
+          scale3d(0.2, 0.2, 1);
+        transition: all 0.35s $ease-soft;
+        line-height: initial;
+        border-radius: 100px;
+        border: 1px solid var(--glass-border);
+        box-shadow: 0 4px 12px var(--glass-shadow);
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
+
+        @media (max-width: 768px) {
+          transform: skew(14deg) rotate(45deg) translate(-50%, -50%)
+            scale3d(0.2, 0.2, 1);
+        }
+      }
+    }
+
+    ul li:hover a::after {
+      opacity: 1;
+      transform: skew(-17deg) rotate(28deg)
+        translate(calc(-50% + 40px), calc(-50% - 60px)) scale3d(1, 1, 1);
+
+      @media (max-width: 768px) {
+        transform: skew(14deg) rotate(45deg)
+          translate(calc(-50% + 40px), calc(-50% - 60px)) scale3d(1, 1, 1);
+      }
+    }
+
     ul li span {
       @include position(absolute, $top: 0, $left: 0);
       width: 100%;
@@ -824,6 +874,39 @@ h3 {
       width: 30vw;
       height: 30vw;
       overflow: hidden;
+
+      // Tooltip matching _clock.scss style
+      &::after {
+        display: block;
+        opacity: 0;
+        pointer-events: none;
+        position: absolute;
+        background: var(--bg-surface);
+        color: var(--text-primary);
+        content: attr(data-title);
+        font-size: clamp(11px, 1.1vw, 15px);
+        font-family: $font1;
+        font-weight: 600;
+        letter-spacing: 0.5px;
+        padding: 5px 14px;
+        bottom: 50%;
+        left: 50%;
+        white-space: nowrap;
+        transform: translate(-50%, 10px) scale3d(0.2, 0.2, 1);
+        transition: all 0.35s $ease-soft;
+        line-height: initial;
+        border-radius: 100px;
+        border: 1px solid var(--glass-border);
+        box-shadow: 0 4px 15px var(--glass-shadow);
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
+        z-index: 20;
+      }
+
+      &:hover::after {
+        opacity: 1;
+        transform: translate(-50%, 0) scale3d(1, 1, 1);
+      }
     }
   }
 
@@ -1274,6 +1357,46 @@ h3 {
 
     &:hover {
       color: var(--text-primary);
+    }
+  }
+
+  .contact-text a,
+  .contact-text.place {
+    position: relative;
+    display: inline-block;
+    line-height: normal;
+
+    // Tooltip matching _clock.scss style
+    &[data-title]::after {
+      display: block;
+      opacity: 0;
+      pointer-events: none;
+      position: absolute;
+      background: var(--bg-surface);
+      color: var(--text-secondary);
+      content: attr(data-title);
+      font-size: clamp(11px, 1.1vw, 15px);
+      font-family: $font1;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      padding: 3px 10px;
+      bottom: calc(100% + 8px);
+      left: 50%;
+      white-space: nowrap;
+      transform: translate(-50%, 6px) scale3d(0.2, 0.2, 1);
+      transition: all 0.35s $ease-soft;
+      line-height: initial;
+      border-radius: 100px;
+      border: 1px solid var(--glass-border);
+      box-shadow: 0 4px 12px var(--glass-shadow);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      z-index: 20;
+    }
+
+    &:hover::after {
+      opacity: 1;
+      transform: translate(-50%, 0) scale3d(1, 1, 1);
     }
   }
 }

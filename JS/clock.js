@@ -89,9 +89,9 @@
     }
   }
 
-  /** Highlight the current weekday (spans start at "sat"). */
+  /* Highlight the current weekday (spans start at "Monday"). */
   function setWeekDay(dayIndex) {
-    const idx = (dayIndex + 1) % 7;
+    const idx = (dayIndex + 6) % 7; // Js maps Sunday=0 to index 6; so we add 6 to make it start from Monday(1)
     weekDays.forEach((el, i) => el.classList.toggle("active", i === idx));
   }
 
@@ -177,7 +177,9 @@
     resetDigits();
     timeHolder.className =
       "TimeHolder" +
-      (next === "time" ? "" : " " + (next === "stopwatch" ? "StopWatch" : "Alarm"));
+      (next === "time"
+        ? ""
+        : " " + (next === "stopwatch" ? "StopWatch" : "Alarm"));
     if (next !== "alarm") showNumbers(true);
     setControls(true);
     alarmInput.classList.remove("DisNone");
@@ -243,9 +245,7 @@
   ];
 
   function activateModeButton(target) {
-    modeButtons.forEach(({ el }) =>
-      el && el.classList.remove("active-mode"),
-    );
+    modeButtons.forEach(({ el }) => el && el.classList.remove("active-mode"));
     if (target) target.classList.add("active-mode");
   }
 
