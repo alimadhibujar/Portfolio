@@ -178,7 +178,7 @@ h3 {
   position: relative;
   border-top-right-radius: $side-radius;
   border-top-left-radius: $radius-sm;
-  contain: layout paint;
+  contain: layout;
 
   @media (max-width: 768px) {
     @include position(fixed, $top: 0, $left: 0);

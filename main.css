@@ -268,7 +268,7 @@ h3 {
   position: relative;
   border-top-right-radius: 60px;
   border-top-left-radius: 8px;
-  contain: layout paint;
+  contain: layout;
 }
 @media (max-width: 768px) {
   .panel__main-side {
