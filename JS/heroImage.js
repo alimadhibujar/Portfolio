@@ -38,6 +38,8 @@ document.addEventListener("DOMContentLoaded", () => {
   let mouseWorldX = 0; // Mouse position in world coordinates
   let mouseWorldY = 0;
   const maxTiltAngle = 20; // Maximum tilt in degrees
+  let currentTiltX = 0;
+  let currentTiltY = 0;
 
   // Magnetic cursor effect
   const magneticRadius = 120; // Radius of magnetic influence
@@ -83,6 +85,36 @@ document.addEventListener("DOMContentLoaded", () => {
   let imgHeight = 0;
   let imageScale = 1; // computed scale factor
 
+  // Render-loop lifecycle: only animate while the tab is visible AND the hero
+  // canvas is actually on screen (Home section). Otherwise the rAF loop keeps
+  // burning CPU/GPU in the background.
+  const MAX_PIXEL_RATIO = 2;
+  let rafId = null;
+  let isCanvasVisible = false;
+  let visibilityObserver = null;
+
+  const shouldRender = () =>
+    !document.hidden && isCanvasVisible && points !== undefined;
+
+  const start = () => {
+    if (rafId === null && shouldRender()) {
+      rafId = requestAnimationFrame(render);
+    }
+  };
+
+  const stop = () => {
+    if (rafId !== null) {
+      cancelAnimationFrame(rafId);
+      rafId = null;
+    }
+  };
+
+  // Re-evaluate on visibility / intersection changes
+  const syncRenderLoop = () => {
+    if (shouldRender()) start();
+    else stop();
+  };
+
   const init = () => {
     const canvas = document.getElementById("heroImage");
     // Set consistent canvas dimensions
@@ -99,7 +131,9 @@ document.addEventListener("DOMContentLoaded", () => {
       alpha: true,
     });
     renderer.setSize(ww, wh);
-    renderer.setPixelRatio(window.devicePixelRatio);
+    renderer.setPixelRatio(
+      Math.min(window.devicePixelRatio || 1, MAX_PIXEL_RATIO),
+    );
 
     scene = new THREE.Scene();
 
@@ -115,12 +149,33 @@ document.addEventListener("DOMContentLoaded", () => {
       createPointCloud(getImageData(image));
       // Start load animation: from scattered (startPositions) to clear (targetPositions)
       animationStartTime = performance.now();
-      requestAnimationFrame(render);
+      start();
     };
     image.onerror = () => {
       console.error("Error loading image!");
     };
     image.src = imgData;
+
+    // Only run rAF while the hero canvas is on screen (Home section).
+    if ("IntersectionObserver" in window) {
+      visibilityObserver = new IntersectionObserver(
+        (entries) => {
+          const entry = entries[0];
+          if (!entry) return;
+          isCanvasVisible = entry.isIntersecting;
+          syncRenderLoop();
+        },
+        { threshold: 0 },
+      );
+      visibilityObserver.observe(container);
+    } else {
+      // Fallback: keep animating if IntersectionObserver is unavailable
+      isCanvasVisible = true;
+      syncRenderLoop();
+    }
+
+    // Pause the loop whenever the tab is hidden.
+    document.addEventListener("visibilitychange", syncRenderLoop, false);
 
     window.addEventListener("resize", onResize, false);
     setupInteractionEvents(canvas);
@@ -196,11 +251,11 @@ document.addEventListener("DOMContentLoaded", () => {
     const geometry = new THREE.BufferGeometry();
     geometry.setAttribute(
       "position",
-      new THREE.Float32BufferAttribute(currentPositions, 3)
+      new THREE.Float32BufferAttribute(currentPositions, 3),
     );
     geometry.setAttribute(
       "color",
-      new THREE.Float32BufferAttribute(currentColors, 3)
+      new THREE.Float32BufferAttribute(currentColors, 3),
     );
     geometry.computeVertexNormals();
 
@@ -220,6 +275,9 @@ document.addEventListener("DOMContentLoaded", () => {
     const canvas = document.getElementById("heroImage");
     const ww = window.innerWidth;
     const wh = window.innerHeight;
+    renderer.setPixelRatio(
+      Math.min(window.devicePixelRatio || 1, MAX_PIXEL_RATIO),
+    );
     renderer.setSize(ww, wh);
     camera.aspect = ww / wh;
     camera.updateProjectionMatrix();
@@ -366,10 +424,14 @@ document.addEventListener("DOMContentLoaded", () => {
       mouseY = ((touch.clientY - rect.top) / rect.height) * 2 - 1;
     });
 
-    canvas.addEventListener("touchend", (e) => {
-      spotlightActive = false;
-      endDrag(e);
-    }, false);
+    canvas.addEventListener(
+      "touchend",
+      (e) => {
+        spotlightActive = false;
+        endDrag(e);
+      },
+      false,
+    );
   };
 
   // Update particle history for trail effect
@@ -388,7 +450,9 @@ document.addEventListener("DOMContentLoaded", () => {
   const applyNaturalColorEnhancement = (intensity) => {
     for (let i = 0; i < grayscaleColors.length; i += 3) {
       // Blend between desaturated and original color
-      let r = grayscaleColors[i] + (originalColors[i] - grayscaleColors[i]) * intensity;
+      let r =
+        grayscaleColors[i] +
+        (originalColors[i] - grayscaleColors[i]) * intensity;
       let g =
         grayscaleColors[i + 1] +
         (originalColors[i + 1] - grayscaleColors[i + 1]) * intensity;
@@ -404,10 +468,13 @@ document.addEventListener("DOMContentLoaded", () => {
         maxBrightnessBoost * intensity * (1 - luminance * 0.5);
 
       // Add slight warm tint (increase red/yellow slightly)
-      currentColors[i] = Math.min(1, r + brightnessBoost + warmthFactor * intensity); // Red
+      currentColors[i] = Math.min(
+        1,
+        r + brightnessBoost + warmthFactor * intensity,
+      ); // Red
       currentColors[i + 1] = Math.min(
         1,
-        g + brightnessBoost + warmthFactor * intensity * 0.7
+        g + brightnessBoost + warmthFactor * intensity * 0.7,
       ); // Green (less for warmth)
       currentColors[i + 2] = Math.min(1, b + brightnessBoost); // Blue (no warmth added)
     }
@@ -430,7 +497,10 @@ document.addEventListener("DOMContentLoaded", () => {
       }
 
       // Smoothstep falloff: 1 inside the core, easing to 0 at the edge
-      let falloff = distance <= spotlightRadius ? 1 : 1 - (distance - spotlightRadius) / spotlightSoftness;
+      let falloff =
+        distance <= spotlightRadius
+          ? 1
+          : 1 - (distance - spotlightRadius) / spotlightSoftness;
       falloff = falloff * falloff * (3 - 2 * falloff);
 
       currentColors[i] =
@@ -445,7 +515,7 @@ document.addEventListener("DOMContentLoaded", () => {
   };
 
   const render = () => {
-    requestAnimationFrame(render);
+    rafId = null;
     const now = performance.now();
 
     // Initial load animation (scatter to clear)
@@ -545,7 +615,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const dragCenterX = currentDragDelta.x;
         const dragCenterY = currentDragDelta.y;
         const dragMagnitude = Math.sqrt(
-          dragCenterX * dragCenterX + dragCenterY * dragCenterY
+          dragCenterX * dragCenterX + dragCenterY * dragCenterY,
         );
 
         // Get effective drag progress
@@ -553,7 +623,7 @@ document.addEventListener("DOMContentLoaded", () => {
           const releaseElapsed = now - dragReleaseStartTime;
           const releaseProgress = Math.min(
             releaseElapsed / dragReleaseDuration,
-            1
+            1,
           );
           currentDragProgress = (1 - releaseProgress) * dragDecayFactor;
           currentDragDelta.x = initialDragDelta.x * (1 - releaseProgress);
@@ -587,13 +657,13 @@ document.addEventListener("DOMContentLoaded", () => {
           // Determine rotation direction based on drag motion
           const dragDirectionAngle = Math.atan2(
             currentDragDelta.y,
-            currentDragDelta.x
+            currentDragDelta.x,
           );
 
           // Calculate the angle between the point and drag direction
           const angleDifference = Math.atan2(
             Math.sin(pointAngle - dragDirectionAngle),
-            Math.cos(pointAngle - dragDirectionAngle)
+            Math.cos(pointAngle - dragDirectionAngle),
           );
 
           // Set direction multiplier based on which side of the drag vector the point is on
@@ -639,34 +709,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
         // Increase color enhancement during drag
         colorEnhancement = Math.min(1, colorEnhancement + colorEnhanceSpeed);
-      } else if (!isMagneticActive) {
-        // Apply tilt effect on mouseover (when not dragging or magnetic)
-        const tiltY = mouseX * maxTiltAngle; // Rotate around Y-axis
-        const tiltX = -mouseY * maxTiltAngle; // Rotate around X-axis
-        const rotationMatrixX = new THREE.Matrix4().makeRotationX(
-          THREE.MathUtils.degToRad(tiltX)
-        );
-        const rotationMatrixY = new THREE.Matrix4().makeRotationY(
-          THREE.MathUtils.degToRad(tiltY)
-        );
-        const totalRotationMatrix = new THREE.Matrix4().multiplyMatrices(
-          rotationMatrixY,
-          rotationMatrixX
-        );
-
-        for (let i = 0; i < currentPositions.length; i += 3) {
-          const targetVec = new THREE.Vector3(
-            currentPositions[i],
-            currentPositions[i + 1],
-            currentPositions[i + 2]
-          );
-          const rotatedVec = targetVec
-            .clone()
-            .applyMatrix4(totalRotationMatrix);
-          currentPositions[i] = rotatedVec.x;
-          currentPositions[i + 1] = rotatedVec.y;
-          currentPositions[i + 2] = rotatedVec.z;
-        }
       }
 
       // Update color enhancement
@@ -724,7 +766,20 @@ document.addEventListener("DOMContentLoaded", () => {
       points.geometry.attributes.position.needsUpdate = true;
     }
 
+    const targetTiltY = mouseX * THREE.MathUtils.degToRad(maxTiltAngle);
+    const targetTiltX = -mouseY * THREE.MathUtils.degToRad(maxTiltAngle);
+
+    // Smooth damping (lerp) for buttery-smooth 3D tilt
+    currentTiltX += (targetTiltX - currentTiltX) * 0.08;
+    currentTiltY += (targetTiltY - currentTiltY) * 0.08;
+
+    points.rotation.x = currentTiltX;
+    points.rotation.y = currentTiltY;
+
     renderer.render(scene, camera);
+
+    // Schedule the next frame only while we're allowed to animate.
+    start();
   };
 
   init();
