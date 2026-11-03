@@ -10,6 +10,7 @@ document.addEventListener("DOMContentLoaded", () => {
   let currentPositions = null; // current positions for the point cloud
   let originalColors = null; // store original colors for restoration
   let currentColors = null; // current colors for dynamic effects
+  let velocities = null; // per-particle velocities for fluid magnetic effect
 
   // For the initial load animation (scatter -> clear)
   let animationStartTime = null;
@@ -45,6 +46,11 @@ document.addEventListener("DOMContentLoaded", () => {
   const magneticRadius = 120; // Radius of magnetic influence
   const magneticStrength = 0.3; // Strength of magnetic pull
   let isMagneticActive = false;
+  // Fluid mouse-velocity tracking (world coords)
+  let prevMouseWorldX = 0;
+  let prevMouseWorldY = 0;
+  let mouseVelX = 0;
+  let mouseVelY = 0;
 
   // Wave/Ripple effect
   let waveAnimations = []; // Array to track multiple wave animations
@@ -201,11 +207,17 @@ document.addEventListener("DOMContentLoaded", () => {
           // Calculate clear image positions centered at (0,0)
           const px = x - imagedata.width / 2;
           const py = -y + imagedata.height / 2;
-          const pz = 0;
-          positions.push(px, py, pz);
+
           const r = imagedata.data[(x + imagedata.width * y) * 4] / 255;
           const g = imagedata.data[(x + imagedata.width * y) * 4 + 1] / 255;
           const b = imagedata.data[(x + imagedata.width * y) * 4 + 2] / 255;
+
+          // Brighter pixels pop forward in Z-space (2.5D hologram relief effect)
+          const luminance = 0.299 * r + 0.587 * g + 0.114 * b;
+          const depthRelief = 5; // Adjust how "3D" the portrait feels
+          const pz = (luminance - 0.5) * depthRelief;
+          positions.push(px, py, pz);
+
           colors.push(r, g, b);
         }
       }
@@ -221,6 +233,8 @@ document.addEventListener("DOMContentLoaded", () => {
     // Create startPositions for the scattered state.
     startPositions = new Float32Array(positions.length);
     currentPositions = new Float32Array(positions.length);
+    // Per-particle velocities for the fluid magnetic scatter effect.
+    velocities = new Float32Array(positions.length); // initialized to 0
     // Store original colors, build grayscale resting colors, create current
     // colors (start desaturated – the spotlight reveals the real colors)
     originalColors = new Float32Array(colors);
@@ -341,8 +355,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
       // Convert to world coordinates for magnetic effect
       const worldPos = screenToWorld(mouseX, -mouseY);
+      // Track velocity: difference from last frame's world position
+      prevMouseWorldX = mouseWorldX;
+      prevMouseWorldY = mouseWorldY;
       mouseWorldX = worldPos.x;
       mouseWorldY = worldPos.y;
+      mouseVelX = mouseWorldX - prevMouseWorldX;
+      mouseVelY = mouseWorldY - prevMouseWorldY;
 
       // Enable magnetic + spotlight effects when not dragging
       if (!isDragging && loadAnimationDone) {
@@ -374,6 +393,8 @@ document.addEventListener("DOMContentLoaded", () => {
       // Reset tilt, magnetic and spotlight effects when mouse leaves canvas
       mouseX = 0;
       mouseY = 0;
+      mouseVelX = 0;
+      mouseVelY = 0;
       isMagneticActive = false;
       spotlightActive = false;
     });
@@ -518,15 +539,40 @@ document.addEventListener("DOMContentLoaded", () => {
     rafId = null;
     const now = performance.now();
 
-    // Initial load animation (scatter to clear)
+    // Initial load animation (scatter → clear) — Staggered Swirl + Ease-Out
     if (!isDragging && !dragReleaseAnimating && !loadAnimationDone) {
+      const duration = 2600;
       const elapsed = now - animationStartTime;
-      const progress = Math.min(elapsed / 2000, 1);
-      for (let i = 0; i < currentPositions.length; i++) {
+      let allDone = true;
+
+      for (let i = 0; i < currentPositions.length; i += 3) {
+        const tx = targetPositions[i];
+        const ty = targetPositions[i + 1];
+        const tz = targetPositions[i + 2];
+
+        // Stagger delay based on distance from center (0 to 600 ms delay),
+        // so the core forms first and the edges settle smoothly afterward.
+        const distFromCenter = Math.sqrt(tx * tx + ty * ty);
+        const delay = Math.min(600, distFromCenter * 2.2);
+
+        const localProgress = Math.max(
+          0,
+          Math.min(1, (elapsed - delay) / (duration - 600)),
+        );
+        if (localProgress < 1) allDone = false;
+
+        // Cubic ease-out: fast start, buttery smooth landing
+        const ease = 1 - Math.pow(1 - localProgress, 3);
+
         currentPositions[i] =
-          startPositions[i] * (1 - progress) + targetPositions[i] * progress;
+          startPositions[i] + (tx - startPositions[i]) * ease;
+        currentPositions[i + 1] =
+          startPositions[i + 1] + (ty - startPositions[i + 1]) * ease;
+        currentPositions[i + 2] =
+          startPositions[i + 2] + (tz - startPositions[i + 2]) * ease;
       }
-      if (progress === 1) {
+
+      if (allDone) {
         loadAnimationDone = true;
         // Notify other components (e.g. the digital clock) that the
         // hero image has finished its entrance animation.
@@ -543,11 +589,15 @@ document.addEventListener("DOMContentLoaded", () => {
         currentPositions[i] = targetPositions[i];
       }
 
-      // Apply breathing animation (idle state)
-      const breathingOffset =
-        Math.sin(now * breathingSpeed) * breathingAmplitude;
-      for (let i = 2; i < currentPositions.length; i += 3) {
-        currentPositions[i] += breathingOffset;
+      // Apply 3D wave undulation (idle state) — diagonal spatial wave ripples
+      // across X and Y so each particle is phase-offset by its position,
+      // replacing the old "cardboard" breathing with an organic rolling wave.
+      for (let i = 0; i < currentPositions.length; i += 3) {
+        const px = targetPositions[i];
+        const py = targetPositions[i + 1];
+        // Diagonal spatial wave across X and Y
+        currentPositions[i + 2] +=
+          Math.sin(now * 0.002 + px * 0.02 + py * 0.02) * breathingAmplitude;
       }
 
       // Apply wave ripple effects
@@ -590,22 +640,41 @@ document.addEventListener("DOMContentLoaded", () => {
         return true; // Keep active waves
       });
 
-      // Apply magnetic cursor effect
+      // Apply fluid magnetic cursor effect with velocity-based scatter
       if (isMagneticActive && !isDragging) {
         for (let i = 0; i < currentPositions.length; i += 3) {
           const dx = currentPositions[i] - mouseWorldX;
           const dy = currentPositions[i + 1] - mouseWorldY;
-          const distance = Math.sqrt(dx * dx + dy * dy);
+          const distSq = dx * dx + dy * dy;
 
-          if (distance < magneticRadius && distance > 0) {
-            const falloff = 1 - distance / magneticRadius;
-            const magneticForce = falloff * falloff * magneticStrength;
-
-            // Pull particles towards cursor
-            currentPositions[i] -= (dx / distance) * magneticForce * 10;
-            currentPositions[i + 1] -= (dy / distance) * magneticForce * 10;
-            currentPositions[i + 2] += falloff * 5; // Slight Z displacement
+          if (distSq < magneticRadius * magneticRadius) {
+            const dist = Math.sqrt(distSq);
+            const falloff = Math.pow(1 - dist / magneticRadius, 2);
+            // Impart cursor-swipe velocity to nearby particles (dust-in-wind)
+            velocities[i] += mouseVelX * falloff * 0.45;
+            velocities[i + 1] += mouseVelY * falloff * 0.45;
+            velocities[i + 2] +=
+              (Math.abs(mouseVelX) + Math.abs(mouseVelY)) * falloff * 0.3;
           }
+        }
+      }
+
+      // Apply velocity, spring-decay toward target, and smooth friction every frame
+      if (velocities !== null) {
+        for (let i = 0; i < currentPositions.length; i += 3) {
+          // Spring: gently pull displaced particles back toward their home position
+          const springX = (targetPositions[i] - currentPositions[i]) * 0.04;
+          const springY =
+            (targetPositions[i + 1] - currentPositions[i + 1]) * 0.04;
+          const springZ =
+            (targetPositions[i + 2] - currentPositions[i + 2]) * 0.04;
+          velocities[i] = (velocities[i] + springX) * 0.9;
+          velocities[i + 1] = (velocities[i + 1] + springY) * 0.9;
+          velocities[i + 2] = (velocities[i + 2] + springZ) * 0.9;
+
+          currentPositions[i] += velocities[i];
+          currentPositions[i + 1] += velocities[i + 1];
+          currentPositions[i + 2] += velocities[i + 2];
         }
       }
 
