@@ -18,12 +18,13 @@
       })();
     </script>
 
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin />
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
     />
     <link rel="stylesheet" href="cv.css" />
-    <link rel="shortcut icon" type="image/icon" href="./../img/favicon.webp" />
+    <link rel="icon" type="image/webp" href="./../img/favicon.webp" />
   </head>
   <body>
     <div id="mesh-background" aria-hidden="true">
@@ -32,18 +33,21 @@
       <div class="mesh-orb orb-3"></div>
       <div class="mesh-orb orb-4"></div>
     </div>
+
     <div class="loading-overlay" aria-hidden="true">
       <div class="loading-spinner">
-        <i class="fa fa-spinner fa-spin fa-3x"></i>
+        <i class="fa fa-spinner fa-spin fa-3x" aria-hidden="true"></i>
         <p>Generating PDF...</p>
       </div>
     </div>
+
     <div
       class="toast-container"
       id="toast-container"
       aria-live="polite"
       aria-atomic="true"
     ></div>
+
     <div class="button-container" role="toolbar" aria-label="CV actions">
       <button
         class="action-button"
@@ -51,7 +55,7 @@
         aria-label="Print CV"
         data-tooltip="Print (P)"
         title="Print CV"
-        onclick="window.print()"
+        type="button"
       >
         <i class="fa fa-print" aria-hidden="true"></i>
         <span class="label">Print CV</span>
@@ -62,6 +66,7 @@
         aria-label="Download CV"
         data-tooltip="Download PDF (D)"
         title="Download CV"
+        type="button"
       >
         <i class="fa fa-download" aria-hidden="true"></i>
         <span class="label">Download CV</span>
@@ -74,7 +79,7 @@
         title="Toggle Dark Mode"
         type="button"
       >
-        <!-- Sun icon (shown in dark mode) -->
+        <!-- Sun icon (shown in dark mode via CSS) -->
         <svg
           class="theme-toggle__sun"
           xmlns="http://www.w3.org/2000/svg"
@@ -82,7 +87,6 @@
           viewBox="0 0 24 24"
           stroke="currentColor"
           stroke-width="2"
-          style="display: none"
           aria-hidden="true"
         >
           <path
@@ -91,7 +95,7 @@
             d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"
           />
         </svg>
-        <!-- Moon icon (shown in light mode) -->
+        <!-- Moon icon (shown in light mode via CSS) -->
         <svg
           class="theme-toggle__moon"
           xmlns="http://www.w3.org/2000/svg"
@@ -110,6 +114,7 @@
         <span class="label">Dark Mode</span>
       </button>
     </div>
+
     <div id="cv-container" class="container">
       <aside class="sidebar">
         <img
@@ -118,7 +123,6 @@
           class="profile-image"
           loading="eager"
         />
-        <!-- img src = imgData via js.cv -->
 
         <section class="sidebar-section">
           <h2>
@@ -130,6 +134,7 @@
                 <a
                   href="https://maps.app.goo.gl/KGjn8BQeKSzrgMJa7"
                   target="_blank"
+                  rel="noopener noreferrer"
                   ><i class="fa fa-map-marker" aria-hidden="true"></i>&nbsp;
                   Tirana, Albania</a
                 >
@@ -155,6 +160,15 @@
                   <i class="fa fa-copy" aria-hidden="true"></i>
                 </button>
               </li>
+              <li id="CV-online">
+                <a
+                  href="../CV/cv.html"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  ><i class="fa fa-id-card" aria-hidden="true"></i>&nbsp;
+                  CV-online-interactive</a
+                >
+              </li>
               <li>
                 <a href="../index.html"
                   ><i class="fa fa-globe" aria-hidden="true"></i>&nbsp;
@@ -162,13 +176,19 @@
                 >
               </li>
               <li>
-                <a href="https://github.com/alimadhibujar" target="_blank"
+                <a
+                  href="https://github.com/alimadhibujar"
+                  target="_blank"
+                  rel="noopener noreferrer"
                   ><i class="fa fa-github" aria-hidden="true"></i>&nbsp;
                   GitHub</a
                 >
               </li>
               <li>
-                <a href="https://codepen.io/alimadhibujar" target="_blank"
+                <a
+                  href="https://codepen.io/alimadhibujar"
+                  target="_blank"
+                  rel="noopener noreferrer"
                   ><i class="fa fa-codepen" aria-hidden="true"></i>&nbsp;
                   Codepen</a
                 >
@@ -177,6 +197,7 @@
                 <a
                   href="https://www.linkedin.com/in/bujar-alimadhi/"
                   target="_blank"
+                  rel="noopener noreferrer"
                   ><i class="fa fa-linkedin" aria-hidden="true"></i>&nbsp;
                   LinkedIn</a
                 >
@@ -188,42 +209,78 @@
         <section class="sidebar-section">
           <h2>Skills</h2>
           <ul class="skills-list">
-            <li>
+            <li
+              data-skill="HTML"
+              tabindex="0"
+              role="button"
+              aria-pressed="false"
+              aria-label="Filter projects by HTML skill"
+            >
               HTML
               <div class="skill-bar" data-percentage="95">
                 <div class="skill-level"></div>
                 <div class="tooltip">95%</div>
               </div>
             </li>
-            <li>
+            <li
+              data-skill="CSS"
+              tabindex="0"
+              role="button"
+              aria-pressed="false"
+              aria-label="Filter projects by CSS skill"
+            >
               CSS3/SCSS
               <div class="skill-bar" data-percentage="90">
                 <div class="skill-level"></div>
                 <div class="tooltip">90%</div>
               </div>
             </li>
-            <li>
+            <li
+              data-skill="JS"
+              tabindex="0"
+              role="button"
+              aria-pressed="false"
+              aria-label="Filter projects by JavaScript skill"
+            >
               JavaScript
               <div class="skill-bar" data-percentage="85">
                 <div class="skill-level"></div>
                 <div class="tooltip">85%</div>
               </div>
             </li>
-            <li>
+            <li
+              data-skill="React"
+              tabindex="0"
+              role="button"
+              aria-pressed="false"
+              aria-label="Filter projects by React skill"
+            >
               REACT
               <div class="skill-bar" data-percentage="80">
                 <div class="skill-level"></div>
                 <div class="tooltip">80%</div>
               </div>
             </li>
-            <li>
+            <li
+              data-skill="Redux"
+              tabindex="0"
+              role="button"
+              aria-pressed="false"
+              aria-label="Filter projects by Redux skill"
+            >
               REDUX
               <div class="skill-bar" data-percentage="75">
                 <div class="skill-level"></div>
                 <div class="tooltip">75%</div>
               </div>
             </li>
-            <li>
+            <li
+              data-skill="TS"
+              tabindex="0"
+              role="button"
+              aria-pressed="false"
+              aria-label="Filter projects by TypeScript skill"
+            >
               TypeScript
               <div class="skill-bar" data-percentage="70">
                 <div class="skill-level"></div>
@@ -243,11 +300,16 @@
             <li>Italian :<span class="language-level">B1</span></li>
           </ul>
         </section>
+
         <section class="certification-item">
           <h2>Certifications</h2>
           <ul>
             <li>
-              <a href="./../img/certificate.webp" target="_blank">
+              <a
+                href="./../img/certificate.webp"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
                 Link Academy Lab</a
               >, Tiranë. Graduation Certification for Front-End Developer.
             </li>
@@ -287,6 +349,7 @@
               >at &nbsp;<a
                 href="https://chweb.azurewebsites.net/home"
                 target="_blank"
+                rel="noopener noreferrer"
                 >Chweb</a
               ></span
             >
@@ -300,87 +363,99 @@
               >(January 06, 2020 – December 15, 2022)</span
             >
           </div>
+
           <div class="work-experience-item">
             <p>
               Here are some of the links of my projects, for more information
-              visit my <a href="/index.html"> Portfolio</a>, GitHub account or
-              code pen account.
+              visit my <a href="../index.html">Portfolio</a>, GitHub account or
+              CodePen account.
             </p>
             <ul class="project-list" style="--sibling-count: 11">
-              <li style="--sibling-index: 1">
+              <li style="--sibling-index: 1" data-tech="HTML,CSS,React">
                 <a
                   href="https://alimadhibujar.github.io/Gallery-of-Pets/"
                   target="_blank"
+                  rel="noopener noreferrer"
                   >Gallery of Pets</a
                 >
               </li>
-              <li style="--sibling-index: 2">
+              <li style="--sibling-index: 2" data-tech="React,CSS,JS">
                 <a
                   href="https://codepen.io/alimadhibujar/full/mybzoNg"
                   target="_blank"
+                  rel="noopener noreferrer"
                   >Tetris React Game</a
                 >
               </li>
-              <li style="--sibling-index: 3">
+              <li style="--sibling-index: 3" data-tech="HTML,CSS,JS">
                 <a
                   href="https://alimadhibujar.github.io/linkacademy/index.html"
                   target="_blank"
+                  rel="noopener noreferrer"
                   >Link-Academy-Web</a
                 >
               </li>
-              <li style="--sibling-index: 4">
+              <li style="--sibling-index: 4" data-tech="JS,CSS,HTML">
                 <a
                   href="https://codepen.io/alimadhibujar/pen/raBwbZb"
                   target="_blank"
+                  rel="noopener noreferrer"
                   >Synth Keyboard</a
                 >
               </li>
-              <li style="--sibling-index: 5">
+              <li style="--sibling-index: 5" data-tech="React,Redux,CSS">
                 <a
                   href="https://alimadhibujar.github.io/Tik-Tok-React-App/"
                   target="_blank"
+                  rel="noopener noreferrer"
                   >Tik-Tok-React-App</a
                 >
               </li>
-              <li style="--sibling-index: 6">
+              <li style="--sibling-index: 6" data-tech="JS,CSS,HTML">
                 <a
                   href="https://codepen.io/alimadhibujar/pen/OJybqEd"
                   target="_blank"
+                  rel="noopener noreferrer"
                   >Neumorphic Responsive Analog Clock</a
                 >
               </li>
-              <li style="--sibling-index: 7">
+              <li style="--sibling-index: 7" data-tech="React,CSS,Api-Call">
                 <a
                   href="https://alimadhibujar.github.io/Photo-Gallery/"
                   target="_blank"
+                  rel="noopener noreferrer"
                   >Photo-Gallery-React-App</a
                 >
               </li>
-              <li style="--sibling-index: 8">
+              <li style="--sibling-index: 8" data-tech="HTML,CSS,JS">
                 <a
                   href="https://codepen.io/alimadhibujar/pen/jOMjZbx"
                   target="_blank"
+                  rel="noopener noreferrer"
                   >Glassmorphism-Credit-Card-Form</a
                 >
               </li>
-              <li style="--sibling-index: 9">
+              <li style="--sibling-index: 9" data-tech="React,CSS,JS">
                 <a
                   href="https://alimadhibujar.github.io/React-Rock-Scissors-Paper/"
                   target="_blank"
+                  rel="noopener noreferrer"
                   >Rock-Paper-Scissors-React-Game</a
                 >
               </li>
-              <li style="--sibling-index: 10">
+              <li style="--sibling-index: 10" data-tech="HTML,CSS">
                 <a
                   href="https://codepen.io/alimadhibujar/pen/qBdjJqZ"
                   target="_blank"
+                  rel="noopener noreferrer"
                   >Neumorphic Social Media Buttons</a
                 >
               </li>
-              <li style="--sibling-index: 11">
+              <li style="--sibling-index: 11" data-tech="HTML,CSS,JS">
                 <a
                   href="https://codepen.io/alimadhibujar/pen/WNqaaWb"
                   target="_blank"
+                  rel="noopener noreferrer"
                   >Fade-In Card Effect</a
                 >
               </li>
@@ -394,6 +469,7 @@
           <h3>University</h3>
           <p>Faculty of Law, Tiranë, Albania; &nbsp; <span>Bachelor</span></p>
         </section>
+
         <section class="personal-skills">
           <h2>Personal Skills</h2>
           <ul>
@@ -406,7 +482,7 @@
           </ul>
         </section>
 
-        <section class="email-item">
+        <section class="contact-section">
           <h2>Get in touch</h2>
           <p>
             If you have any questions or would like to get in touch, please
@@ -414,13 +490,35 @@
             <a href="mailto:b.alimadhi@yahoo.co.uk">b.alimadhi@yahoo.co.uk</a>.
           </p>
         </section>
+
+        <section class="qr-section">
+          <a
+            href="../CV/cv.html"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="qr-card"
+          >
+            <img
+              src="https://api.qrserver.com/v1/create-qr-code/?size=90x90&data=https%3A%2F%2Falimadhibujar.github.io%2FPortfolio%2FCV%2Fcv.html&color=2c6e9b&bgcolor=ffffff"
+              alt="QR Code to Interactive CV"
+              width="70"
+              height="70"
+              crossorigin="anonymous"
+            />
+            <div class="qr-text">
+              <strong>Interactive CV</strong>
+              <span>Scan to view live projects &amp; animations</span>
+            </div>
+          </a>
+        </section>
       </main>
     </div>
+
+    <!-- CDN for converting HTML to PDF -->
     <script
       src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.2/html2pdf.bundle.min.js"
       defer
     ></script>
-    <!--cdn for converting html to pdf  -->
-    <script type="module" src="./cv.js" defer></script>
+    <script type="module" src="./cv.js"></script>
   </body>
 </html>

@@ -1,6 +1,6 @@
 @import "https://unpkg.com/open-props/easings.min.css";
 
-/* Added @property definitions to enable the browser to interpolate the color values smoothly instead of snapping instantly, during the theme transition */
+/* Enable smooth color interpolation during theme transitions */
 @property --orb-1 {
   syntax: "<color>";
   inherits: true;
@@ -53,17 +53,18 @@
   --link-color: #2c6e9b;
   --link-hover-color: #e67373;
   --date-color: #6c757d;
+  --badge-bg: rgba(44, 110, 155, 0.15);
+  --badge-border: rgba(44, 110, 155, 0.3);
+
+  /* Micro-interactions for list items */
+  --li-hover-bg: rgba(76, 110, 157, 0.08);
+  --li-hover-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+  --li-focus-ring: 0 0 0 3px rgba(76, 110, 157, 0.25);
 
   /* Mesh Gradient Colors - Light Mode */
-  --mesh-strength: 0.55; /* overall orb opacity multiplier */
-  --mesh-blur: 110px; /* how frosted / diffused the orbs are */
-  --mesh-overlay-tint: color-mix(
-    in srgb,
-    var(--primary-color) 22%,
-    #ffffff 78%
-  );
+  --mesh-strength: 0.55;
+  --mesh-blur: 110px;
   --mesh-noise-opacity: 0.035;
-  /* create orb colors that harmonize with primary / secondary */
   --orb-1: color-mix(in srgb, var(--primary-color) 40%, #ffffff 60%);
   --orb-2: color-mix(in srgb, var(--secondary-color) 35%, #ffffff 65%);
   --orb-3: color-mix(
@@ -94,6 +95,13 @@
   --link-color: hsl(204, 56%, 75%);
   --link-hover-color: #ff8585;
   --date-color: #a0aec0;
+  --badge-bg: rgba(100, 166, 211, 0.15);
+  --badge-border: rgba(100, 166, 211, 0.3);
+
+  /* Micro-interactions for list items - Dark Mode */
+  --li-hover-bg: rgba(100, 166, 211, 0.12);
+  --li-hover-shadow: 0 6px 14px rgba(0, 0, 0, 0.35);
+  --li-focus-ring: 0 0 0 3px rgba(100, 166, 211, 0.35);
 
   /* Mesh Gradient Colors - Dark Mode */
   --orb-1: color-mix(in srgb, var(--primary-color) 40%, #000 60%);
@@ -112,8 +120,10 @@
 
 /* Main animated underline effect */
 a {
+  color: var(--link-color);
   text-decoration: none;
   position: relative;
+  transition: color 0.3s ease;
 }
 
 a::before {
@@ -133,35 +143,7 @@ a:hover::before {
 }
 
 a:hover {
-  color: var(--link-hover-color) !important;
-}
-
-/* Improved performance */
-@media (prefers-reduced-motion: reduce) {
-  * {
-    animation-duration: 0.01ms !important;
-    transition-duration: 0.01ms !important;
-  }
-}
-
-/* print styles */
-@media print {
-  .button-container {
-    display: none !important;
-  }
-  .container {
-    box-shadow: none;
-  }
-  a::after {
-    content: " (" attr(href) ")";
-  }
-  .tooltip {
-    display: none;
-  }
-  @page {
-    size: A4;
-    margin: 0;
-  }
+  color: var(--link-hover-color);
 }
 
 body {
@@ -198,7 +180,6 @@ body {
   pointer-events: none;
   overflow: hidden;
   display: block;
-  /* base gradient as subtle foundation */
   background:
     radial-gradient(1200px 800px at 10% 10%, var(--orb-1) 0%, transparent 30%),
     radial-gradient(1000px 600px at 90% 20%, var(--orb-2) 0%, transparent 32%),
@@ -210,25 +191,21 @@ body {
   transition: background-color 0.3s ease;
 }
 
-/* frosted glass overlay that sits above the orbs, creates separation */
+/* Subtle tint overlay above the orbs */
 #mesh-background::after {
   content: "";
   position: absolute;
   inset: 0;
   pointer-events: none;
-  /* subtle cool-white tint + slight saturation to hint freezer glass */
   background: linear-gradient(
     180deg,
     rgba(255, 255, 255, 0.02),
     rgba(255, 255, 255, 0.03)
   );
   mix-blend-mode: overlay;
-  backdrop-filter: blur(18px) saturate(120%);
-  -webkit-backdrop-filter: blur(18px) saturate(120%);
-  opacity: 1;
 }
 
-/* subtle noise to avoid perfectly smooth blur */
+/* Subtle noise to avoid banding */
 #mesh-background::before {
   content: "";
   position: absolute;
@@ -244,43 +221,11 @@ body {
   border-radius: 50%;
   filter: blur(var(--mesh-blur));
   opacity: calc(0.75 * var(--mesh-strength));
-  mix-blend-mode: screen; /* screen helps them brighten underlying page colors gently */
+  mix-blend-mode: screen;
   transform-origin: center;
-  will-change: transform, opacity, filter;
+  will-change: transform;
 }
 
-.orb-2 {
-  width: 50vw;
-  height: 50vw;
-  max-width: 700px;
-  max-height: 700px;
-  background: var(--orb-2);
-  top: 50%;
-  right: -15%;
-  animation: float2 17s ease-in-out infinite;
-}
-
-.orb-3 {
-  width: 55vw;
-  height: 55vw;
-  max-width: 750px;
-  max-height: 750px;
-  background: var(--orb-3);
-  bottom: -25%;
-  left: 20%;
-  animation: float3 19s ease-in-out infinite;
-}
-
-.orb-4 {
-  width: 45vw;
-  height: 45vw;
-  max-width: 600px;
-  max-height: 600px;
-  background: var(--orb-4);
-  top: 30%;
-  left: 40%;
-  animation: float4 13s ease-in-out infinite;
-}
 .orb-1 {
   width: 58vw;
   height: 58vw;
@@ -327,7 +272,8 @@ body {
 }
 
 @keyframes float1 {
-  0% {
+  0%,
+  100% {
     transform: translate(0, 0) scale(1) rotate(0deg);
     opacity: 1;
   }
@@ -339,13 +285,11 @@ body {
     transform: translate(20%, 18%) scale(1) rotate(-0.8deg);
     opacity: 0.9;
   }
-  100% {
-    transform: translate(0, 0) scale(1) rotate(0deg);
-    opacity: 1;
-  }
 }
+
 @keyframes float2 {
-  0% {
+  0%,
+  100% {
     transform: translate(0, 0) scale(1) rotate(0deg);
     opacity: 1;
   }
@@ -357,13 +301,11 @@ body {
     transform: translate(-22%, 6%) scale(1.08) rotate(0.9deg);
     opacity: 0.9;
   }
-  100% {
-    transform: translate(0, 0) scale(1) rotate(0deg);
-    opacity: 1;
-  }
 }
+
 @keyframes float3 {
-  0% {
+  0%,
+  100% {
     transform: translate(0, 0) scale(1) rotate(0deg);
     opacity: 1;
   }
@@ -375,13 +317,11 @@ body {
     transform: translate(6%, -32%) scale(0.98) rotate(-1deg);
     opacity: 0.92;
   }
-  100% {
-    transform: translate(0, 0) scale(1) rotate(0deg);
-    opacity: 1;
-  }
 }
+
 @keyframes float4 {
-  0% {
+  0%,
+  100% {
     transform: translate(0, 0) scale(1) rotate(0deg);
     opacity: 1;
   }
@@ -393,23 +333,6 @@ body {
     transform: translate(-12%, -22%) scale(0.95) rotate(-1.5deg);
     opacity: 0.9;
   }
-  100% {
-    transform: translate(0, 0) scale(1) rotate(0deg);
-    opacity: 1;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .mesh-orb {
-    animation: none !important;
-  }
-  #mesh-background::before {
-    display: none;
-  }
-  #mesh-background::after {
-    backdrop-filter: blur(6px);
-    -webkit-backdrop-filter: blur(6px);
-  }
 }
 
 h1,
@@ -420,20 +343,17 @@ h3 {
   font-weight: 600;
 }
 
-/* Buttons -> Sticky Mini-Toolbar */
-
+/* Sticky Mini-Toolbar */
 .button-container {
   position: sticky;
   top: 12px;
   z-index: 1000;
   width: fit-content;
-  max-width: none;
   display: flex;
   gap: 10px;
   margin-inline: auto;
+  margin-bottom: 12px;
   align-items: center;
-
-  /* Glassmorphism background with stronger contrast */
   padding: 8px 10px;
   border-radius: 999px;
   background: color-mix(in srgb, var(--background-color) 85%, #0000);
@@ -445,7 +365,7 @@ h3 {
 }
 
 .action-button {
-  inline-size: 42px; /* larger target improves readability */
+  inline-size: 42px;
   block-size: 42px;
   padding: 0;
   margin: 0;
@@ -458,9 +378,8 @@ h3 {
   );
   color: #fff;
   text-decoration: none;
-  border: none;
   cursor: pointer;
-  border-radius: 12px; /* softer rounded square increases legibility */
+  border-radius: 12px;
   transition:
     background-color 0.3s var(--ease-out-3),
     transform 0.3s var(--ease-out-3),
@@ -469,35 +388,50 @@ h3 {
   position: relative;
   border: 1px solid color-mix(in srgb, #ffffff 25%, var(--secondary-color));
 }
+
 .action-button:hover {
   background-color: rgba(44, 62, 80, 0.98);
   transform: translateY(-2px);
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.22);
 }
 
-/* Theme toggle SVG icons (matching index theme-toggle from _body.scss) */
+.action-button .label {
+  display: none;
+}
+
+/* Theme toggle SVG icons controlled via CSS to prevent FOUC */
+#theme-toggle {
+  color: hsl(43, 96%, 56%);
+}
+
 #theme-toggle svg {
   width: 22px;
   height: 22px;
   transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
-#theme-toggle {
-  color: hsl(43, 96%, 56%);
+.theme-toggle__sun {
+  display: none;
+}
+
+.dark-mode .theme-toggle__sun {
+  display: block;
+}
+
+.dark-mode .theme-toggle__moon {
+  display: none;
 }
 
 #theme-toggle:hover svg {
   transform: rotate(30deg);
 }
 
-/* Icon sizing increased for readability */
 .action-button .fa {
   font-size: 18px;
   line-height: 1;
 }
 
-/* Show labels (previously hidden) to increase readability on wide screens */
-@media (min-width: 992px) {
+@media screen and (min-width: 992px) {
   .action-button {
     inline-size: auto;
     padding: 0 12px;
@@ -515,7 +449,7 @@ h3 {
   }
 }
 
-/* Custom tooltips for mini-toolbar using data-tooltip (set in HTML/JS) */
+/* Custom tooltips for mini-toolbar */
 .action-button[data-tooltip]::after {
   content: attr(data-tooltip);
   position: absolute;
@@ -548,7 +482,6 @@ h3 {
   transform: translateX(-50%) translateY(0);
 }
 
-/* Keyboard focus ring with stronger contrast */
 .action-button:focus-visible {
   outline: none;
   box-shadow:
@@ -556,34 +489,7 @@ h3 {
     0 6px 16px rgba(0, 0, 0, 0.2);
 }
 
-/* Hide toolbar on print */
-@media print {
-  .button-container {
-    display: none !important;
-  }
-}
-
-/* Mobile: slightly larger touch targets */
-@media (max-width: 768px) {
-  .button-container {
-    top: 6px;
-    gap: 8px;
-    padding: 6px 8px;
-  }
-  .action-button {
-    inline-size: 46px;
-    block-size: 46px;
-  }
-  .action-button .fa {
-    font-size: 20px; /* larger icons on mobile */
-  }
-  .action-button .label,
-  .action-button .svg {
-    display: none; /* keep compact on mobile */
-  }
-}
-
-/* CV format A4 */
+/* CV format A4 Container */
 .container {
   color: var(--text-color);
   background-color: var(--background-color);
@@ -603,14 +509,11 @@ h3 {
   position: relative;
   overflow: hidden;
 }
-/* Noise background for the container in dark mode */
+
 .container::before {
   content: "";
   position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
+  inset: 0;
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.4'/%3E%3C/svg%3E");
   pointer-events: none;
   opacity: 0.25;
@@ -619,6 +522,26 @@ h3 {
 
 .container:hover {
   box-shadow: var(--containerBoxShadowHover);
+}
+
+/* Glassmorphic Spotlight Cursor Glow */
+.container::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(
+    600px circle at var(--mouse-x, -500px) var(--mouse-y, -500px),
+    color-mix(in srgb, var(--primary-color) 12%, transparent),
+    transparent 40%
+  );
+  z-index: 10;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+.container:hover::after {
+  opacity: 1;
 }
 
 /* Sidebar Styles */
@@ -642,8 +565,9 @@ h3 {
   transition:
     filter 0.3s ease,
     transform 0.3s ease;
-  animation: 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  animation: scale-in-center 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
+
 @keyframes scale-in-center {
   0% {
     transform: scale(0);
@@ -694,11 +618,9 @@ h3 {
   font-size: 0.9em;
 }
 
-.contact-list li a,
-.certification-item ul li a {
-  /* color: var(--primary-color);   this style is implemented inline html for better pdf style */
-  text-decoration: none;
-  transition: color 0.3s ease;
+/* Hidden on screen by default; displayed only in the PDF downloaded version */
+#CV-online {
+  display: none;
 }
 
 .skill-bar {
@@ -712,40 +634,30 @@ h3 {
 }
 
 .skill-level {
-  background-color: var(--skill-level-bg);
   height: 100%;
   border-radius: 4px;
   width: var(--skill-level, 0);
   background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
   transition: width 1s var(--ease-out-5);
-  animation: 1.5s ease-out forwards;
 }
 
-/* Loading animation for skill bars manipulating animation name with js */
-@keyframes loadSkill {
-  from {
-    width: 0;
-  }
-}
-
-.skill-bar:hover .skill-level,
+.skills-list li:hover .skill-level,
+.skills-list li:focus-visible .skill-level,
 .loading-overlay p {
   animation: pulse 1s infinite;
 }
 
 @keyframes pulse {
-  0% {
+  0%,
+  100% {
     opacity: 1;
   }
   50% {
     opacity: 0.5;
   }
-  100% {
-    opacity: 1;
-  }
 }
 
-/* Tooltip styles */
+/* Skill Bar Tooltip styles */
 .tooltip {
   position: absolute;
   background-color: hsl(205, 36%, 35%);
@@ -755,7 +667,6 @@ h3 {
   font-size: 14px;
   pointer-events: none;
   opacity: 0;
-  will-change: opacity;
   transition: opacity 0.3s ease;
   top: -9px;
   left: var(--skill-level);
@@ -776,7 +687,8 @@ h3 {
   border-color: hsl(205, 36%, 35%) transparent transparent transparent;
 }
 
-.skill-bar:hover .tooltip {
+.skills-list li:hover .tooltip,
+.skills-list li:focus-visible .tooltip {
   opacity: 1;
 }
 
@@ -784,12 +696,12 @@ h3 {
   font-weight: bold;
   margin-left: 5px;
 }
+
 .certification-item p {
   margin: 0;
 }
 
 /* Main Content Styles */
-
 .main-content {
   padding: 10px 30px;
 }
@@ -804,14 +716,12 @@ h3 {
 }
 
 @keyframes gradient {
-  0% {
+  0%,
+  100% {
     background-position: 0% 50%;
   }
   50% {
     background-position: 100% 50%;
-  }
-  100% {
-    background-position: 0% 50%;
   }
 }
 
@@ -823,15 +733,15 @@ h3 {
 }
 
 .main-content header p {
-  font-family: "Times New Roman", Arial, sans-serif;
   color: #ddd;
+  font-family: "Times New Roman", Arial, sans-serif;
 }
 
 .main-content header hr {
   margin: 5px 0;
   border: none;
   border-top: 1px solid rgba(255, 255, 255, 0.5);
-  view-transition-name: header-separator; /*hr transition on page change */
+  view-transition-name: header-separator;
 }
 
 .main-content h2 {
@@ -842,12 +752,9 @@ h3 {
   margin: 10px 0;
 }
 
-.main-content h3,
-.main-content a,
-.main-content p a {
+.main-content h3 {
   font-size: 1em;
   color: var(--secondary-color);
-  text-decoration: none;
 }
 
 .main-content p {
@@ -876,27 +783,16 @@ section:hover {
   opacity: 1;
   transform: translateY(0);
   filter: none;
-  will-change: opacity, transform, filter;
   transition:
     opacity 600ms var(--ease-out-3),
     transform 600ms var(--ease-out-3),
     filter 600ms var(--ease-out-3);
 }
+
 .cv-reveal.is-hidden {
   opacity: 0;
   transform: translateY(16px);
   filter: blur(2px);
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .cv-reveal {
-    transition: none !important;
-  }
-  .cv-reveal.is-hidden {
-    opacity: 1;
-    transform: none;
-    filter: none;
-  }
 }
 
 .date-range {
@@ -905,27 +801,9 @@ section:hover {
   float: right;
 }
 
-.project-list {
-  color: var(--secondary-color);
-}
-
-.project-list,
 .personal-skills ul {
   list-style: disc;
   padding-left: 20px;
-}
-
-/* Micro-interactions for list items */
-:root {
-  --li-hover-bg: rgba(76, 110, 157, 0.08);
-  --li-hover-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
-  --li-focus-ring: 0 0 0 3px rgba(76, 110, 157, 0.25);
-}
-
-.dark-mode {
-  --li-hover-bg: rgba(100, 166, 211, 0.12);
-  --li-hover-shadow: 0 6px 14px rgba(0, 0, 0, 0.35);
-  --li-focus-ring: 0 0 0 3px rgba(100, 166, 211, 0.35);
 }
 
 /* Target all CV lists without affecting nested skill bars */
@@ -942,10 +820,8 @@ section:hover {
     box-shadow 220ms var(--ease-out-3),
     background-color 220ms var(--ease-out-3),
     color 220ms var(--ease-out-3);
-  will-change: transform, box-shadow, background-color;
 }
 
-/* Slight lift and gentle highlight */
 @media (hover) and (prefers-reduced-motion: no-preference) {
   .contact-list li:hover,
   .skills-list > li:hover,
@@ -958,7 +834,6 @@ section:hover {
   }
 }
 
-/* Keyboard accessibility: mirror hover on focus-visible */
 .contact-list li:focus-visible,
 .skills-list > li:focus-visible,
 .languages-list li:focus-visible,
@@ -970,7 +845,6 @@ section:hover {
   transform: translateY(-1px);
 }
 
-/* Subtle link color lift inside list items without breaking global underline */
 .contact-list li:hover a,
 .skills-list > li:hover a,
 .languages-list li:hover a,
@@ -979,43 +853,12 @@ section:hover {
   color: var(--link-hover-color);
 }
 
-/* Respect reduced motion */
-@media (prefers-reduced-motion: reduce) {
-  .contact-list li,
-  .skills-list > li,
-  .languages-list li,
-  .project-list > li,
-  .personal-skills ul > li {
-    transition:
-      background-color 150ms ease,
-      color 150ms ease,
-      box-shadow 150ms ease;
-  }
-  .contact-list li:hover,
-  .skills-list > li:hover,
-  .languages-list li:hover,
-  .project-list > li:hover,
-  .personal-skills ul > li:hover {
-    transform: none;
-    box-shadow: var(--li-hover-shadow);
-  }
-}
-
-/* Do not show interactive highlights in print */
-@media print {
-  .contact-list li,
-  .skills-list > li,
-  .languages-list li,
-  .project-list > li,
-  .personal-skills ul > li {
-    background: transparent !important;
-    box-shadow: none !important;
-    transform: none !important;
-  }
-}
-
+/* Project List & Arc Hover Interaction */
 .project-list {
   --arc: 0.5deg;
+  color: var(--secondary-color);
+  list-style: none;
+  padding-left: 8px;
   overflow: hidden;
 
   @media (hover) and (prefers-reduced-motion: no-preference) {
@@ -1060,10 +903,12 @@ section:hover {
         opacity 0.7s var(--ease-3);
     }
 
-    &:hover > li:not(:hover) {
-      --distance-from-target: abs(var(--sibling-index) - var(--target));
-      --distance-multiplier: var(--distance-from-target) * 2%; /* variable */
-      --gradual-fadeout: calc(100% - var(--distance-multiplier));
+    &:not(.filtering-active):hover > li:not(:hover) {
+      --distance-from-target: max(
+        var(--sibling-index) - var(--target),
+        var(--target) - var(--sibling-index)
+      );
+      --gradual-fadeout: calc(100% - (var(--distance-from-target) * 2%));
       opacity: var(--gradual-fadeout);
 
       --angle: calc((var(--sibling-index) - var(--target)) * var(--arc));
@@ -1072,10 +917,83 @@ section:hover {
   }
 }
 
-.project-list li a {
-  /*color: var(--primary-color) !important; implemented inline html style for better pdf style*/
-  text-decoration: none;
-  transition: color 0.3s ease;
+.project-list li:hover a::before,
+.project-list li:focus-visible a::before,
+.project-list li:focus-within a::before {
+  width: 100%;
+}
+
+/* Tech stack badges on projects */
+.project-list li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+}
+
+.skills-list > li[data-skill] {
+  cursor: pointer;
+}
+
+.skills-list > li[data-skill].active-skill {
+  background-color: var(--li-hover-bg);
+  box-shadow: var(--li-hover-shadow), var(--li-focus-ring);
+}
+
+.tech-badges {
+  display: inline-flex;
+  gap: 4px;
+  opacity: 0.65;
+  background-color: transparent;
+  transition:
+    opacity 0.3s ease,
+    background-color 0.3s ease;
+  flex-shrink: 0;
+}
+
+.project-list li:hover .tech-badges {
+  opacity: 1;
+}
+
+.tech-badge {
+  font-size: 0.68rem;
+  padding: 1px 6px;
+  border-radius: 99px;
+  background-color: var(--badge-bg);
+  color: var(--primary-color);
+  border: 1px solid var(--badge-border);
+  font-weight: 600;
+  letter-spacing: 0.3px;
+  transition:
+    background-color 0.25s ease,
+    color 0.25s ease,
+    border-color 0.25s ease,
+    transform 0.25s ease;
+}
+
+/* Highlight state when hovering/clicking a skill in the sidebar */
+.project-list.filtering-active > li {
+  opacity: 0.25;
+  filter: blur(0.5px);
+  transition:
+    opacity 0.3s ease,
+    transform 0.3s ease,
+    filter 0.3s ease;
+  transform: none;
+}
+
+.project-list.filtering-active > li.skill-match {
+  opacity: 1;
+  filter: none;
+  transform: translateX(6px);
+  background-color: var(--li-hover-bg);
+}
+
+.project-list.filtering-active > li.skill-match .tech-badge.badge-match {
+  background: var(--accent-color);
+  color: #fff;
+  border-color: var(--accent-color);
+  transform: scale(1.08);
 }
 
 hr {
@@ -1084,47 +1002,10 @@ hr {
   margin: 20px 0;
 }
 
-/* Print Styles */
-@media print {
-  body {
-    padding: 0;
-    background-color: white;
-  }
-  /* Ensure reveal-on-scroll content is fully visible in print */
-  .cv-reveal.is-hidden {
-    opacity: 1 !important;
-    transform: none !important;
-    filter: none !important;
-  }
-  .container {
-    box-shadow: none;
-    grid-template-columns: 30% 70%;
-    max-width: none;
-    margin: 0;
-  }
-  .sidebar {
-    background-color: #f7f7f7;
-    padding: 10px;
-  }
-  .main-content {
-    padding: 10px 15px;
-  }
-  .action-button {
-    display: none;
-  }
-  @page {
-    size: A4;
-    margin: 10mm;
-  }
-}
-
 /* Loading Overlay Styles */
 .loading-overlay {
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
+  inset: 0;
   background: rgba(255, 255, 255, 0.9);
   display: none;
   place-items: center;
@@ -1164,124 +1045,7 @@ hr {
   }
 }
 
-/* Mobile */
-
-@media (max-width: 768px) {
-  body {
-    margin: 0;
-    padding: 0;
-  }
-
-  .action-button {
-    width: 115px;
-    padding: 10px 0px;
-    margin: 10px 0;
-  }
-
-  .container {
-    grid-template-columns: 1fr;
-  }
-  .sidebar,
-  .main-content {
-    padding: 0px;
-  }
-
-  .main-content h1 {
-    font-size: 1.5em;
-  }
-  .sidebar-section:last-child {
-    padding-bottom: 10px;
-    padding-bottom: 10px;
-  }
-}
-
-/* View-transition */
-
-/* View Transitions - Core Setup */
-@media (prefers-reduced-motion: no-preference) {
-  @view-transition {
-    navigation: auto;
-  }
-}
-
-/* Global transition settings */
-
-::view-transition-group(*) {
-  animation-duration: 0.8s;
-  animation-timing-function: cubic-bezier(0.25, 0.46, 0.45, 0.94);
-}
-
-/* Smooth fade for page background */
-::view-transition-old(root),
-::view-transition-new(root) {
-  animation-duration: 0.6s;
-}
-
-/* Custom easing for smoother transitions */
-::view-transition-old(root) {
-  animation-name: fade-out;
-}
-::view-transition-new(root) {
-  animation-name: fade-in;
-}
-@keyframes fade-out {
-  from {
-    opacity: 1;
-    filter: blur(0);
-  }
-  to {
-    opacity: 0;
-    filter: blur(2px);
-  }
-}
-@keyframes fade-in {
-  from {
-    opacity: 0;
-    filter: blur(2px);
-  }
-  to {
-    opacity: 1;
-    filter: blur(0);
-  }
-}
-
-/* Profile image transition */
-html:not(.spa-transition) #imageProfile {
-  view-transition-name: imageProfile;
-}
-
-/* Main title transition */
-html:not(.spa-transition) .main-content h1 {
-  view-transition-name: title;
-}
-
-/* CV-specific transition timing */
-::view-transition-group(imageProfile) {
-  animation-duration: 0.7s;
-  animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-}
-::view-transition-group(title) {
-  animation-duration: 1s;
-  animation-timing-function: cubic-bezier(0.25, 0.46, 0.45, 0.94);
-}
-
-/* Additional smooth transitions for CV layout */
-html:not(.spa-transition) .sidebar {
-  view-transition-name: sidebar;
-}
-html:not(.spa-transition) .main-content {
-  view-transition-name: main-content;
-}
-::view-transition-group(sidebar) {
-  animation-duration: 0.9s;
-  animation-timing-function: cubic-bezier(0.25, 0.46, 0.45, 0.94);
-}
-::view-transition-group(main-content) {
-  animation-duration: 0.8s;
-  animation-timing-function: cubic-bezier(0.25, 0.46, 0.45, 0.94);
-}
-
-/* copy email button styles */
+/* Toast & Copy Email Button Styles */
 .toast-container {
   position: fixed;
   top: 80px;
@@ -1306,11 +1070,17 @@ html:not(.spa-transition) .main-content {
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   transform: translateX(400px);
   opacity: 0;
-  transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  transition:
+    transform 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55),
+    opacity 0.3s ease;
   pointer-events: auto;
   max-width: 300px;
   position: relative;
   overflow: hidden;
+}
+
+.dark-mode .toast {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 }
 
 .toast::before {
@@ -1368,7 +1138,6 @@ html:not(.spa-transition) .main-content {
   letter-spacing: 0.3px;
 }
 
-/* Copy Button Styles */
 .email-item {
   display: flex;
   align-items: center;
@@ -1391,7 +1160,9 @@ html:not(.spa-transition) .main-content {
   border-radius: 6px;
   padding: 6px 10px;
   cursor: pointer;
-  transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  transition:
+    transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+    box-shadow 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   font-size: 14px;
   display: inline-flex;
   align-items: center;
@@ -1401,6 +1172,10 @@ html:not(.spa-transition) .main-content {
   position: relative;
   overflow: hidden;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.dark-mode .copy-btn {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
 }
 
 .copy-btn::before {
@@ -1423,6 +1198,10 @@ html:not(.spa-transition) .main-content {
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
 
+.dark-mode .copy-btn:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+}
+
 .copy-btn:hover::before {
   width: 300%;
   height: 300%;
@@ -1433,20 +1212,23 @@ html:not(.spa-transition) .main-content {
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
+.copy-btn:focus-visible {
+  outline: 3px solid var(--accent-color);
+  outline-offset: 2px;
+}
+
 .copy-btn.copied {
   background: linear-gradient(135deg, #00b09b, #96c93d);
   animation: copy-success 0.6s ease;
 }
 
 @keyframes copy-success {
-  0% {
+  0%,
+  100% {
     transform: scale(1) rotate(0deg);
   }
   50% {
     transform: scale(1.1) rotate(5deg);
-  }
-  100% {
-    transform: scale(1) rotate(0deg);
   }
 }
 
@@ -1465,100 +1247,131 @@ html:not(.spa-transition) .main-content {
   }
 }
 
-/* Dark mode adjustments */
-.dark-mode .toast {
-  background: linear-gradient(
-    135deg,
-    var(--primary-color),
-    var(--secondary-color)
-  );
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+/* QR Code Badge (Hidden on screen; shown in print/PDF) */
+.qr-section {
+  display: none;
+  margin-top: 2rem;
 }
 
-.dark-mode .copy-btn {
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+.qr-card {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px;
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--primary-color) 8%, transparent);
+  border: 1px dashed color-mix(in srgb, var(--primary-color) 35%, transparent);
+  margin-top: 12px;
+  text-decoration: none;
+  color: inherit;
 }
 
-.dark-mode .copy-btn:hover {
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+.qr-card img {
+  border-radius: 6px;
+  padding: 4px;
+  background: #fff;
+  flex-shrink: 0;
 }
 
-/* Mobile responsiveness */
-@media (max-width: 768px) {
-  .toast-container {
-    top: 60px;
-    right: 10px;
-    left: 10px;
-  }
-
-  .toast {
-    max-width: none;
-    width: auto;
-  }
-
-  .email-item {
-    flex-wrap: wrap;
-  }
-
-  .copy-btn {
-    margin-top: 5px;
-  }
+.qr-text {
+  display: flex;
+  flex-direction: column;
+  font-size: 0.75rem;
+  line-height: 1.3;
 }
 
-/* Print styles - hide copy button */
-@media print {
-  .copy-btn,
-  .toast-container {
-    display: none !important;
-  }
+.qr-text strong {
+  color: var(--primary-color);
+  font-size: 0.85rem;
 }
 
-/* Accessibility improvements */
-.copy-btn:focus-visible {
-  outline: 3px solid var(--accent-color);
-  outline-offset: 2px;
+.qr-text span {
+  color: var(--text-color);
+  opacity: 0.8;
 }
 
-/* Reduced motion */
-@media (prefers-reduced-motion: reduce) {
-  .toast,
-  .copy-btn,
-  .copy-btn::before {
-    transition: none;
-  }
-
-  .toast::before,
-  .toast-icon,
-  .copy-btn.copied,
-  .copy-btn .fa-check {
-    animation: none;
+/* ============================================================
+   View Transitions (MPA Navigation + SPA Circular Theme Reveal)
+   ============================================================ */
+@media (prefers-reduced-motion: no-preference) {
+  @view-transition {
+    navigation: auto;
   }
 }
 
-/* ─── View Transition API – circular theme-change reveal ──────────────────── */
+::view-transition-group(*) {
+  animation-duration: 0.8s;
+  animation-timing-function: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
 
-/*
-  By default View Transitions cross-fade both snapshots.
-  We override that with a clip-path circle that expands from the
-  toggle-button centre (coordinates supplied as CSS custom props by JS).
-*/
+/* Multi-Page Navigation Transitions */
+html:not(.spa-transition)::view-transition-old(root) {
+  animation: fade-out 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+html:not(.spa-transition)::view-transition-new(root) {
+  animation: fade-in 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
 
-/* Kill the default cross-fade on the root */
-::view-transition-old(root),
-::view-transition-new(root) {
-  animation: none;
+@keyframes fade-out {
+  from {
+    opacity: 1;
+    filter: blur(0);
+  }
+  to {
+    opacity: 0;
+    filter: blur(2px);
+  }
+}
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    filter: blur(2px);
+  }
+  to {
+    opacity: 1;
+    filter: blur(0);
+  }
+}
+
+html:not(.spa-transition) #imageProfile {
+  view-transition-name: imageProfile;
+}
+html:not(.spa-transition) .main-content h1 {
+  view-transition-name: title;
+}
+html:not(.spa-transition) .sidebar {
+  view-transition-name: sidebar;
+}
+html:not(.spa-transition) .main-content {
+  view-transition-name: main-content;
+}
+
+::view-transition-group(imageProfile) {
+  animation-duration: 0.7s;
+  animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+::view-transition-group(title) {
+  animation-duration: 1s;
+}
+::view-transition-group(sidebar) {
+  animation-duration: 0.9s;
+}
+::view-transition-group(main-content) {
+  animation-duration: 0.8s;
+}
+
+/* SPA Theme Toggle Circular Reveal */
+html.spa-transition::view-transition-old(root),
+html.spa-transition::view-transition-new(root) {
   mix-blend-mode: normal;
 }
 
-/* Old snapshot: stays put, fades out gently */
-::view-transition-old(root) {
+html.spa-transition::view-transition-old(root) {
   animation: vt-fade-out 0.45s var(--ease-out-3) forwards;
 }
 
-/* New snapshot: expands as a circle from the button position */
-::view-transition-new(root) {
+html.spa-transition::view-transition-new(root) {
   animation: vt-circle-in 0.5s var(--ease-out-3) forwards;
-  /* clip-path uses inline CSS vars set by JS */
   clip-path: circle(0px at var(--vt-cx, 50%) var(--vt-cy, 50%));
 }
 
@@ -1584,9 +1397,8 @@ html:not(.spa-transition) .main-content {
   }
 }
 
-/* Spin the toggle-button icon during the transition for extra flair */
-::view-transition-new(root) #theme-toggle svg,
-::view-transition-old(root) #theme-toggle svg {
+html.spa-transition::view-transition-new(root) #theme-toggle svg,
+html.spa-transition::view-transition-old(root) #theme-toggle svg {
   animation: vt-spin 0.5s var(--ease-out-3) both;
 }
 
@@ -1599,11 +1411,267 @@ html:not(.spa-transition) .main-content {
   }
 }
 
-/* Respect reduced-motion: skip the clip animation entirely */
+/* ============================================================
+   Responsive Mobile Styles (Consolidated)
+   ============================================================ */
+@media screen and (max-width: 768px) {
+  body {
+    margin: 0;
+    padding: 8px;
+  }
+
+  .button-container {
+    top: 6px;
+    gap: 8px;
+    padding: 6px 8px;
+  }
+
+  .action-button {
+    inline-size: 46px;
+    block-size: 46px;
+  }
+
+  .action-button .fa {
+    font-size: 20px;
+  }
+
+  .action-button .label {
+    display: none;
+  }
+
+  .container {
+    grid-template-columns: 1fr;
+    padding: 0;
+  }
+
+  .sidebar {
+    border-right: none;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    padding: 16px;
+  }
+
+  .main-content {
+    padding: 16px;
+  }
+
+  .main-content header h1 {
+    font-size: 1.5em;
+  }
+
+  .sidebar-section:last-child {
+    padding-bottom: 10px;
+  }
+
+  .toast-container {
+    top: 60px;
+    right: 10px;
+    left: 10px;
+  }
+
+  .toast {
+    max-width: none;
+    width: auto;
+  }
+
+  .email-item {
+    flex-wrap: wrap;
+  }
+}
+
+/* ============================================================
+   Reduced Motion Preferences (Consolidated)
+   ============================================================ */
 @media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .mesh-orb {
+    animation: none !important;
+  }
+
+  #mesh-background::before {
+    display: none;
+  }
+
+  .cv-reveal,
+  .cv-reveal.is-hidden {
+    transition: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+    filter: none !important;
+  }
+
   ::view-transition-old(root),
   ::view-transition-new(root) {
     animation: none !important;
     clip-path: none !important;
+  }
+}
+
+/* ============================================================
+   Print Styles (Consolidated - Matches 2-Column A4 Layout)
+   ============================================================ */
+@media print {
+  @page {
+    size: A4 portrait;
+    margin: 8mm;
+  }
+
+  * {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  :root,
+  .dark-mode {
+    --primary-color: #2c6e9b !important;
+    --secondary-color: #4a90c0 !important;
+    --accent-color: #e67373 !important;
+    --background-color: #ffffff !important;
+    --text-color: #2d3436 !important;
+    --sidebar-bg: #f7f9fc !important;
+    --skill-bar-bg: #e0e7ec !important;
+    --link-color: #2c6e9b !important;
+    --date-color: #6c757d !important;
+    --badge-bg: rgba(44, 110, 155, 0.12) !important;
+    --badge-border: rgba(44, 110, 155, 0.3) !important;
+  }
+
+  body {
+    margin: 0 !important;
+    padding: 0 !important;
+    background: #ffffff !important;
+    display: block !important;
+    min-height: auto !important;
+    font-size: 12.5px !important;
+    line-height: 1.45 !important;
+  }
+
+  #mesh-background,
+  .button-container,
+  .action-button,
+  .copy-btn,
+  .toast-container,
+  .loading-overlay,
+  .tooltip,
+  .container::before,
+  .container::after {
+    display: none !important;
+  }
+
+  a::after {
+    content: none !important;
+  }
+
+  .container {
+    display: grid !important;
+    grid-template-columns: 30% 70% !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    box-shadow: none !important;
+    border: none !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    background-color: #ffffff !important;
+  }
+
+  .sidebar {
+    background-color: var(--sidebar-bg) !important;
+    padding: 15px !important;
+    border-right: 1px solid rgba(0, 0, 0, 0.1) !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+  }
+
+  .profile-image {
+    width: 100% !important;
+    max-width: 180px !important;
+    display: block !important;
+    margin: 0 auto 12px auto !important;
+    filter: grayscale(100%) !important;
+  }
+
+  .main-content {
+    padding: 10px 20px !important;
+  }
+
+  .main-content header {
+    background: radial-gradient(
+      circle farthest-corner at top left,
+      rgba(44, 62, 80, 0.95) 0%,
+      #4a7b9d 85%
+    ) !important;
+    padding: 12px 15px !important;
+    border-radius: 5px !important;
+    animation: none !important;
+  }
+
+  .main-content header h1 {
+    font-size: 1.8em !important;
+    color: #ffffff !important;
+  }
+
+  .main-content header p {
+    color: #e0e0e0 !important;
+    margin: 4px 0 !important;
+  }
+
+  .contact-list li,
+  .skills-list > li,
+  .languages-list li,
+  .project-list > li,
+  .personal-skills ul > li {
+    background: transparent !important;
+    box-shadow: none !important;
+    transform: none !important;
+  }
+
+  .skill-bar {
+    background-color: var(--skill-bar-bg) !important;
+  }
+
+  .skill-level {
+    background: linear-gradient(
+      90deg,
+      var(--primary-color),
+      var(--accent-color)
+    ) !important;
+  }
+
+  .tech-badges {
+    opacity: 1 !important;
+    background-color: transparent !important;
+  }
+
+  .tech-badge {
+    background-color: var(--badge-bg) !important;
+    color: var(--primary-color) !important;
+    border: 1px solid var(--badge-border) !important;
+  }
+
+  .cv-reveal,
+  .cv-reveal.is-hidden {
+    opacity: 1 !important;
+    transform: none !important;
+    filter: none !important;
+  }
+
+  section,
+  .work-experience-item,
+  .education-item {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  .qr-section {
+    display: block !important;
+    margin-top: 10px !important;
   }
 }
