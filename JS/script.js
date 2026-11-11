@@ -593,23 +593,219 @@ if (modal) {
   });
 }
 
-// ============ Wire Project Interactions ============
-// Desktop cube faces
-(function wireCubeFaces() {
-  const ids = ["side1", "side2", "side3", "side4", "side5"];
-  ids.forEach((id) => {
-    const element = document.getElementById(id);
-    if (element) {
-      element.addEventListener("click", (e) => {
-        e.preventDefault();
-        openProjectModal(id);
-      });
-    }
-  });
-})();
+// ============ Interactive 3D Cube Stage, Dock & HUD ============
 
-// Swiper slides
-(function wireSwiperSlides() {
+(function initProjectsShowcase() {
+  const projectOrder = ["side1", "side2", "side3", "side4", "side5"];
+
+  // Exact rotation angles that bring each face straight toward the camera
+  const faceAngles = {
+    side1: { rx: -90, ry: 0 }, // Top face tilted forward
+    side2: { rx: -12, ry: 90 }, // Left face rotated front
+    side3: { rx: -12, ry: 0 }, // Front face
+    side4: { rx: -12, ry: -90 }, // Right face rotated front
+    side5: { rx: -12, ry: -180 }, // Back face rotated front
+  };
+
+  const cubeWrap = document.getElementById("wrapD3Cube");
+  const cube = document.getElementById("D3Cube");
+  const autoToggleBtn = document.getElementById("cubeAutoToggle");
+  const dockPills = document.querySelectorAll(".dock-pill");
+
+  // HUD elements
+  const hudIndex = document.getElementById("hudIndex");
+  const hudTitle = document.getElementById("hudTitle");
+  const hudDesc = document.getElementById("hudDesc");
+  const hudTech = document.getElementById("hudTech");
+  const hudPreviewBtn = document.getElementById("hudPreviewBtn");
+  const hudLiveLink = document.getElementById("hudLiveLink");
+  const hudRepoLink = document.getElementById("hudRepoLink");
+  const hudPrev = document.getElementById("hudPrev");
+  const hudNext = document.getElementById("hudNext");
+
+  let activeIndex = 0;
+  let rotX = -22;
+  let rotY = -38;
+  let isAutoPlaying = true;
+  let autoTimer = null;
+  let wasDragged = false;
+
+  function applyCubeTransform() {
+    if (!cube) return;
+    cube.style.transform = `rotateX(${rotX}deg) rotateY(${rotY}deg) rotateZ(0deg)`;
+  }
+
+  function updateHUD(projectId) {
+    const data = projectsData[projectId];
+    if (!data) return;
+
+    const idx = projectOrder.indexOf(projectId);
+    if (idx !== -1) activeIndex = idx;
+
+    if (hudIndex) {
+      hudIndex.textContent = `0${activeIndex + 1} / 0${projectOrder.length}`;
+    }
+    if (hudTitle) hudTitle.textContent = data.title;
+    if (hudDesc) hudDesc.textContent = data.desc;
+
+    if (hudTech) {
+      hudTech.innerHTML = "";
+      (data.tech || []).forEach((t) => hudTech.appendChild(createTechChip(t)));
+    }
+
+    if (hudLiveLink) {
+      hudLiveLink.href = data.live || "#";
+      hudLiveLink.style.display = data.live ? "" : "none";
+    }
+    if (hudRepoLink) {
+      hudRepoLink.href = data.repo || "#";
+      hudRepoLink.style.display = data.repo ? "" : "none";
+    }
+
+    // Highlight matching dock pill
+    dockPills.forEach((pill) => {
+      const isMatch = pill.dataset.projectId === projectId;
+      pill.classList.toggle("active", isMatch);
+      pill.setAttribute("aria-selected", String(isMatch));
+    });
+  }
+
+  function focusProject(projectId, { syncSwiper = true } = {}) {
+    const target = faceAngles[projectId];
+    if (target) {
+      rotX = target.rx;
+      rotY = target.ry;
+      applyCubeTransform();
+    }
+    updateHUD(projectId);
+
+    // If on mobile and Swiper is initialized, slide it to the matching face
+    if (syncSwiper && window.projectsSwiper) {
+      const mapItem = swiperMap.find((m) => m.id === projectId);
+      if (
+        mapItem &&
+        window.projectsSwiper.activeIndex !== mapItem.selectorIndex
+      ) {
+        window.projectsSwiper.slideTo(mapItem.selectorIndex);
+      }
+    }
+  }
+
+  function stepProject(delta) {
+    const nextIdx =
+      (activeIndex + delta + projectOrder.length) % projectOrder.length;
+    focusProject(projectOrder[nextIdx]);
+  }
+
+  // --- Auto-Tour Controller ---
+  function setAutoPlay(playing) {
+    isAutoPlaying = playing;
+    clearInterval(autoTimer);
+    if (autoToggleBtn) {
+      autoToggleBtn.classList.toggle("is-playing", playing);
+      const icon = autoToggleBtn.querySelector("i");
+      if (icon) icon.className = playing ? "fa fa-pause" : "fa fa-play";
+    }
+    if (playing) {
+      autoTimer = setInterval(() => {
+        // Pause auto-tour if modal is open
+        if (modal?.classList.contains("is-open")) return;
+        stepProject(1);
+      }, 3800);
+    }
+  }
+
+  autoToggleBtn?.addEventListener("click", () => {
+    setAutoPlay(!isAutoPlaying);
+  });
+
+  // Pause auto-tour while hovering over the cube, resume on leave
+  cubeWrap?.addEventListener("mouseenter", () => clearInterval(autoTimer));
+  cubeWrap?.addEventListener("mouseleave", () => {
+    if (isAutoPlaying) setAutoPlay(true);
+  });
+
+  // --- Pointer Drag-to-Rotate on Desktop Cube ---
+  if (cubeWrap && cube) {
+    let isPointerDown = false;
+    let startX = 0;
+    let startY = 0;
+    let startRotX = 0;
+    let startRotY = 0;
+
+    cubeWrap.addEventListener("pointerdown", (e) => {
+      isPointerDown = true;
+      wasDragged = false;
+      startX = e.clientX;
+      startY = e.clientY;
+      startRotX = rotX;
+      startRotY = rotY;
+      cube.classList.add("is-dragging");
+    });
+
+    window.addEventListener("pointermove", (e) => {
+      if (!isPointerDown) return;
+      const dx = e.clientX - startX;
+      const dy = e.clientY - startY;
+
+      if (Math.hypot(dx, dy) > 6) {
+        wasDragged = true;
+        if (isAutoPlaying) setAutoPlay(false);
+      }
+
+      if (wasDragged) {
+        rotY = startRotY + dx * 0.55;
+        rotX = Math.max(-95, Math.min(95, startRotX - dy * 0.55));
+        applyCubeTransform();
+      }
+    });
+
+    window.addEventListener("pointerup", () => {
+      if (!isPointerDown) return;
+      isPointerDown = false;
+      cube.classList.remove("is-dragging");
+    });
+  }
+
+  // --- Wire Desktop Cube Faces (Click opens modal unless user was dragging) ---
+  projectOrder.forEach((id) => {
+    const face = document.getElementById(id);
+    if (!face) return;
+
+    face.addEventListener("click", (e) => {
+      e.preventDefault();
+      if (wasDragged) {
+        wasDragged = false;
+        return;
+      }
+      focusProject(id);
+      openProjectModal(id);
+    });
+  });
+
+  // --- Wire Dock Pills & HUD Buttons ---
+  dockPills.forEach((pill) => {
+    pill.addEventListener("click", () => {
+      setAutoPlay(false);
+      focusProject(pill.dataset.projectId);
+    });
+  });
+
+  hudPrev?.addEventListener("click", () => {
+    setAutoPlay(false);
+    stepProject(-1);
+  });
+
+  hudNext?.addEventListener("click", () => {
+    setAutoPlay(false);
+    stepProject(1);
+  });
+
+  hudPreviewBtn?.addEventListener("click", () => {
+    openProjectModal(projectOrder[activeIndex]);
+  });
+
+  // --- Wire Mobile Swiper Slides & Sync with HUD ---
   const slides = document.querySelectorAll(".swiper-container .swiper-slide");
   slides.forEach((slide, idx) => {
     const anchor = slide.querySelector("a");
@@ -618,11 +814,23 @@ if (modal) {
         e.preventDefault();
         const map = swiperMap.find((m) => m.selectorIndex === idx);
         if (map?.id) {
+          updateHUD(map.id);
           openProjectModal(map.id);
         }
       });
     }
   });
+
+  window.addEventListener("project-swiper-change", (e) => {
+    const map = swiperMap.find((m) => m.selectorIndex === e.detail?.index);
+    if (map?.id) {
+      focusProject(map.id, { syncSwiper: false });
+    }
+  });
+
+  // Initialize initial state
+  focusProject("side1", { syncSwiper: false });
+  setAutoPlay(true);
 })();
 
 // ============ Footer Year ============

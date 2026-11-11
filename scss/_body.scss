@@ -27,6 +27,33 @@
   border: 3px solid var(--scrollbar-border);
 }
 
+*[data-title]::after {
+  display: block;
+  opacity: 0;
+  pointer-events: none;
+  position: absolute;
+  background: var(--bg-surface);
+  color: var(--text-secondary);
+  content: attr(data-title);
+  font-size: clamp(11px, 1.1vw, 15px);
+  font-family: $font1;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  padding: 3px 10px;
+  // bottom: calc(100% + 8px);
+  left: 50%;
+  white-space: nowrap;
+  transform: translate(-50%, 6px) scale3d(0.2, 0.2, 1);
+  transition: all 0.35s $ease-soft;
+  line-height: initial;
+  border-radius: 100px;
+  border: 1px solid var(--glass-border);
+  box-shadow: 0 4px 12px var(--glass-shadow);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  z-index: 20;
+}
+
 button,
 input,
 textarea,
@@ -423,36 +450,10 @@ h3 {
       height: 100%;
       position: relative;
 
-      // Tooltip matching _clock.scss style
+      // Social media links Tooltip, matching _clock.scss style
       &::after {
-        display: block;
-        opacity: 0;
-        pointer-events: none;
-        position: absolute;
-        background: var(--bg-surface);
-        color: var(--text-secondary);
-        content: attr(data-title);
-        font-size: 11px;
-        font-family: $font1;
-        font-weight: 600;
-        padding: 3px 10px;
+        // ---Other Tooltip properties Global Reset *[data-title]::after --//
         top: -10px;
-        left: 50%;
-        white-space: nowrap;
-        transform: skew(-17deg) rotate(28deg) translate(-50%, -50%)
-          scale3d(0.2, 0.2, 1);
-        transition: all 0.35s $ease-soft;
-        line-height: initial;
-        border-radius: 100px;
-        border: 1px solid var(--glass-border);
-        box-shadow: 0 4px 12px var(--glass-shadow);
-        backdrop-filter: blur(8px);
-        -webkit-backdrop-filter: blur(8px);
-
-        @media (max-width: 768px) {
-          transform: skew(14deg) rotate(45deg) translate(-50%, -50%)
-            scale3d(0.2, 0.2, 1);
-        }
       }
     }
 
@@ -764,16 +765,61 @@ h3 {
 // ======================
 
 #about {
-  p {
+  p.bento-card {
+    position: relative;
+    z-index: 1;
+    margin: 1.2rem;
     line-height: 1.5;
     @include glass-panel;
     border-radius: $radius-sm;
-    padding: 8px 16px;
+    padding: 16px;
     transition:
+      transform 0.35s $ease-soft,
       background $dur-slow ease,
       border-color $dur-slow ease,
       box-shadow $dur-slow ease;
 
+    // Subtle glowing accent bar on the left side of each card
+    &::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 16px;
+      bottom: 16px;
+      width: 3px;
+      border-radius: 0 4px 4px 0;
+      background: linear-gradient(180deg, #6366f1, #8b5cf6, #ec4899);
+      opacity: 0.3;
+      transition:
+        opacity 0.35s ease,
+        top 0.35s ease,
+        bottom 0.35s ease;
+    }
+
+    &:hover {
+      z-index: 10; // Ensures certificate popup overlaps neighboring cards
+      transform: translateY(-3px);
+
+      &::before {
+        opacity: 1;
+        top: 8px;
+        bottom: 8px;
+      }
+    }
+
+    // Mini Header Label inside each card
+    .card-label {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #8b5cf6;
+      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    // Scroll-Reveal Animation
     span {
       color: var(--about-text-color);
       background-clip: text;
@@ -788,13 +834,38 @@ h3 {
       animation-timeline: view(y);
       animation-range: cover 15vh cover 24vh;
     }
+
+    @keyframes scroll-reveal {
+      to {
+        background-size: 100% 100%;
+      }
+    }
+
+    // Highlighted Tech Stack Pills
+    .tech-pill {
+      background: rgba(139, 92, 246, 0.12);
+      color: var(--text-primary);
+      border: 1px solid rgba(139, 92, 246, 0.3);
+      padding: 2px 8px;
+      border-radius: 6px;
+      font-size: 0.9em;
+      font-weight: 600;
+      transition: all 0.25s ease;
+
+      &:hover {
+        background: rgba(139, 92, 246, 0.25);
+        border-color: #8b5cf6;
+      }
+    }
   }
 
+  // Animated Link + Certificate Hover Popup
   .animated-link {
     color: var(--social-link-color);
     text-decoration: none;
     position: relative;
     font-weight: 600;
+    display: inline-block;
     transition: color 0.5s ease;
 
     &::before {
@@ -809,18 +880,46 @@ h3 {
       border-radius: 2px;
     }
 
+    &::after {
+      content: "";
+      position: absolute;
+      bottom: calc(100% + 14px);
+      left: 50%;
+      width: 280px;
+      aspect-ratio: 722 / 491;
+      background-image: url("../img/certificate.webp");
+      background-size: cover;
+      background-position: center;
+      border-radius: $radius-sm;
+      border: 2px solid rgba(139, 92, 246, 0.5);
+      box-shadow:
+        0 20px 35px -10px rgba(0, 0, 0, 0.5),
+        0 0 20px rgba(139, 92, 246, 0.25);
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+      transform: translateX(-50%) translateY(12px) scale(0.85) rotate(-2deg);
+      transition:
+        opacity 0.35s $ease-soft,
+        transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1),
+        visibility 0.35s;
+      z-index: 50;
+    }
+
     &:hover::before {
       width: 100%;
     }
+
     &:hover {
       color: #8b5cf6;
     }
-  }
-}
 
-@keyframes scroll-reveal {
-  to {
-    background-size: 100% 100%;
+    &:hover::after,
+    &:focus-visible::after {
+      opacity: 1;
+      visibility: visible;
+      transform: translateX(-50%) translateY(0) scale(1) rotate(0deg);
+    }
   }
 }
 
@@ -829,24 +928,199 @@ h3 {
 // ======================
 
 #projects {
+  --cube-size: clamp(200px, 21vw, 280px);
+  --cube-half: calc(var(--cube-size) / 2);
   position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 1.25rem;
 
-  // "Click picture" hint – desktop only
-  > p {
-    position: relative;
-    text-align: center;
-    margin-top: 60px;
+  .projects-header {
+    @include flex-layout(
+      row,
+      $justify-content: space-between,
+      $align-items: center
+    );
+    flex-wrap: wrap;
+    gap: 12px;
+
+    h3 {
+      margin: 0;
+    }
 
     @media (max-width: 767px) {
-      display: none;
+      .projects-controls {
+        display: none;
+      }
+    }
+  }
+
+  .cube-auto-btn {
+    @include glass-panel(10px);
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 14px;
+    border-radius: 999px;
+    color: var(--text-primary);
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition:
+      background $dur-fast ease,
+      border-color $dur-fast ease,
+      transform $dur-fast ease;
+
+    i {
+      color: var(--accent);
+      font-size: 0.75rem;
+    }
+
+    &.is-playing {
+      border-color: rgba($blurple, 0.55);
+    }
+
+    &:hover {
+      transform: translateY(-1px);
+      border-color: var(--accent);
+    }
+  }
+
+  // Cube Auto Button Tooltip
+
+  .cube-auto-btn[data-title]::after {
+    // ---Other Tooltip properties Global Reset *[data-title]::after --//
+    bottom: calc(100% + 8px);
+  }
+
+  .cube-auto-btn:hover[data-title]::after,
+  .cube-auto-btn:focus-visible[data-title]::after {
+    opacity: 1;
+    transform: translate(-50%, 0) scale3d(1, 1, 1);
+  }
+
+  // Quick-Snap Project Dock
+  .projects-dock {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 6px;
+    border-radius: $radius-lg;
+    @include glass-panel(12px);
+
+    @media (max-width: 600px) {
+      flex-wrap: nowrap;
+      overflow-x: auto;
+      scrollbar-width: none;
+      &::-webkit-scrollbar {
+        display: none;
+      }
+    }
+
+    .dock-pill {
+      flex: 1 1 auto;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 8px 12px;
+      border-radius: $radius-md;
+      border: 1px solid transparent;
+      background: transparent;
+      color: var(--text-secondary);
+      font-size: clamp(0.78rem, 1.1vw, 0.92rem);
+      font-weight: 600;
+      white-space: nowrap;
+      cursor: pointer;
+      transition:
+        background $dur-fast ease,
+        color $dur-fast ease,
+        border-color $dur-fast ease,
+        transform $dur-fast ease;
+
+      &__num {
+        font-size: 0.72rem;
+        padding: 2px 6px;
+        border-radius: 999px;
+        background: rgba($blurple, 0.14);
+        color: var(--accent);
+      }
+
+      &:hover {
+        color: var(--text-primary);
+        background: rgba($blurple, 0.1);
+      }
+
+      &.active {
+        color: $white;
+        background: linear-gradient(
+          135deg,
+          rgba($blurple, 0.85),
+          rgba($purple, 0.85)
+        );
+        border-color: rgba($white, 0.2);
+        box-shadow: 0 4px 14px rgba($blurple, 0.35);
+
+        .dock-pill__num {
+          background: rgba($white, 0.2);
+          color: $white;
+        }
+      }
+    }
+  }
+
+  // 2-Column Stage
+  .projects-stage {
+    display: grid;
+    grid-template-columns: 1.05fr 0.95fr;
+    align-items: center;
+    gap: clamp(1.5rem, 3vw, 2.5rem);
+    margin-top: 0.5rem;
+
+    @media (max-width: 900px) {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .projects-arena {
+    @include flex-layout(
+      column,
+      $justify-content: center,
+      $align-items: center
+    );
+    position: relative;
+    min-height: calc(var(--cube-size) + 110px);
+    user-select: none;
+
+    .arena-hint {
+      margin: 2rem 0 0;
+      padding: 5px;
+      font-size: clamp(0.78rem, 1.1vw, 0.92rem);
+      color: var(--text-secondary);
+      text-align: center;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background-color: var(--glass-bg);
+      border-radius: $radius-sm;
     }
   }
 
   // Desktop 3-D cube wrapper
   #wrapD3Cube {
-    width: 35vw;
-    height: 35vw;
-    margin: 40px auto 0;
+    width: var(--cube-size);
+    height: var(--cube-size);
+    margin: 24px auto 16px;
+    perspective: 1100px;
+    position: relative;
+    cursor: grab;
+    touch-action: none;
+
+    &:active {
+      cursor: grabbing;
+    }
 
     @media (max-width: 767px) {
       display: none;
@@ -854,53 +1128,49 @@ h3 {
   }
 
   #D3Cube {
-    width: 30vw;
-    height: 30vw;
-    top: 40px;
+    width: 100%;
+    height: 100%;
     position: relative;
     transform-style: preserve-3d;
     will-change: transform;
     transform: rotateX(-22deg) rotateY(-38deg) rotateZ(0deg);
-    animation: cubeRotation 8s infinite;
-    transition: all 1500ms ease-in-out;
+    transition: transform 850ms cubic-bezier(0.22, 1, 0.36, 1);
 
-    &:hover {
-      animation-play-state: paused;
+    &.is-dragging {
+      transition: none !important;
     }
 
     a {
       position: absolute;
-      transition: transform 1500ms ease-in-out;
-      width: 30vw;
-      height: 30vw;
+      inset: 0;
+      width: var(--cube-size);
+      height: var(--cube-size);
       overflow: hidden;
+      border-radius: 6px;
+      border: 1px solid rgba($white, 0.22);
+      box-shadow: inset 0 0 28px rgba(0, 0, 0, 0.35);
+      backface-visibility: visible;
 
-      // Tooltip matching _clock.scss style
-      &::after {
-        display: block;
-        opacity: 0;
-        pointer-events: none;
+      .cube-face-badge {
         position: absolute;
-        background: var(--bg-surface);
-        color: var(--text-primary);
-        content: attr(data-title);
-        font-size: clamp(11px, 1.1vw, 15px);
-        font-family: $font1;
-        font-weight: 600;
-        letter-spacing: 0.5px;
-        padding: 5px 14px;
-        bottom: 50%;
-        left: 50%;
-        white-space: nowrap;
-        transform: translate(-50%, 10px) scale3d(0.2, 0.2, 1);
-        transition: all 0.35s $ease-soft;
-        line-height: initial;
-        border-radius: 100px;
-        border: 1px solid var(--glass-border);
-        box-shadow: 0 4px 15px var(--glass-shadow);
-        backdrop-filter: blur(8px);
-        -webkit-backdrop-filter: blur(8px);
-        z-index: 20;
+        top: 10px;
+        left: 10px;
+        padding: 3px 9px;
+        border-radius: 999px;
+        font-size: 0.72rem;
+        font-weight: 700;
+        background: rgba(10, 14, 26, 0.72);
+        color: $white;
+        border: 1px solid rgba($white, 0.2);
+        backdrop-filter: blur(6px);
+      }
+
+      // Cube face tooltip
+
+      &::after {
+        //--Other Tooltip properties Global Reset *[data-title]::after--//
+        bottom: 14px;
+        transform: translate(-50%, 10px) scale3d(0.85, 0.85, 1);
       }
 
       &:hover::after {
@@ -910,71 +1180,270 @@ h3 {
     }
   }
 
-  @keyframes cubeRotation {
-    0% {
-      transform: rotateX(-22deg) rotateY(-38deg) rotateZ(0deg);
-    }
-    50% {
-      transform: rotateX(-22deg) rotateY(-238deg) rotateZ(0deg);
-    }
-    100% {
-      transform: rotateX(-22deg) rotateY(-398deg) rotateZ(0deg);
-    }
+  // 3D Floor Glow Pedestal beneath the cube
+  .cube-pedestal {
+    position: absolute;
+    bottom: -36px;
+    left: 50%;
+    width: calc(var(--cube-size) * 0.95);
+    height: 36px;
+    transform: translateX(-50%);
+    background: radial-gradient(
+      ellipse at center,
+      rgba($blurple, 0.42) 0%,
+      rgba($purple, 0.2) 45%,
+      transparent 75%
+    );
+    filter: blur(10px);
+    pointer-events: none;
   }
 
-  // Cube faces
+  // Cube faces using dynamic --cube-half
   #side1 {
-    transform: rotateX(90deg) translateZ(15vw);
+    transform: rotateX(90deg) translateZ(var(--cube-half));
     background: url(img/Gallery-of-Pets.webp) center / cover;
   }
   #side2 {
-    transform: rotateY(-90deg) translateZ(15vw);
+    transform: rotateY(-90deg) translateZ(var(--cube-half));
     background: url(img/reactGame.webp) 50% 50% / cover;
   }
   #side3 {
-    transform: translateZ(15vw);
+    transform: translateZ(var(--cube-half));
     background: url(img/Tetris-Game.webp) 50% 100% / cover;
   }
   #side4 {
-    transform: rotateY(90deg) translateZ(15vw);
+    transform: rotateY(90deg) translateZ(var(--cube-half));
     background: url(img/tikTok.webp) center / cover;
   }
   #side5 {
-    transform: rotateY(180deg) translateZ(15vw);
+    transform: rotateY(180deg) translateZ(var(--cube-half));
     background: url(img/Photo-Gallery.webp) center / cover;
   }
   #side6 {
-    transform: rotateX(-90deg) translateZ(15vw);
+    transform: rotateX(-90deg) translateZ(var(--cube-half));
+    background:
+      radial-gradient(
+        circle at center,
+        rgba($blurple, 0.35),
+        rgba($blue, 0.92)
+      ),
+      repeating-linear-gradient(
+        45deg,
+        rgba($white, 0.05) 0 2px,
+        transparent 2px 10px
+      );
+    pointer-events: none;
   }
 
-  // Mobile Swiper
+  // Mobile Swiper (cleanly centered inside .projects-arena)
   .swiper-container {
-    position: absolute;
-    width: 450px;
-    height: 450px;
-    left: 40%;
-    top: 40%;
-    margin-left: -180px;
-    margin-top: -150px;
+    position: relative;
+    width: min(300px, 78vw);
+    height: min(300px, 78vw);
+    margin: 10px auto;
 
-    @media (min-width: 766px) {
+    @media (min-width: 768px) {
       display: none;
-    }
-    @media (max-width: 500px) {
-      width: 280px;
-      height: 280px;
-      left: 62%;
-      top: 40%;
-    }
-
-    // Show the hint inside the swiper
-    p {
-      display: block;
     }
 
     .swiper-slide {
       background-position: center;
       background-size: cover;
+      border-radius: $radius-sm;
+      border: 1px solid var(--glass-border);
+
+      a {
+        display: block;
+        width: 100%;
+        height: 100%;
+      }
+    }
+  }
+
+  // Glassmorphic Project HUD Card
+  .project-hud {
+    @include glass-panel(18px, 140%);
+    border-radius: $radius-lg;
+    padding: clamp(1.1rem, 2.2vw, 1.6rem);
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+    position: relative;
+    transition:
+      transform $dur-mid $ease-soft,
+      box-shadow $dur-mid $ease-soft;
+
+    // Subtle top accent bar
+    &::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--accent), var(--accent-purple));
+    }
+
+    &__top {
+      @include flex-layout(
+        row,
+        $justify-content: space-between,
+        $align-items: center
+      );
+    }
+
+    &__index {
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      background: rgba($blurple, 0.16);
+      color: var(--accent);
+      border: 1px solid rgba($blurple, 0.3);
+    }
+
+    &__nav {
+      display: inline-flex;
+      gap: 6px;
+
+      .hud-nav-btn {
+        width: 32px;
+        height: 32px;
+        border-radius: $radius-sm;
+        border: 1px solid var(--glass-border);
+        background: var(--bg-surface);
+        color: var(--text-primary);
+        display: grid;
+        place-items: center;
+        cursor: pointer;
+        transition:
+          background $dur-fast ease,
+          color $dur-fast ease,
+          transform $dur-fast ease;
+
+        &:hover {
+          background: var(--accent);
+          color: $white;
+          transform: translateY(-1px);
+        }
+
+        // Tooltip for pre-next button
+
+        &[data-title]::after {
+          //--Other Tooltip properties Global Reset *[data-title]::after--//
+          bottom: calc(100% + 8px);
+        }
+
+        &:hover[data-title]::after,
+        &:focus-visible[data-title]::after {
+          opacity: 1;
+          transform: translate(-50%, 0) scale3d(1, 1, 1);
+        }
+      }
+    }
+
+    &__title {
+      margin: 0.15rem 0 0;
+      font-size: clamp(1.25rem, 2vw, 1.6rem);
+      color: var(--text-primary);
+    }
+
+    &__desc {
+      margin: 0;
+      font-size: 0.95rem;
+      line-height: 1.55;
+      color: var(--text-secondary);
+      min-height: 3em;
+    }
+
+    &__tech {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+      margin: 4px 0;
+
+      .tech-chip {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 4px 10px;
+        border-radius: 999px;
+        background: rgba($blurple, 0.14);
+        color: var(--text-primary);
+        border: 1px solid rgba($blurple, 0.32);
+        font-size: 0.8rem;
+
+        .fa {
+          color: var(--accent);
+        }
+      }
+    }
+
+    &__actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 6px;
+
+      .hud-btn {
+        position: relative;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        border-radius: $radius-md;
+        font-size: 0.9rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition:
+          transform $dur-fast ease,
+          background $dur-fast ease,
+          border-color $dur-fast ease,
+          box-shadow $dur-fast ease;
+
+        // live and source code Button Tooltip matching _clock.scss style
+
+        &[data-title]::after {
+          // ---Other Tooltip proper Global Reset *[data-title]::after --//
+          bottom: calc(100% + 8px);
+        }
+
+        &:hover[data-title]::after,
+        &:focus-visible[data-title]::after {
+          opacity: 1;
+          transform: translate(-50%, 0) scale3d(1, 1, 1);
+        }
+
+        &--primary {
+          flex: 1;
+          padding: 10px 16px;
+          border: 1px solid rgba($blurple, 0.6);
+          background: linear-gradient(135deg, $blurple, $purple);
+          color: $white;
+          box-shadow: 0 6px 18px rgba($blurple, 0.32);
+
+          &:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 22px rgba($blurple, 0.45);
+          }
+        }
+
+        &--icon {
+          width: 40px;
+          height: 40px;
+          border: 1px solid var(--glass-border);
+          background: var(--bg-surface);
+          color: var(--text-primary);
+
+          &:hover {
+            background: rgba($blurple, 0.2);
+            border-color: var(--accent);
+            color: var(--accent);
+            transform: translateY(-2px);
+          }
+        }
+      }
     }
   }
 }
@@ -1366,32 +1835,11 @@ h3 {
     display: inline-block;
     line-height: normal;
 
-    // Tooltip matching _clock.scss style
+    // contact-list-item Tooltip matching _clock.scss style
+
     &[data-title]::after {
-      display: block;
-      opacity: 0;
-      pointer-events: none;
-      position: absolute;
-      background: var(--bg-surface);
-      color: var(--text-secondary);
-      content: attr(data-title);
-      font-size: clamp(11px, 1.1vw, 15px);
-      font-family: $font1;
-      font-weight: 600;
-      letter-spacing: 0.5px;
-      padding: 3px 10px;
+      // ---Other Tooltip proper Global Reset  *[data-title]::after --//
       bottom: calc(100% + 8px);
-      left: 50%;
-      white-space: nowrap;
-      transform: translate(-50%, 6px) scale3d(0.2, 0.2, 1);
-      transition: all 0.35s $ease-soft;
-      line-height: initial;
-      border-radius: 100px;
-      border: 1px solid var(--glass-border);
-      box-shadow: 0 4px 12px var(--glass-shadow);
-      backdrop-filter: blur(8px);
-      -webkit-backdrop-filter: blur(8px);
-      z-index: 20;
     }
 
     &:hover::after {

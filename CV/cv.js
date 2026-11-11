@@ -10,6 +10,7 @@ const cvContainer = document.getElementById("cv-container");
 const themeToggle = document.getElementById("theme-toggle");
 const printBtn = document.getElementById("print-btn");
 const downloadBtn = document.getElementById("download-btn");
+const certLinkPreview = document.querySelector(".cert-preview");
 
 // Set profile image
 if (profileImage) {
@@ -321,6 +322,7 @@ async function downloadPDF() {
     if (cvOnlineElement) cvOnlineElement.style.display = "block";
     if (qrSection) qrSection.style.display = "block";
     if (copyBtn) copyBtn.style.display = "none";
+    if (certLinkPreview) certLinkPreview.style.display = "none";
     toolTips.forEach((t) => {
       t.style.display = "none";
     });
@@ -362,6 +364,7 @@ async function downloadPDF() {
     if (cvOnlineElement) cvOnlineElement.style.display = "";
     if (qrSection) qrSection.style.display = "";
     if (copyBtn) copyBtn.style.display = "";
+    if (certLinkPreview) certLinkPreview.style.display = "";
     toolTips.forEach((t) => {
       t.style.display = "";
     });

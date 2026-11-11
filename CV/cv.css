@@ -1675,3 +1675,85 @@ html.spa-transition::view-transition-old(root) #theme-toggle svg {
     margin-top: 10px !important;
   }
 }
+
+/* ============================================================
+   Certificate link: image preview on hover / keyboard focus
+   ============================================================ */
+.cert-link .cert-preview {
+  position: absolute;
+  left: 0;
+  bottom: calc(100% + 14px);
+  z-index: 50;
+  width: min(320px, 80vw);
+  padding: 6px;
+  border-radius: 10px;
+  background: var(--background-color);
+  border: 1px solid var(--badge-border);
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.28);
+  backdrop-filter: blur(14px) saturate(120%);
+  -webkit-backdrop-filter: blur(14px) saturate(120%);
+  pointer-events: none;
+
+  /* hidden state */
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(14px) scale(0.86) rotate(-3deg);
+  transform-origin: 20px 100%;
+  transition:
+    opacity 0.25s ease,
+    transform 0.6s var(--bounce-soft),
+    visibility 0s linear 0.6s;
+}
+
+/* little pointer toward the link */
+.cert-link .cert-preview::after {
+  content: "";
+  position: absolute;
+  left: 18px;
+  bottom: -6px;
+  width: 10px;
+  height: 10px;
+  background: inherit;
+  border-right: 1px solid var(--badge-border);
+  border-bottom: 1px solid var(--badge-border);
+  transform: rotate(45deg);
+}
+
+.cert-link .cert-preview img {
+  display: block;
+  width: 100%;
+  height: auto;
+  min-height: 90px;
+  border-radius: 6px;
+  background-image: var(--badge-bg);
+  filter: blur(6px);
+  transform: scale(1.04);
+  transition:
+    filter 0.5s ease 0.08s,
+    transform 0.6s ease 0.08s;
+}
+
+/* visible state: keyboard focus works everywhere, hover only on hover devices */
+.cert-link:focus-visible .cert-preview {
+  opacity: 1;
+  visibility: visible;
+  transform: none;
+  transition-delay: 0s;
+}
+.cert-link:focus-visible .cert-preview img {
+  filter: none;
+  transform: none;
+}
+
+@media (hover: hover) {
+  .cert-link:hover .cert-preview {
+    opacity: 1;
+    visibility: visible;
+    transform: none;
+    transition-delay: 0s;
+  }
+  .cert-link:hover .cert-preview img {
+    filter: none;
+    transform: none;
+  }
+}

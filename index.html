@@ -361,9 +361,13 @@
         </section>
 
         <!-- About Section -->
+
         <section id="about" class="hidden">
           <h3>About</h3>
-          <p>
+
+          <!-- Card 1: Intro  -->
+          <p class="bento-card">
+            <strong class="card-label">✨ Who I Am</strong>
             <span>
               Hey, My name is Bujar Alimadhi. I'm a Web Developer, who is
               passionate about creating beautiful responsive websites and web
@@ -374,7 +378,10 @@
               on the web.
             </span>
           </p>
-          <p>
+
+          <!-- Card 2: Education  -->
+          <p class="bento-card">
+            <strong class="card-label">🎓 Education & Background</strong>
             <span>
               My background is a mixture of education. I hold a
               <a
@@ -390,147 +397,309 @@
               setting projects and doing new things.
             </span>
           </p>
-          <p>
+
+          <!-- Card 3: Tech Stack  -->
+          <p class="bento-card">
+            <strong class="card-label">⚡ Core Stack</strong>
             <span>
               I've used a wide range of different languages and frameworks, but
-              I'm currently loving working with HTML, CSS/SCSS, and
-              JavaScript/React on the front-end.
+              I'm currently loving working with
+              <mark class="tech-pill">HTML</mark>,
+              <mark class="tech-pill">CSS/SCSS</mark>, and
+              <mark class="tech-pill">JavaScript/React</mark> on the front-end.
             </span>
           </p>
-          <p>
+
+          <!-- Card 4: Mindset  -->
+          <p class="bento-card">
+            <strong class="card-label">🚀 Mindset</strong>
             <span>
               I also love learning new things, so I'm always happy for
               opportunities to try to use something I haven't before, or even to
               revisit something I haven't used in a while.
             </span>
           </p>
-          <p>
+
+          <!-- Card 5: Beyond Coding  -->
+          <p class="bento-card">
+            <strong class="card-label">🏔️ Offline</strong>
             <span>Outside of coding, I enjoy hiking and traveling.</span>
           </p>
         </section>
 
         <!-- Projects Section -->
-        <section id="projects" class="hidden">
-          <h3>My Projects</h3>
 
-          <!-- 3D Cube for Desktop -->
-          <div id="wrapD3Cube">
-            <div id="D3Cube">
-              <a
-                id="side1"
-                href="https://alimadhibujar.github.io/Gallery-of-Pets/"
-                target="_blank"
-                rel="noopener"
-                data-title="Gallery of Pets"
-                aria-label="Gallery of Pets"
-              ></a>
-              <a
-                id="side2"
-                href="https://alimadhibujar.github.io/React-Rock-Scissors-Paper/"
-                target="_blank"
-                rel="noopener"
-                data-title="Rock-Paper-Scissors (React)"
-                aria-label="Rock-Paper-Scissors React Game"
-              ></a>
-              <a
-                id="side3"
-                href="https://codepen.io/alimadhibujar/full/mybzoNg"
-                target="_blank"
-                rel="noopener"
-                data-title="Tetris (React)"
-                aria-label="Tetris React Game"
-              ></a>
-              <a
-                id="side4"
-                href="https://alimadhibujar.github.io/Tik-Tok-React-App/"
-                target="_blank"
-                rel="noopener"
-                data-title="TikTok React App"
-                aria-label="TikTok React App"
-              ></a>
-              <a
-                id="side5"
-                href="https://alimadhibujar.github.io/Photo-Gallery"
-                target="_blank"
-                rel="noopener"
-                data-title="React Photo Gallery"
-                aria-label="React Photo Gallery"
-              ></a>
-              <a id="side6" aria-hidden="true"></a>
+        <section id="projects" class="hidden">
+          <div class="projects-header">
+            <h3>My Projects</h3>
+            <div class="projects-controls">
+              <button
+                type="button"
+                id="cubeAutoToggle"
+                class="cube-auto-btn is-playing"
+                aria-label="Toggle auto-rotation"
+                data-title="Pause / Resume Auto-Tour"
+              >
+                <i class="fa fa-pause" aria-hidden="true"></i>
+                <span>Auto-Tour</span>
+              </button>
             </div>
           </div>
-          <p>
-            Click on the image for a project preview and detailed information.
-          </p>
 
-          <!-- 3D Cube Mobile version -->
-          <div class="swiper-container">
-            <div class="swiper-wrapper">
-              <div
-                class="swiper-slide"
-                style="background-image: url(img/Gallery-of-Pets.webp)"
-              >
-                <a
-                  class="swiper-container"
-                  href="https://alimadhibujar.github.io/Gallery-of-Pets/"
-                  target="_blank"
-                  rel="noopener"
-                  title="Gallery of Pets"
-                ></a>
+          <!-- Quick-Snap Project Dock -->
+          <div
+            class="projects-dock"
+            role="tablist"
+            aria-label="Select a project"
+          >
+            <button
+              type="button"
+              class="dock-pill active"
+              data-project-id="side1"
+              role="tab"
+              aria-selected="true"
+            >
+              <span class="dock-pill__num">01</span>
+              <span class="dock-pill__label">Gallery of Pets</span>
+            </button>
+            <button
+              type="button"
+              class="dock-pill"
+              data-project-id="side2"
+              role="tab"
+              aria-selected="false"
+            >
+              <span class="dock-pill__num">02</span>
+              <span class="dock-pill__label">Rock-Paper-Scissors</span>
+            </button>
+            <button
+              type="button"
+              class="dock-pill"
+              data-project-id="side3"
+              role="tab"
+              aria-selected="false"
+            >
+              <span class="dock-pill__num">03</span>
+              <span class="dock-pill__label">Tetris</span>
+            </button>
+            <button
+              type="button"
+              class="dock-pill"
+              data-project-id="side4"
+              role="tab"
+              aria-selected="false"
+            >
+              <span class="dock-pill__num">04</span>
+              <span class="dock-pill__label">TikTok App</span>
+            </button>
+            <button
+              type="button"
+              class="dock-pill"
+              data-project-id="side5"
+              role="tab"
+              aria-selected="false"
+            >
+              <span class="dock-pill__num">05</span>
+              <span class="dock-pill__label">Photo Gallery</span>
+            </button>
+          </div>
+
+          <!-- 2-Column Showcase Stage: 3D Cube Arena + Glassmorphic HUD -->
+          <div class="projects-stage">
+            <div class="projects-arena">
+              <!-- 3D Cube for Desktop -->
+              <div id="wrapD3Cube">
+                <div id="D3Cube">
+                  <a
+                    id="side1"
+                    href="https://alimadhibujar.github.io/Gallery-of-Pets/"
+                    target="_blank"
+                    rel="noopener"
+                    data-title="Click to Preview"
+                    aria-label="Gallery of Pets"
+                  >
+                    <span class="cube-face-badge">01</span>
+                  </a>
+                  <a
+                    id="side2"
+                    href="https://alimadhibujar.github.io/React-Rock-Scissors-Paper/"
+                    target="_blank"
+                    rel="noopener"
+                    data-title="Click to Preview"
+                    aria-label="Rock-Paper-Scissors React Game"
+                  >
+                    <span class="cube-face-badge">02</span>
+                  </a>
+                  <a
+                    id="side3"
+                    href="https://codepen.io/alimadhibujar/full/mybzoNg"
+                    target="_blank"
+                    rel="noopener"
+                    data-title="Click to Preview"
+                    aria-label="Tetris React Game"
+                  >
+                    <span class="cube-face-badge">03</span>
+                  </a>
+                  <a
+                    id="side4"
+                    href="https://alimadhibujar.github.io/Tik-Tok-React-App/"
+                    target="_blank"
+                    rel="noopener"
+                    data-title="Click to Preview"
+                    aria-label="TikTok React App"
+                  >
+                    <span class="cube-face-badge">04</span>
+                  </a>
+                  <a
+                    id="side5"
+                    href="https://alimadhibujar.github.io/Photo-Gallery"
+                    target="_blank"
+                    rel="noopener"
+                    data-title="Click to Preview"
+                    aria-label="React Photo Gallery"
+                  >
+                    <span class="cube-face-badge">05</span>
+                  </a>
+                  <a id="side6" aria-hidden="true"></a>
+                </div>
+                <div class="cube-pedestal" aria-hidden="true"></div>
               </div>
-              <div
-                class="swiper-slide"
-                style="background-image: url(img/Tetris-Game.webp)"
-              >
-                <a
-                  class="swiper-container"
-                  href="https://codepen.io/alimadhibujar/full/mybzoNg"
-                  target="_blank"
-                  rel="noopener"
-                  title="Tetris-Game"
-                ></a>
+
+              <!-- 3D Cube Mobile version -->
+              <div class="swiper-container">
+                <div class="swiper-wrapper">
+                  <div
+                    class="swiper-slide"
+                    style="background-image: url(img/Gallery-of-Pets.webp)"
+                  >
+                    <a
+                      href="https://alimadhibujar.github.io/Gallery-of-Pets/"
+                      target="_blank"
+                      rel="noopener"
+                      title="Gallery of Pets"
+                    ></a>
+                  </div>
+                  <div
+                    class="swiper-slide"
+                    style="background-image: url(img/Tetris-Game.webp)"
+                  >
+                    <a
+                      href="https://codepen.io/alimadhibujar/full/mybzoNg"
+                      target="_blank"
+                      rel="noopener"
+                      title="Tetris-Game"
+                    ></a>
+                  </div>
+                  <div
+                    class="swiper-slide"
+                    style="background-image: url(img/reactGame.webp)"
+                  >
+                    <a
+                      href="https://alimadhibujar.github.io/React-Rock-Scissors-Paper/"
+                      target="_blank"
+                      rel="noopener"
+                      title="Rock-ScissorsPaper-React-Game"
+                    ></a>
+                  </div>
+                  <div
+                    class="swiper-slide"
+                    style="background-image: url(img/Photo-Gallery.webp)"
+                  >
+                    <a
+                      href="https://alimadhibujar.github.io/Photo-Gallery/"
+                      target="_blank"
+                      rel="noopener"
+                      title="React Photo Gallery"
+                    ></a>
+                  </div>
+                  <div
+                    class="swiper-slide"
+                    style="background-image: url(img/tikTok.webp)"
+                  >
+                    <a
+                      href="https://alimadhibujar.github.io/Tik-Tok-React-App/"
+                      target="_blank"
+                      rel="noopener"
+                      title="Tik-Tok-React-App"
+                    ></a>
+                  </div>
+                </div>
               </div>
-              <div
-                class="swiper-slide"
-                style="background-image: url(img/reactGame.webp)"
-              >
-                <a
-                  class="swiper-container"
-                  href="https://alimadhibujar.github.io/React-Rock-Scissors-Paper/"
-                  target="_blank"
-                  rel="noopener"
-                  title="Rock-ScissorsPaper-React-Game"
-                ></a>
-              </div>
-              <div
-                class="swiper-slide"
-                style="background-image: url(img/Photo-Gallery.webp)"
-              >
-                <a
-                  class="swiper-container"
-                  href="https://alimadhibujar.github.io/Photo-Gallery/"
-                  target="_blank"
-                  rel="noopener"
-                  title="React Photo Gallery"
-                ></a>
-              </div>
-              <div
-                class="swiper-slide"
-                style="background-image: url(img/tikTok.webp)"
-              >
-                <a
-                  class="swiper-container"
-                  href="https://alimadhibujar.github.io/Tik-Tok-React-App/"
-                  target="_blank"
-                  rel="noopener"
-                  title="Tik-Tok-React-App"
-                ></a>
-              </div>
+
+              <p class="arena-hint">
+                <i class="fa fa-hand-paper-o" aria-hidden="true"></i>
+                Drag to rotate 3D cube or click face to launch live preview
+              </p>
             </div>
-            <p>
-              Slide the cube, and click on the image for detailed project
-              information.
-            </p>
+
+            <!-- Synchronized Glassmorphic Project HUD -->
+            <aside class="project-hud" aria-live="polite">
+              <div class="project-hud__top">
+                <span id="hudIndex" class="project-hud__index">01 / 05</span>
+                <div class="project-hud__nav">
+                  <button
+                    type="button"
+                    id="hudPrev"
+                    class="hud-nav-btn"
+                    aria-label="Previous project"
+                    data-title="Previous project"
+                  >
+                    <i class="fa fa-chevron-left" aria-hidden="true"></i>
+                  </button>
+                  <button
+                    type="button"
+                    id="hudNext"
+                    class="hud-nav-btn"
+                    aria-label="Next project"
+                    data-title="Next project"
+                  >
+                    <i class="fa fa-chevron-right" aria-hidden="true"></i>
+                  </button>
+                </div>
+              </div>
+
+              <h4 id="hudTitle" class="project-hud__title">Gallery of Pets</h4>
+              <p id="hudDesc" class="project-hud__desc"></p>
+
+              <div
+                id="hudTech"
+                class="project-hud__tech"
+                aria-label="Technologies used"
+              ></div>
+
+              <div class="project-hud__actions">
+                <button
+                  type="button"
+                  id="hudPreviewBtn"
+                  class="hud-btn hud-btn--primary"
+                >
+                  <i class="fa fa-expand" aria-hidden="true"></i>
+                  <span>Interactive Preview</span>
+                </button>
+                <a
+                  id="hudLiveLink"
+                  class="hud-btn hud-btn--icon"
+                  href="#"
+                  target="_blank"
+                  rel="noopener"
+                  aria-label="Open live demo in new tab"
+                  data-title="Open Live Site"
+                >
+                  <i class="fa fa-external-link" aria-hidden="true"></i>
+                </a>
+                <a
+                  id="hudRepoLink"
+                  class="hud-btn hud-btn--icon"
+                  href="#"
+                  target="_blank"
+                  rel="noopener"
+                  aria-label="Open source code repository"
+                  data-title="Source Code"
+                >
+                  <i class="fa fa-github" aria-hidden="true"></i>
+                </a>
+              </div>
+            </aside>
           </div>
         </section>
 
@@ -757,48 +926,50 @@
     <script src="./JS/ghost-cursor.js" type="module" defer></script>
     <script src="./JS/theme-toggle.js" defer></script>
     <script src="./JS/clock.js" defer></script>
+
     <!-- Lazy-load Swiper only on small screens and when visible -->
     <script>
       (function () {
         const isSmallScreen =
-          window.matchMedia && window.matchMedia("(max-width: 765px)").matches;
+          window.matchMedia && window.matchMedia("(max-width: 767px)").matches;
         if (!isSmallScreen) return;
         const container = document.querySelector(".swiper-container");
         if (!container) return;
 
         let initialized = false;
+        const createSwiperInstance = () => {
+          window.projectsSwiper = new window.Swiper(".swiper-container", {
+            effect: "cube",
+            grabCursor: true,
+            cubeEffect: {
+              shadow: true,
+              slideShadows: true,
+              shadowOffset: 20,
+              shadowScale: 0.94,
+            },
+            on: {
+              slideChange: function () {
+                window.dispatchEvent(
+                  new CustomEvent("project-swiper-change", {
+                    detail: { index: this.activeIndex },
+                  }),
+                );
+              },
+            },
+          });
+        };
+
         const initSwiper = () => {
           if (initialized) return;
           initialized = true;
-          // If Swiper is not yet on the page, inject it, then init
           if (typeof window.Swiper === "undefined") {
             const s = document.createElement("script");
             s.src = "https://unpkg.com/swiper/swiper-bundle.min.js";
             s.async = true;
-            s.onload = () => {
-              new window.Swiper(".swiper-container", {
-                effect: "cube",
-                grabCursor: true,
-                cubeEffect: {
-                  shadow: true,
-                  slideShadows: true,
-                  shadowOffset: 20,
-                  shadowScale: 0.94,
-                },
-              });
-            };
+            s.onload = createSwiperInstance;
             document.head.appendChild(s);
           } else {
-            new window.Swiper(".swiper-container", {
-              effect: "cube",
-              grabCursor: true,
-              cubeEffect: {
-                shadow: true,
-                slideShadows: true,
-                shadowOffset: 20,
-                shadowScale: 0.94,
-              },
-            });
+            createSwiperInstance();
           }
         };
 
