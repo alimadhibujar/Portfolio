@@ -86,8 +86,6 @@
         />
       </div>
 
-      <i class="cursor" aria-hidden="true"></i>
-
       <!-- Sidebar Navigation -->
       <aside id="side-js" class="panel__main-side">
         <button class="closeBtn" aria-label="Close navigation">&times;</button>
@@ -308,6 +306,7 @@
           id="theme-toggle"
           class="theme-toggle"
           aria-label="Switch to light mode"
+          data-title="Light/Dark"
         >
           <!-- Sun icon (shown in dark mode) -->
           <svg
@@ -704,9 +703,11 @@
         </section>
 
         <!-- Contact Section -->
+
         <section id="contact" class="hidden">
           <h3>Contact</h3>
-          <p>
+          <p class="bento-card">
+            <strong class="card-label"> 💼 Work With Me</strong>
             If you'd like to find out more about how I work and my process of
             working with clients, get in touch. Please feel free to use the form
             below to talk about the project you have in mind, and to discuss how
@@ -717,42 +718,48 @@
           <div class="contact-wrapper">
             <!-- Contact Form -->
             <form
+              id="contact-form"
               class="form-horizontal"
-              target="_blank"
-              action="https://formsubmit.co/b5b2f9549d5b3a88e702b392193bdd58"
+              action="https://formsubmit.co/ajax/b5b2f9549d5b3a88e702b392193bdd58"
               method="POST"
             >
-              <input
-                type="text"
-                class="form-control"
-                id="name"
-                placeholder="YOUR NAME"
-                name="name"
-                autocomplete="name"
-                required
-              />
-              <label for="name">your name</label>
+              <div class="field-group">
+                <input
+                  type="text"
+                  class="form-control"
+                  id="name"
+                  placeholder="YOUR NAME"
+                  name="name"
+                  autocomplete="name"
+                  required
+                />
+                <label for="name">your name</label>
+              </div>
 
-              <input
-                type="email"
-                class="form-control"
-                id="email"
-                placeholder="TYPE YOUR EMAIL"
-                name="email"
-                autocomplete="email"
-                required
-              />
-              <label for="email" class="email">your email</label>
+              <div class="field-group">
+                <input
+                  type="email"
+                  class="form-control"
+                  id="email"
+                  placeholder="TYPE YOUR EMAIL"
+                  name="email"
+                  autocomplete="email"
+                  required
+                />
+                <label for="email" class="email">your email</label>
+              </div>
 
-              <textarea
-                id="letters"
-                class="form-control"
-                rows="4"
-                placeholder="TYPE YOUR MESSAGE"
-                name="message"
-                required
-              ></textarea>
-              <label for="letters" class="message">message</label>
+              <div class="field-group">
+                <textarea
+                  id="letters"
+                  class="form-control"
+                  rows="4"
+                  placeholder="TYPE YOUR MESSAGE"
+                  name="message"
+                  required
+                ></textarea>
+                <label for="letters" class="message">message</label>
+              </div>
 
               <input type="hidden" id="captcha" name="_captcha" value="false" />
 
@@ -760,8 +767,14 @@
                 <div class="button">
                   <span class="send-text">SEND</span>
                 </div>
-                <i class="fa fa-paper-plane"></i>
+                <i class="fa fa-paper-plane" aria-hidden="true"></i>
               </button>
+
+              <div
+                class="form-status"
+                id="form-status"
+                aria-live="polite"
+              ></div>
             </form>
 
             <!-- Letter flying effect container -->
@@ -769,33 +782,79 @@
 
             <!-- Contact Information -->
             <div class="direct-contact-container">
+              <!-- New: Live Availability & Local Time Pill -->
+              <div class="availability-card">
+                <span class="status-dot"></span>
+                <span class="status-text">Available for new projects</span>
+                <span
+                  class="local-time"
+                  id="local-time"
+                  data-title="My local time in Tiranë"
+                >
+                  --:-- CET
+                </span>
+              </div>
+
               <ul class="contact-list">
                 <li class="list-item">
-                  <i class="fa fa-map-marker">
-                    <span class="contact-text place" data-title="Location"
-                      >Tiranë | Albania</span
-                    >
-                  </i>
-                </li>
-                <li class="list-item">
-                  <i class="fa fa-phone">
-                    <span class="contact-text phone">
-                      <a href="tel:00355685169365" data-title="Give me a call"
-                        >00355 685169365</a
-                      >
+                  <div class="icon-box">
+                    <i class="fa fa-map-marker" aria-hidden="true"></i>
+                  </div>
+                  <div class="contact-details">
+                    <span class="contact-label">Location</span>
+                    <span class="contact-text place" data-title="Location">
+                      Tiranë | Albania
                     </span>
-                  </i>
+                  </div>
                 </li>
+
                 <li class="list-item">
-                  <i class="fa fa-envelope">
+                  <div class="icon-box">
+                    <i class="fa fa-phone" aria-hidden="true"></i>
+                  </div>
+                  <div class="contact-details">
+                    <span class="contact-label">Phone</span>
+                    <span class="contact-text phone">
+                      <a href="tel:00355685169365" data-title="Give me a call">
+                        00355 685169365
+                      </a>
+                    </span>
+                  </div>
+                  <button
+                    type="button"
+                    class="copy-btn"
+                    data-copy="+355685169365"
+                    data-title="Copy number"
+                    aria-label="Copy phone number"
+                  >
+                    <i class="fa fa-clone" aria-hidden="true"></i>
+                  </button>
+                </li>
+
+                <li class="list-item">
+                  <div class="icon-box">
+                    <i class="fa fa-envelope" aria-hidden="true"></i>
+                  </div>
+                  <div class="contact-details">
+                    <span class="contact-label">Email</span>
                     <span class="contact-text gmail">
                       <a
                         href="mailto:b.alimadhi@yahoo.co.uk"
                         data-title="Send me an email"
-                        >b.alimadhi@yahoo.co.uk</a
                       >
+                        b.alimadhi@yahoo.co.uk
+                      </a>
                     </span>
-                  </i>
+                  </div>
+                  <button
+                    type="button"
+                    class="copy-btn"
+                    data-copy="b.alimadhi@yahoo.co.uk"
+                    data-title="Copy email"
+                    aria-label="Copy email address"
+                  >
+                    <i class="fa fa-clone" aria-hidden="true"></i>
+                  </button>
                 </li>
               </ul>
             </div>
@@ -803,54 +862,40 @@
         </section>
 
         <div class="footer-wrapper">
-          <div>
-            <!-- Wave Animation -->
-            <svg
-              class="waves"
-              xmlns="http://www.w3.org/2000/svg"
-              xmlns:xlink="http://www.w3.org/1999/xlink"
-              viewBox="0 24 150 28"
-              preserveAspectRatio="none"
-              shape-rendering="auto"
-              aria-hidden="true"
-            >
-              <defs>
-                <path
-                  id="gentle-wave"
-                  d="M-160 44c30 0 58-18 88-18s 58 18 88 18 58-18 88-18 58 18 88 18 v44h-352z"
-                />
-              </defs>
-              <g class="parallax">
-                <use
-                  xlink:href="#gentle-wave"
-                  x="48"
-                  y="0"
-                  fill="rgba(51, 73, 119, 0.7)"
-                />
-                <use
-                  xlink:href="#gentle-wave"
-                  x="48"
-                  y="3"
-                  fill="rgba(51, 73, 119, 0.5)"
-                />
-                <use
-                  xlink:href="#gentle-wave"
-                  x="48"
-                  y="5"
-                  fill="rgba(51, 73, 119, 0.3)"
-                />
-                <use
-                  xlink:href="#gentle-wave"
-                  x="48"
-                  y="7"
-                  fill="rgba(51, 73, 119, 1)"
-                />
-              </g>
-            </svg>
-          </div>
+          <!-- Wave Animation -->
+          <svg
+            class="waves"
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 24 150 28"
+            preserveAspectRatio="none"
+            shape-rendering="auto"
+            aria-hidden="true"
+          >
+            <defs>
+              <path
+                id="gentle-wave"
+                d="M-160 44c30 0 58-18 88-18s 58 18 88 18 58-18 88-18 58 18 88 18 v44h-352z"
+              />
+            </defs>
+            <g class="parallax">
+              <use href="#gentle-wave" x="48" y="0" />
+              <use href="#gentle-wave" x="48" y="3" />
+              <use href="#gentle-wave" x="48" y="5" />
+              <use href="#gentle-wave" x="48" y="7" />
+            </g>
+          </svg>
 
           <!-- Footer -->
           <footer>
+            <a
+              href="#home"
+              class="back-to-top"
+              data-title="Back to top"
+              aria-label="Scroll back to top"
+            >
+              <i class="fa fa-chevron-up" aria-hidden="true"></i>
+            </a>
+
             <div class="container">
               <div>Thanks for visiting!</div>
               <div class="copyright">

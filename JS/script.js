@@ -43,18 +43,35 @@ navLinks.forEach((link) => {
     -1px -1px 2px rgb(41, 40, 40), 2px 1px 2px rgba(0, 0, 0, 0.7);
     transform: translate(0, 0)`;
 
-  const defaultStyle = `transform: translate(-1px, -1px);
-    text-shadow: 0 -1px 0 #7289da, 1px 1px 1px black,
-    2px 2px 10px rgba(0, 0, 0, 0.15), 4px 5px 10px rgba(0, 0, 0, 0.15),
-    6px 9px 10px rgba(0, 0, 0, 0.15), 8px 15px 10px rgba(0, 0, 0, 0.15),
-    10px 20px 10px rgba(0, 0, 0, 0.15), 15px 30px 10px rgba(0, 0, 0, 0.15)`;
+  const getDefaultStyle = () => {
+    const glowColor = getComputedStyle(document.documentElement)
+      .getPropertyValue("--hero-title-glow")
+      .trim();
+    return `transform: translate(-1px, -1px);
+    text-shadow: 0 -1px 0 ${glowColor}, 1px 1px 1px rgba(0, 0, 0, 0.7),
+    2px 2px 10px rgba(0, 0, 0, 0.18), 4px 5px 10px rgba(0, 0, 0, 0.18),
+    6px 9px 10px rgba(0, 0, 0, 0.18), 8px 15px 10px rgba(0, 0, 0, 0.18),
+    10px 20px 10px rgba(0, 0, 0, 0.18), 15px 30px 10px rgba(0, 0, 0, 0.18)`;
+  };
 
   heroImg.addEventListener("mouseover", () => {
     nameTitle.style.cssText = hoverStyle;
   });
 
   heroImg.addEventListener("mouseout", () => {
-    nameTitle.style.cssText = defaultStyle;
+    nameTitle.style.cssText = getDefaultStyle();
+  });
+
+  // Re-apply whenever the theme changes so the glow colour updates immediately
+  // even when the title is in its resting state (not being hovered).
+  const observer = new MutationObserver(() => {
+    if (!heroImg.matches(":hover")) {
+      nameTitle.style.cssText = getDefaultStyle();
+    }
+  });
+  observer.observe(document.documentElement, {
+    attributes: true,
+    attributeFilter: ["data-theme"],
   });
 })();
 
@@ -832,6 +849,85 @@ if (modal) {
   focusProject("side1", { syncSwiper: false });
   setAutoPlay(true);
 })();
+
+// ============ INTERACTIVE Contact Form & FOOTER ============ //
+
+// 1. Live Local Time in Tiranë, Albania
+function updateTiranaTime() {
+  const timeEl = document.getElementById("local-time");
+  if (!timeEl) return;
+
+  const now = new Date();
+  const formatter = new Intl.DateTimeFormat("en-GB", {
+    timeZone: "Europe/Tirane",
+    hour: "2-digit",
+    minute: "2-digit",
+    timeZoneName: "short",
+  });
+  timeEl.textContent = formatter.format(now);
+}
+updateTiranaTime();
+setInterval(updateTiranaTime, 30000);
+
+// 2. Click-to-Copy Contact Info with Tooltip Feedback
+document.querySelectorAll(".copy-btn").forEach((btn) => {
+  const defaultTitle = btn.getAttribute("data-title");
+
+  btn.addEventListener("click", async () => {
+    const valueToCopy = btn.getAttribute("data-copy");
+    try {
+      await navigator.clipboard.writeText(valueToCopy);
+      btn.setAttribute("data-title", "Copied!");
+      btn.querySelector("i").className = "fa fa-check";
+
+      setTimeout(() => {
+        btn.setAttribute("data-title", defaultTitle);
+        btn.querySelector("i").className = "fa fa-clone";
+      }, 2000);
+    } catch (err) {
+      console.error("Copy failed", err);
+    }
+  });
+});
+
+// 3. In-Page AJAX Form Submission + Paper Plane Takeoff
+const contactForm = document.getElementById("contact-form");
+if (contactForm) {
+  contactForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    const submitBtn = document.getElementById("submit");
+    const sendText = submitBtn.querySelector(".send-text");
+    const statusEl = document.getElementById("form-status");
+
+    submitBtn.classList.add("is-sending");
+    sendText.textContent = "SENDING...";
+
+    try {
+      const response = await fetch(contactForm.action, {
+        method: "POST",
+        body: new FormData(contactForm),
+        headers: { Accept: "application/json" },
+      });
+
+      if (response.ok) {
+        submitBtn.classList.remove("is-sending");
+        submitBtn.classList.add("is-sent");
+        sendText.textContent = "MESSAGE SENT ✓";
+        statusEl.textContent = "Thank you! I'll get back to you shortly.";
+        statusEl.classList.add("visible");
+        contactForm.reset();
+      } else {
+        throw new Error("Form submission failed");
+      }
+    } catch (error) {
+      submitBtn.classList.remove("is-sending");
+      sendText.textContent = "SEND";
+      statusEl.textContent = "Something went wrong. Please email me directly.";
+      statusEl.classList.add("visible");
+    }
+  });
+}
 
 // ============ Footer Year ============
 const year = document.getElementById("year");

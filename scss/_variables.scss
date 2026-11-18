@@ -112,29 +112,28 @@ html {
   // Text
   --text-primary: #{$grey4};
   --text-secondary: #{$grey5};
-  --text-heading: #{$grey3};
   --about-text-color: hsl(0 0% 100% / 0.4);
   --nav-link-color: rgb(118, 161, 241);
   --social-link-color: hsl(219, 81%, 75%);
+
+  // Hero 3D Title
+  --hero-title-base: #1e293b;
+  --hero-title-glow: #e2e8f0;
 
   // Accent
   --accent: #{$blurple};
   --accent-purple: #{$purple};
 
   // Surfaces / Glass
-  --glass-bg: rgba(31, 34, 37, 0.5);
-  --glass-border: rgba(255, 255, 255, 0.1);
-  --glass-shadow: rgba(0, 0, 0, 0.45);
+  --glass-bg: rgba(15, 23, 42, 0.74);
+  --glass-border: rgba(255, 255, 255, 0.14);
+  --glass-shadow: rgba(2, 6, 23, 0.55);
 
   // Background image overlay
   --bg-gradient: #{$bgImgColor};
 
   // Footer
   --footer-bg: rgb(51, 73, 119);
-  --footer-wave-1: rgba(51, 73, 119, 0.7);
-  --footer-wave-2: rgba(51, 73, 119, 0.5);
-  --footer-wave-3: rgba(51, 73, 119, 0.3);
-  --footer-wave-4: rgba(51, 73, 119, 1);
 
   // Modal
   --modal-backdrop: rgba(5, 8, 20, 0.7);
@@ -151,8 +150,6 @@ html {
   --scrollbar-border: #{$grey2};
 
   // Misc
-  --active-link-color: #{$activeColor};
-  --list-hover-shadow: rgb(94, 100, 85);
   --nav-hover-glow-start: #{rgba($blurple, 0.25)};
   --nav-hover-glow-end: #{rgba($purple, 0.5)};
   --active-bg: #{$activeColor};
@@ -171,22 +168,26 @@ html {
   --bg-button: #bfc5d2;
   --snow-filter: invert(0.2) brightness(1.1);
   --confetti-filter: invert(1);
+
   // Text
   --text-primary: #1a2744;
-  --text-secondary: #55607a;
-  --text-heading: #e8ecf1;
+  --text-secondary: #334155;
   --about-text-color: hsl(0 0% 5% / 0.4);
   --nav-link-color: hsl(239, 72%, 85%);
   --social-link-color: hsl(228, 92%, 70%);
+
+  // Hero 3D Title
+  --hero-title-base: #334155;
+  --hero-title-glow: #4f46e5;
 
   // Accent
   --accent: #4a6cf7;
   --accent-purple: #7c4dff;
 
   // Surfaces / Glass
-  --glass-bg: rgba(255, 255, 255, 0.65);
-  --glass-border: rgba(0, 30, 80, 0.1);
-  --glass-shadow: rgba(0, 0, 0, 0.2);
+  --glass-bg: rgba(255, 255, 255, 0.7);
+  --glass-border: rgba(15, 23, 42, 0.22);
+  --glass-shadow: rgba(15, 23, 42, 0.24);
 
   --bg-gradient:
     radial-gradient(
@@ -212,10 +213,6 @@ html {
 
   // Footer
   --footer-bg: rgb(51, 73, 119);
-  --footer-wave-1: rgba(180, 195, 220, 0.7);
-  --footer-wave-2: rgba(180, 195, 220, 0.5);
-  --footer-wave-3: rgba(180, 195, 220, 0.3);
-  --footer-wave-4: rgba(180, 195, 220, 1);
 
   // Modal
   --modal-backdrop: rgba(200, 210, 230, 0.6);
@@ -232,8 +229,6 @@ html {
   --scrollbar-border: #e8ecf1;
 
   // Misc
-  --active-link-color: hsl(230, 12%, 65%);
-  --list-hover-shadow: rgb(160, 165, 155);
   --nav-hover-glow-start: rgba(74, 108, 247, 0.25);
   --nav-hover-glow-end: rgba(124, 77, 255, 0.5);
   --active-bg: var(--bg-surface);
