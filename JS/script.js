@@ -77,31 +77,34 @@ navLinks.forEach((link) => {
 
 // ============ Section Fade Effect & Active Link ============
 function sectionFadeEffect() {
-  const options =
-    window.innerHeight > 768
-      ? { rootMargin: "-275px 0px", threshold: 0.05 }
-      : { rootMargin: "0px", threshold: 0.2 };
+  const root = document.querySelector(".panel__main-content");
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        const id = entry.target.getAttribute("id");
+        const link = document.querySelector(`.list__links li a[href="#${id}"]`);
 
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach((entry) => {
-      const id = entry.target.getAttribute("id");
-      const link = document.querySelector(`.list__links li a[href="#${id}"]`);
-
-      if (entry.isIntersecting) {
-        entry.target.classList.remove("hidden");
-        if (link) {
-          link.parentElement.classList.add("active");
+        if (entry.isIntersecting) {
+          entry.target.classList.remove("hidden");
+          if (link) {
+            link.parentElement.classList.add("active");
+          }
+        } else {
+          entry.target.classList.add("hidden");
+          if (link) {
+            link.parentElement.classList.remove("active");
+          }
         }
-      } else {
-        entry.target.classList.add("hidden");
-        if (link) {
-          link.parentElement.classList.remove("active");
-        }
-      }
-    });
-  }, options);
+      });
+    },
+    {
+      root,
+      rootMargin: "-20% 0px -20% 0px",
+      threshold: 0.05,
+    },
+  );
 
-  document.querySelectorAll(".hidden").forEach((section) => {
+  document.querySelectorAll("section").forEach((section) => {
     observer.observe(section);
   });
 }
@@ -305,7 +308,7 @@ function createTechChip(name) {
     CSS: "fa-css3",
     "CSS Modules": "fa-css3",
     JavaScript: "fa-code",
-    React: "fa-react",
+    React: "fa-code",
     Hooks: "fa-react",
     "React-Hooks": "fa-react",
     Vite: "fa-bolt",
@@ -781,6 +784,9 @@ if (modal) {
       if (!isPointerDown) return;
       isPointerDown = false;
       cube.classList.remove("is-dragging");
+      setTimeout(() => {
+        wasDragged = false;
+      }, 0);
     });
   }
 

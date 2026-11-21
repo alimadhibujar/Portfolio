@@ -18,6 +18,9 @@ html {
   --social-link-color: hsl(219, 81%, 75%);
   --hero-title-base: #1e293b;
   --hero-title-glow: #e2e8f0;
+  --hero-image-filter: contrast(128%) brightness(1.06) saturate(112%)
+    drop-shadow(0 8px 18px rgba(0, 7, 28, 0.78))
+    drop-shadow(-4px -3px 20px rgba(114, 137, 218, 0.26));
   --accent: #7289da;
   --accent-purple: #6e48aa;
   --glass-bg: rgba(15, 23, 42, 0.74);
@@ -53,6 +56,9 @@ html {
   --social-link-color: hsl(228, 92%, 70%);
   --hero-title-base: #334155;
   --hero-title-glow: #4f46e5;
+  --hero-image-filter: contrast(138%) brightness(0.88)
+    drop-shadow(-5px -3px 20px rgba(26, 39, 68, 0.44))
+    drop-shadow(0 6px 14px rgba(15, 23, 42, 0.26));
   --accent: #4a6cf7;
   --accent-purple: #7c4dff;
   --glass-bg: rgba(255, 255, 255, 0.7);
@@ -189,7 +195,7 @@ section {
   will-change: transform, opacity;
   transition: opacity 1s ease, transform 1s ease, filter 1s ease;
   content-visibility: auto;
-  contain-intrinsic-size: 800px 900px;
+  contain-intrinsic-size: auto 800px auto 900px;
 }
 
 .hidden {
@@ -468,7 +474,6 @@ p.bento-card .card-label {
   display: flex;
   flex-direction: row;
   justify-content: flex-end;
-  align-items: "";
   position: relative;
   top: 50vh;
   left: 9px;
@@ -684,7 +689,6 @@ p.bento-card .card-label {
 #home {
   display: flex;
   flex-direction: column;
-  justify-content: "";
   align-items: center;
   position: relative;
 }
@@ -805,10 +809,12 @@ p.bento-card .card-label {
   }
 }
 #home #heroImage {
-  filter: contrast(120%) drop-shadow(-5px -3px 25px rgba(0, 0, 0, 0.4));
+  width: 100%;
+  height: 100%;
+  filter: var(--hero-image-filter);
   will-change: filter;
   position: absolute;
-  top: 55%;
+  top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
   transition: filter 0.3s ease-in-out;
@@ -816,18 +822,6 @@ p.bento-card .card-label {
 }
 #home #heroImage:active {
   cursor: grabbing;
-}
-@media (max-width: 1024px) {
-  #home #heroImage {
-    height: 780px !important;
-    width: 620px !important;
-  }
-}
-@media (max-width: 480px) {
-  #home #heroImage {
-    height: 712px !important;
-    width: 100% !important;
-  }
 }
 #home hr {
   width: 50vw;
@@ -923,7 +917,7 @@ p.bento-card .card-label {
     background-image: linear-gradient(90deg, var(--text-primary), var(--text-primary));
     animation: scroll-reveal linear forwards;
     animation-timeline: view(y);
-    animation-range: cover 12vh cover 28vh;
+    animation-range: cover 10% cover 30%;
   }
 }
 @keyframes scroll-reveal {
@@ -957,7 +951,7 @@ p.bento-card .card-label {
   left: 50%;
   width: 280px;
   aspect-ratio: 722/491;
-  background-image: url("https://raw.githubusercontent.com/alimadhibujar/Portfolio/master/img/certificate.webp");
+  background-image: url("img/certificate.webp");
   background-size: cover;
   background-position: center;
   border-radius: 8px;
@@ -1434,7 +1428,6 @@ p.bento-card .card-label {
   #contact .contact-wrapper {
     display: flex;
     flex-direction: column;
-    justify-content: "";
     align-items: center;
     width: 100%;
   }
@@ -1957,7 +1950,7 @@ footer .back-to-top {
   text-decoration: none;
   box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
   transition: transform 0.25s ease, background-color 0.25s ease, color 0.25s ease;
-  z-index: 20;
+  z-index: 200;
 }
 footer .back-to-top:hover {
   transform: translateY(-4px);
@@ -1973,15 +1966,15 @@ footer .back-to-top:hover::after {
 }
 @media (max-width: 768px) {
   footer .back-to-top {
-    bottom: 16px;
-    right: 14px;
+    bottom: 20px;
+    right: 16px;
     width: 38px;
     height: 38px;
   }
 }
 footer .container {
   font-size: 2.5rem;
-  font-family: "Mr De Haviland";
+  font-family: "Mr De Haviland", cursive;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -2043,7 +2036,7 @@ footer .container div:first-of-type {
   height: 44px;
   border-radius: 50%;
   border: 1px solid var(--glass-border);
-  background: transparent;
+  background: var(--bg-surface);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   box-shadow: 0 6px 16px var(--glass-shadow);

@@ -761,7 +761,14 @@
                 <label for="letters" class="message">message</label>
               </div>
 
-              <input type="hidden" id="captcha" name="_captcha" value="false" />
+              <!-- cuts down automated bot spam without adding a CAPTCHA. -->
+              <input
+                type="text"
+                name="_honey"
+                style="display: none"
+                tabindex="-1"
+                autocomplete="off"
+              />
 
               <button class="send-button" id="submit" type="submit">
                 <div class="button">

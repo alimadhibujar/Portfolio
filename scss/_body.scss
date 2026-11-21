@@ -106,7 +106,7 @@ section {
     transform $dur-xl $ease-standard,
     filter $dur-xl $ease-standard;
   content-visibility: auto;
-  contain-intrinsic-size: 800px 900px;
+  contain-intrinsic-size: auto 800px auto 900px;
 }
 
 // HIdde Section Styles
@@ -712,9 +712,11 @@ p.bento-card {
   }
 
   #heroImage {
-    filter: contrast(120%) drop-shadow(-5px -3px 25px rgba(0, 0, 0, 0.4));
+    width: 100%;
+    height: 100%;
+    filter: var(--hero-image-filter);
     will-change: filter;
-    @include position(absolute, $left: 50%, $top: 55%);
+    @include position(absolute, $left: 50%, $top: 50%);
     transform: translate(-50%, -50%);
     transition: filter 0.3s ease-in-out;
     cursor: grab;
@@ -724,15 +726,6 @@ p.bento-card {
     }
     // Note: color reveal is handled per-particle in JS (spotlight effect),
     // so no grayscale hover flip here anymore.
-
-    @media (max-width: 1024px) {
-      height: 780px !important;
-      width: 620px !important;
-    }
-    @media (max-width: 480px) {
-      height: 712px !important;
-      width: 100% !important;
-    }
   }
 
   hr {
@@ -850,7 +843,7 @@ p.bento-card {
         );
         animation: scroll-reveal linear forwards;
         animation-timeline: view(y);
-        animation-range: cover 12vh cover 28vh;
+        animation-range: cover 10% cover 30%;
       }
     }
 
@@ -889,7 +882,7 @@ p.bento-card {
       left: 50%;
       width: 280px;
       aspect-ratio: 722 / 491;
-      background-image: url("https://raw.githubusercontent.com/alimadhibujar/Portfolio/master/img/certificate.webp");
+      background-image: url("img/certificate.webp");
       background-size: cover;
       background-position: center;
       border-radius: $radius-sm;
@@ -2161,7 +2154,7 @@ footer {
       transform 0.25s ease,
       background-color 0.25s ease,
       color 0.25s ease;
-    z-index: 20;
+    z-index: 200;
 
     &:hover {
       transform: translateY(-4px);
@@ -2178,8 +2171,8 @@ footer {
       transform: translate(-50%, 0) scale3d(1, 1, 1);
     }
     @media (max-width: 768px) {
-      bottom: 16px;
-      right: 14px;
+      bottom: 20px;
+      right: 16px;
       width: 38px;
       height: 38px;
     }
@@ -2261,7 +2254,7 @@ footer {
   height: 44px;
   border-radius: 50%;
   border: 1px solid var(--glass-border);
-  background: transparent;
+  background: var(--bg-surface);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   box-shadow: 0 6px 16px var(--glass-shadow);

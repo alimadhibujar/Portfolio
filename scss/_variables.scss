@@ -5,7 +5,7 @@
 $side-width: 17.85vw;
 $max-side-width: 250px;
 $font1: "Josefin Slab", serif;
-$font2: "Mr De Haviland";
+$font2: "Mr De Haviland", cursive;
 $base-font-size: clamp(1rem, 2vw, 1.5rem); // Fluid typography
 $blurple: #7289da;
 $activeColor: hsl(230, 12%, 45%);
@@ -61,8 +61,12 @@ $bgImgColor:
 @mixin flex-layout($direction: row, $justify-content: "", $align-items: "") {
   display: flex;
   flex-direction: $direction;
-  justify-content: $justify-content;
-  align-items: $align-items;
+  @if $justify-content != "" {
+    justify-content: $justify-content;
+  }
+  @if $align-items != "" {
+    align-items: $align-items;
+  }
 }
 
 @mixin position(
@@ -109,6 +113,7 @@ html {
   --bg-button: #{$blueButton};
   --snow-filter: invert(0) brightness(0.8);
   --confetti-filter: none;
+
   // Text
   --text-primary: #{$grey4};
   --text-secondary: #{$grey5};
@@ -119,6 +124,11 @@ html {
   // Hero 3D Title
   --hero-title-base: #1e293b;
   --hero-title-glow: #e2e8f0;
+
+  // Hero 3D Portrait Filter (Dark mode default)
+  --hero-image-filter: contrast(128%) brightness(1.06) saturate(112%)
+    drop-shadow(0 8px 18px rgba(0, 7, 28, 0.78))
+    drop-shadow(-4px -3px 20px rgba(114, 137, 218, 0.26));
 
   // Accent
   --accent: #{$blurple};
@@ -179,6 +189,11 @@ html {
   // Hero 3D Title
   --hero-title-base: #334155;
   --hero-title-glow: #4f46e5;
+
+  // Hero 3D Portrait Filter (Light mode contrast boost + dual ambient drop-shadow
+  --hero-image-filter: contrast(138%) brightness(0.88)
+    drop-shadow(-5px -3px 20px rgba(26, 39, 68, 0.44))
+    drop-shadow(0 6px 14px rgba(15, 23, 42, 0.26));
 
   // Accent
   --accent: #4a6cf7;

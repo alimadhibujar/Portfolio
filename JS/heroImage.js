@@ -1,9 +1,8 @@
 import { imgData } from "./dataImage.js";
 
 document.addEventListener("DOMContentLoaded", () => {
-  let renderer, scene, camera, points;
+  let renderer, scene, camera, points, container;
   const samplingInterval = 1;
-  const centerVector = new THREE.Vector3(0, 0, 0);
 
   let targetPositions = null; // clear image positions (centered & scaled)
   let startPositions = null; // scattered positions (used for reverse drag effect)
@@ -62,11 +61,6 @@ document.addEventListener("DOMContentLoaded", () => {
   const breathingSpeed = 0.001; // Speed of breathing animation
   const breathingAmplitude = 5; // Amplitude of breathing effect
 
-  // Particle trail effect
-  let particleHistory = [];
-  const historyLength = 5; // Number of history frames to keep
-  let trailOpacity = 0; // Current trail opacity (increases during movement)
-
   // Natural color enhancement (subtle glow/brightness)
   let colorEnhancement = 0; // Amount of color enhancement (0 to 1)
   const colorEnhanceSpeed = 0.03; // Speed of color transition
@@ -86,7 +80,13 @@ document.addEventListener("DOMContentLoaded", () => {
   const maxBrightnessBoost = 0.15; // Maximum brightness increase (subtle)
   const warmthFactor = 0.05; // Slight warm tint during interaction
 
-  // To scale the clear image to max-width=400px and max-height=397px
+  // Portrait bounding box in world units. The point cloud is scaled to fit it
+  // (see createPointCloud) and the camera is framed around it (see fitCamera).
+  const PORTRAIT_W = 400;
+  const PORTRAIT_H = 360;
+  const FIT_PADDING = 0.95; // breathing room around the portrait (1 = edge to edge)
+  const VERTICAL_NUDGE = 0.05; // portrait sits this fraction of the view height lower
+
   let imgWidth = 0;
   let imgHeight = 0;
   let imageScale = 1; // computed scale factor
@@ -98,6 +98,10 @@ document.addEventListener("DOMContentLoaded", () => {
   let rafId = null;
   let isCanvasVisible = false;
   let visibilityObserver = null;
+  let resizeObserver = null;
+  let lastW = 0;
+  let lastH = 0;
+  let lastDpr = 0;
 
   const shouldRender = () =>
     !document.hidden && isCanvasVisible && points !== undefined;
@@ -123,30 +127,23 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const init = () => {
     const canvas = document.getElementById("heroImage");
-    // Set consistent canvas dimensions
-    const container = canvas.parentElement;
-    canvas.width = container.clientWidth;
-    canvas.height = container.clientHeight || canvas.width * (9 / 16);
-
-    const ww = window.innerWidth;
-    const wh = window.innerHeight;
+    // The canvas is sized from its container (.image-container), never from the
+    // window, so the render aspect always matches the displayed aspect.
+    container = canvas.parentElement;
 
     renderer = new THREE.WebGLRenderer({
       canvas: canvas,
       antialias: true,
       alpha: true,
     });
-    renderer.setSize(ww, wh);
-    renderer.setPixelRatio(
-      Math.min(window.devicePixelRatio || 1, MAX_PIXEL_RATIO),
-    );
 
     scene = new THREE.Scene();
 
-    camera = new THREE.PerspectiveCamera(75, ww / wh, 0.1, 2000);
-    camera.position.set(0, 0, 500);
-    camera.lookAt(centerVector);
+    camera = new THREE.PerspectiveCamera(75, 1, 0.1, 2000);
     scene.add(camera);
+
+    // Sizes the renderer and frames the camera from the container's size.
+    onResize();
 
     const image = new Image();
     image.onload = () => {
@@ -183,7 +180,14 @@ document.addEventListener("DOMContentLoaded", () => {
     // Pause the loop whenever the tab is hidden.
     document.addEventListener("visibilitychange", syncRenderLoop, false);
 
-    window.addEventListener("resize", onResize, false);
+    // Track the container itself: it also changes on orientation change,
+    // breakpoint changes and layout shifts that never fire a window resize.
+    if ("ResizeObserver" in window) {
+      resizeObserver = new ResizeObserver(onResize);
+      resizeObserver.observe(container);
+    } else {
+      window.addEventListener("resize", onResize, false);
+    }
     setupInteractionEvents(canvas);
   };
 
@@ -222,8 +226,11 @@ document.addEventListener("DOMContentLoaded", () => {
         }
       }
     }
-    // Compute scale factor so that the clear image fits within 400px x 397px.
-    imageScale = Math.min(400 / imagedata.width, 360 / imagedata.height);
+    // Compute scale factor so that the clear image fits within PORTRAIT_W x PORTRAIT_H.
+    imageScale = Math.min(
+      PORTRAIT_W / imagedata.width,
+      PORTRAIT_H / imagedata.height,
+    );
     for (let i = 0; i < positions.length; i++) {
       positions[i] *= imageScale;
     }
@@ -249,11 +256,6 @@ document.addEventListener("DOMContentLoaded", () => {
       grayscaleColors[i + 2] = luminance;
     }
     currentColors = new Float32Array(grayscaleColors);
-
-    // Initialize particle history for trail effect
-    for (let i = 0; i < historyLength; i++) {
-      particleHistory.push(new Float32Array(positions.length));
-    }
 
     // Scatter range is relative to the clear image size.
     const scatterRange = 500 * imageScale;
@@ -285,21 +287,54 @@ document.addEventListener("DOMContentLoaded", () => {
     scene.add(points);
   };
 
-  const onResize = () => {
-    const canvas = document.getElementById("heroImage");
-    const ww = window.innerWidth;
-    const wh = window.innerHeight;
-    renderer.setPixelRatio(
-      Math.min(window.devicePixelRatio || 1, MAX_PIXEL_RATIO),
+  // Frame the camera so the whole portrait stays visible at any container
+  // aspect ratio ("contain" fit). The FOV stays fixed and the camera dollies,
+  // which keeps the point size proportional to the portrait at every size.
+  const fitCamera = (w, h) => {
+    const aspect = w / h;
+    const halfFov = THREE.MathUtils.degToRad(camera.fov / 2);
+    // World-space height the view must cover: tall enough for the portrait's
+    // height (plus the vertical nudge on both sides), and wide enough for its
+    // width on narrow containers.
+    const visibleH = Math.max(
+      (PORTRAIT_H * FIT_PADDING) / (1 - 2 * VERTICAL_NUDGE),
+      (PORTRAIT_W * FIT_PADDING) / aspect,
     );
-    renderer.setSize(ww, wh);
-    camera.aspect = ww / wh;
+    camera.aspect = aspect;
+    camera.position.set(
+      0,
+      visibleH * VERTICAL_NUDGE,
+      visibleH / (2 * Math.tan(halfFov)),
+    );
     camera.updateProjectionMatrix();
+    camera.updateMatrixWorld(); // screenToWorld may run before the next render
+  };
+
+  const onResize = () => {
+    if (!renderer || !camera || !container) return;
+    const w = container.clientWidth;
+    const h = container.clientHeight;
+    if (w === 0 || h === 0) return; // hidden (display: none): keep last good size
+    const dpr = Math.min(window.devicePixelRatio || 1, MAX_PIXEL_RATIO);
+    if (w === lastW && h === lastH && dpr === lastDpr) return;
+    lastW = w;
+    lastH = h;
+    lastDpr = dpr;
+
+    renderer.setPixelRatio(dpr);
+    // updateStyle=false: CSS (#heroImage { width/height: 100% }) owns the
+    // display size, so the canvas can't drift away from the camera aspect.
+    renderer.setSize(w, h, false);
+    fitCamera(w, h);
+
+    // setSize clears the drawing buffer; redraw now so there is no blank frame
+    // before the next animation frame.
+    if (points) renderer.render(scene, camera);
   };
 
   // Convert screen coordinates to world coordinates
   const screenToWorld = (screenX, screenY) => {
-    const vector = new THREE.Vector3(screenX, -screenY, 0.5);
+    const vector = new THREE.Vector3(screenX, screenY, 0.5);
     vector.unproject(camera);
     const dir = vector.sub(camera.position).normalize();
     const distance = -camera.position.z / dir.z;
@@ -399,11 +434,23 @@ document.addEventListener("DOMContentLoaded", () => {
       spotlightActive = false;
     });
 
-    canvas.addEventListener("mouseenter", () => {
+    canvas.addEventListener("mouseenter", (e) => {
       if (!isDragging && loadAnimationDone) {
         isMagneticActive = true;
         spotlightActive = true;
       }
+      // Sync prev position to the current cursor world position so the first
+      // mousemove doesn't produce a large velocity spike from (0,0).
+      const rect = canvas.getBoundingClientRect();
+      const nx = ((e.clientX - rect.left) / rect.width) * 2 - 1;
+      const ny = ((e.clientY - rect.top) / rect.height) * 2 - 1;
+      const worldPos = screenToWorld(nx, -ny);
+      mouseWorldX = worldPos.x;
+      mouseWorldY = worldPos.y;
+      prevMouseWorldX = mouseWorldX;
+      prevMouseWorldY = mouseWorldY;
+      mouseVelX = 0;
+      mouseVelY = 0;
     });
 
     // Setup touch events for mobile/tablet support
@@ -455,15 +502,7 @@ document.addEventListener("DOMContentLoaded", () => {
     );
   };
 
-  // Update particle history for trail effect
-  const updateParticleHistory = () => {
-    // Shift history arrays
-    const oldestHistory = particleHistory.shift();
-    for (let i = 0; i < currentPositions.length; i++) {
-      oldestHistory[i] = currentPositions[i];
-    }
-    particleHistory.push(oldestHistory);
-  };
+  // Update particle history for trail effect)
 
   // Apply natural color enhancement (subtle brightness and warmth).
   // Blends from the grayscale resting state towards the original colors,
@@ -808,26 +847,13 @@ document.addEventListener("DOMContentLoaded", () => {
         points.geometry.attributes.color.array.set(currentColors);
         points.geometry.attributes.color.needsUpdate = true;
       } else {
-        // Resting state: desaturated until the spotlight reveals colors
-        points.geometry.attributes.color.array.set(grayscaleColors);
-        points.geometry.attributes.color.needsUpdate = true;
-      }
-
-      // Update particle trail opacity based on movement
-      const movement =
-        Math.abs(currentDragDelta.x) + Math.abs(currentDragDelta.y);
-      if (movement > 5 || waveAnimations.length > 0) {
-        trailOpacity = Math.min(0.5, trailOpacity + 0.05);
-      } else {
-        trailOpacity = Math.max(0, trailOpacity - 0.02);
-      }
-
-      // Update material opacity for trail effect
-      points.material.opacity = 1 - trailOpacity * 0.3;
-
-      // Update particle history for next frame
-      if (trailOpacity > 0.01) {
-        updateParticleHistory();
+        // Resting state: desaturated until the spotlight reveals colors.
+        // Only re-upload the color buffer when we first enter the resting state
+        // (colorEnhancement just hit 0); avoid redundant GPU uploads every frame.
+        if (points.geometry.attributes.color.array !== grayscaleColors) {
+          points.geometry.attributes.color.array.set(grayscaleColors);
+          points.geometry.attributes.color.needsUpdate = true;
+        }
       }
 
       // Update point cloud geometry
