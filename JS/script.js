@@ -77,32 +77,31 @@ navLinks.forEach((link) => {
 
 // ============ Section Fade Effect & Active Link ============
 function sectionFadeEffect() {
-  const root = document.querySelector(".panel__main-content");
-  const observer = new IntersectionObserver(
-    (entries) => {
-      entries.forEach((entry) => {
-        const id = entry.target.getAttribute("id");
-        const link = document.querySelector(`.list__links li a[href="#${id}"]`);
+  const scrollRoot = document.querySelector(".panel__main-content");
+  const isDesktop = window.innerWidth > 768;
 
-        if (entry.isIntersecting) {
-          entry.target.classList.remove("hidden");
-          if (link) {
-            link.parentElement.classList.add("active");
-          }
-        } else {
-          entry.target.classList.add("hidden");
-          if (link) {
-            link.parentElement.classList.remove("active");
-          }
+  const options = isDesktop
+    ? { root: scrollRoot, rootMargin: "-275px 0px", threshold: 0.05 }
+    : { root: scrollRoot, rootMargin: "-10% 0px", threshold: 0.12 };
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      const id = entry.target.getAttribute("id");
+      const link = document.querySelector(`.list__links li a[href="#${id}"]`);
+
+      if (entry.isIntersecting) {
+        entry.target.classList.remove("hidden");
+        if (link) {
+          link.parentElement.classList.add("active");
         }
-      });
-    },
-    {
-      root,
-      rootMargin: "-20% 0px -20% 0px",
-      threshold: 0.05,
-    },
-  );
+      } else {
+        entry.target.classList.add("hidden");
+        if (link) {
+          link.parentElement.classList.remove("active");
+        }
+      }
+    });
+  }, options);
 
   document.querySelectorAll("section").forEach((section) => {
     observer.observe(section);
@@ -944,6 +943,32 @@ if (year) {
 
 // ============ Section Navigation ============
 const mainContent = document.querySelector(".panel__main-content");
+
+// Smooth-scroll Back-to-Top button inside .panel__main-content
+if (backToTopBtn && mainContent) {
+  backToTopBtn.addEventListener("click", (e) => {
+    e.preventDefault();
+    const homeSection = document.getElementById("home");
+    homeSection?.classList.remove("hidden");
+
+    mainContent.scrollTo({ top: 0, behavior: "smooth" });
+
+    // Update active state in sidebar navigation
+    document.querySelectorAll(".list__links li").forEach((li) => {
+      li.classList.remove("active");
+    });
+    const homeLink = document.querySelector('.list__links li a[href="#home"]');
+    if (homeLink) {
+      homeLink.parentElement.classList.add("active");
+      document
+        .querySelectorAll('.list__links a[aria-current="page"]')
+        .forEach((a) => a.removeAttribute("aria-current"));
+      homeLink.setAttribute("aria-current", "page");
+    }
+
+    window.history.pushState(null, null, "#home");
+  });
+}
 
 // Window resize handler
 window.addEventListener("resize", () => {

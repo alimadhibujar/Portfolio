@@ -632,6 +632,7 @@ p.bento-card .card-label {
 .overlay {
   width: 0;
   height: 100vh;
+  height: 100dvh;
   position: absolute;
   z-index: 2;
   transition: all 0.6s linear;
@@ -645,6 +646,7 @@ p.bento-card .card-label {
   left: min(17.85vw, 250px);
   width: calc(100vw - min(17.85vw, 250px));
   height: 100vh;
+  height: 100dvh;
   overflow-y: auto;
   overflow-x: hidden;
 }
@@ -863,7 +865,7 @@ p.bento-card .card-label {
 @media (max-width: 768px) {
   #home #text {
     font-size: calc(100% + 3vw);
-    min-height: 1.2em;
+    min-height: 2.4em;
   }
 }
 
@@ -1324,18 +1326,36 @@ p.bento-card .card-label {
   font-size: clamp(1.25rem, 2vw, 1.6rem);
   color: var(--text-primary);
 }
+@media (max-width: 767px) {
+  #projects .project-hud__title {
+    min-height: 2.5em;
+    display: flex;
+    align-items: center;
+  }
+}
 #projects .project-hud__desc {
   margin: 0;
   font-size: 0.95rem;
   line-height: 1.55;
   color: var(--text-secondary);
-  min-height: 3em;
+  min-height: 3.1em;
+}
+@media (max-width: 767px) {
+  #projects .project-hud__desc {
+    min-height: 4.65em;
+  }
 }
 #projects .project-hud__tech {
   display: flex;
   flex-wrap: wrap;
+  align-content: flex-start;
   gap: 7px;
   margin: 4px 0;
+}
+@media (max-width: 767px) {
+  #projects .project-hud__tech {
+    min-height: 68px;
+  }
 }
 #projects .project-hud__tech .tech-chip {
   display: inline-flex;
@@ -1931,7 +1951,8 @@ footer {
 }
 @media (max-width: 768px) {
   footer {
-    width: 100vw;
+    width: 100%;
+    padding-bottom: calc(70px + env(safe-area-inset-bottom));
   }
 }
 footer .back-to-top {
@@ -1947,6 +1968,7 @@ footer .back-to-top {
   display: flex;
   align-items: center;
   justify-content: center;
+  font-size: 1.5rem;
   text-decoration: none;
   box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
   transition: transform 0.25s ease, background-color 0.25s ease, color 0.25s ease;
@@ -1966,7 +1988,7 @@ footer .back-to-top:hover::after {
 }
 @media (max-width: 768px) {
   footer .back-to-top {
-    bottom: 20px;
+    bottom: calc(20px + env(safe-area-inset-bottom));
     right: 16px;
     width: 38px;
     height: 38px;
