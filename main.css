@@ -197,6 +197,11 @@ section {
   content-visibility: auto;
   contain-intrinsic-size: auto 800px auto 900px;
 }
+@media (min-width: 769px) and (max-width: 920px) {
+  section {
+    padding: 1rem 1.25rem;
+  }
+}
 
 .hidden {
   opacity: 0;
@@ -389,6 +394,17 @@ p.bento-card .card-label {
   right: 0;
   left: 0;
 }
+@media (min-width: 769px) and (max-width: 920px) {
+  .panel__main-side .list__links {
+    top: 70px;
+    padding-left: 12px;
+  }
+}
+@media (max-height: 620px) and (min-width: 769px) {
+  .panel__main-side .list__links {
+    top: 40px;
+  }
+}
 .panel__main-side .list__links li {
   position: relative;
   display: block;
@@ -401,6 +417,18 @@ p.bento-card .card-label {
   z-index: 1;
   backface-visibility: hidden;
   transform: translateZ(0);
+}
+@media (min-width: 769px) and (max-width: 920px) {
+  .panel__main-side .list__links li {
+    padding: 9px 8px 9px 12px;
+    font-size: 0.95rem;
+  }
+}
+@media (max-height: 620px) and (min-width: 769px) {
+  .panel__main-side .list__links li {
+    margin: 5px 0;
+    padding: 7px 8px 7px 12px;
+  }
 }
 .panel__main-side .list__links li span {
   width: 100%;
@@ -475,29 +503,36 @@ p.bento-card .card-label {
   flex-direction: row;
   justify-content: flex-end;
   position: relative;
-  top: 50vh;
+  top: clamp(425px, 58vh, 620px);
   left: 9px;
   z-index: 1;
 }
-@media (min-width: 769px) and (max-width: 1024px) {
+@media (min-width: 769px) and (max-width: 920px) {
   .panel__main-side .social-links {
-    top: 35vh;
+    justify-content: center;
+    left: 4px;
+    top: clamp(425px, 56vh, 540px);
   }
 }
-@media (orientation: landscape) and (max-width: 1366px) {
+@media (min-width: 921px) and (max-width: 1024px) {
   .panel__main-side .social-links {
-    top: 63vh;
+    top: clamp(430px, 58vh, 580px);
+  }
+}
+@media (max-height: 620px) and (min-width: 769px) {
+  .panel__main-side .social-links {
+    top: clamp(330px, 62vh, 420px);
   }
 }
 @media (min-width: 501px) and (max-width: 768px) {
   .panel__main-side .social-links {
-    top: 45vh;
+    top: clamp(410px, 52vh, 520px);
     left: 38px;
   }
 }
 @media (max-width: 500px) {
   .panel__main-side .social-links {
-    top: 60vh;
+    top: clamp(400px, 58vh, 520px);
     left: 15px;
   }
 }
@@ -509,6 +544,8 @@ p.bento-card .card-label {
   align-items: center;
   transform: rotate(-28deg) skew(17deg);
   transform-style: preserve-3d;
+  padding: 0;
+  margin: 0;
 }
 @media (max-width: 768px) {
   .panel__main-side .social-links ul {
@@ -518,11 +555,18 @@ p.bento-card .card-label {
 .panel__main-side .social-links ul li {
   position: relative;
   list-style: none;
-  width: 3.72vw;
-  height: 3.72vw;
+  width: clamp(36px, 3.72vw, 52px);
+  height: clamp(36px, 3.72vw, 52px);
   max-width: 52px;
   max-height: 52px;
   margin: 0 min(1.26vw, 18px);
+}
+@media (min-width: 769px) and (max-width: 920px) {
+  .panel__main-side .social-links ul li {
+    width: clamp(34px, 3.5vw, 42px);
+    height: clamp(34px, 3.5vw, 42px);
+    margin: 0 10px;
+  }
 }
 @media (max-width: 768px) {
   .panel__main-side .social-links ul li {
@@ -691,11 +735,13 @@ p.bento-card .card-label {
 #home {
   display: flex;
   flex-direction: column;
+  justify-content: space-evenly;
   align-items: center;
   position: relative;
+  min-height: 100dvh;
 }
 #home h1 {
-  margin: 30px 0;
+  margin: 0;
   padding: 0;
   color: var(--hero-title-base);
   font-family: "Josefin Slab", serif;
@@ -704,9 +750,9 @@ p.bento-card .card-label {
   text-shadow: 0 -1px 0 var(--hero-title-glow), 1px 1px 1px rgba(0, 0, 0, 0.7), 2px 2px 10px rgba(0, 0, 0, 0.18), 4px 5px 10px rgba(0, 0, 0, 0.18), 6px 9px 10px rgba(0, 0, 0, 0.18), 8px 15px 10px rgba(0, 0, 0, 0.18), 10px 20px 10px rgba(0, 0, 0, 0.18), 15px 30px 10px rgba(0, 0, 0, 0.18);
   will-change: text-shadow;
 }
-@media (max-width: 920px) {
+@media (min-width: 769px) and (max-width: 920px) {
   #home h1 {
-    margin-top: 10%;
+    font-size: clamp(2.2rem, 5vw, 3.2rem);
   }
 }
 #home h1:hover {
@@ -792,13 +838,17 @@ p.bento-card .card-label {
   transition: text-shadow 0.9s ease-in-out;
 }
 #home .image-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: center;
   position: relative;
   width: 100%;
   max-width: 100%;
   max-height: 478px;
   height: auto;
   aspect-ratio: 16/9;
-  overflow: hidden;
+  overflow-x: clip;
 }
 @media (max-width: 480px) {
   #home .image-container {
@@ -828,7 +878,7 @@ p.bento-card .card-label {
 #home hr {
   width: 50vw;
   height: 1px;
-  margin-top: 0;
+  margin: 0;
   outline: 0;
   border: 0;
   box-shadow: 0px 2px 2px rgb(81, 107, 92);
@@ -842,7 +892,7 @@ p.bento-card .card-label {
 }
 @media (max-width: 500px) {
   #home hr {
-    width: 100vw;
+    width: 100%;
   }
 }
 #home #text {
@@ -850,7 +900,7 @@ p.bento-card .card-label {
   font-size: calc(100% + 1.2vw);
   min-height: 1.5em;
   line-height: 1.5;
-  margin-top: 10%;
+  margin: 0;
   -webkit-text-fill-color: transparent;
   -webkit-text-stroke: 0.5px hsl(240, 4%, 81%);
   text-shadow: 1px 2px 2px rgba(0, 0, 0, 0.1), 2px 2px 2px rgba(0, 0, 0, 0.5), 3px 3px 3px rgba(0, 0, 0, 0.8);
@@ -864,8 +914,7 @@ p.bento-card .card-label {
 }
 @media (max-width: 768px) {
   #home #text {
-    font-size: calc(100% + 3vw);
-    min-height: 2.4em;
+    font-size: calc(100% + 3.5vw);
   }
 }
 
@@ -1107,7 +1156,7 @@ p.bento-card .card-label {
   gap: clamp(1.5rem, 3vw, 2.5rem);
   margin-top: 0.5rem;
 }
-@media (max-width: 900px) {
+@media (max-width: 920px) {
   #projects .projects-stage {
     grid-template-columns: 1fr;
   }
@@ -1423,18 +1472,28 @@ p.bento-card .card-label {
 }
 
 #contact {
-  min-height: clamp(300px, 65vh, 800px);
+  min-height: auto;
   position: relative;
   overflow: visible;
+  padding-bottom: 2.5rem;
 }
-@media (min-width: 768px) and (max-width: 1024px) {
+@media (min-width: 769px) and (max-width: 920px) {
   #contact {
-    padding-top: 10px;
+    padding-top: 0;
+    padding-bottom: 1.5rem;
+  }
+  #contact h3 {
+    margin: 0.5rem 0;
+  }
+  #contact p.bento-card {
+    margin: 0.5rem 0 0.75rem;
+    padding: 12px 14px;
   }
 }
-@media (orientation: landscape) and (max-width: 1024px) {
+@media (min-width: 921px) and (max-width: 1024px) {
   #contact {
-    padding-bottom: 150px;
+    padding-top: 10px;
+    padding-bottom: 2rem;
   }
 }
 #contact .contact-wrapper {
@@ -1443,6 +1502,11 @@ p.bento-card .card-label {
   justify-content: space-between;
   align-items: flex-start;
   gap: 2rem;
+}
+@media (min-width: 769px) and (max-width: 920px) {
+  #contact .contact-wrapper {
+    gap: 1.25rem;
+  }
 }
 @media (max-width: 767px) {
   #contact .contact-wrapper {
@@ -1459,9 +1523,20 @@ p.bento-card .card-label {
   margin-top: 25px;
   position: relative;
 }
+@media (min-width: 769px) and (max-width: 920px) {
+  #contact .form-horizontal {
+    flex-basis: 48%;
+    margin-top: 10px;
+  }
+}
 #contact .form-horizontal .field-group {
   position: relative;
   margin-bottom: 25px;
+}
+@media (min-width: 769px) and (max-width: 920px) {
+  #contact .form-horizontal .field-group {
+    margin-bottom: 16px;
+  }
 }
 #contact .form-horizontal input {
   width: 100%;
@@ -1564,6 +1639,11 @@ p.bento-card .card-label {
   transition: opacity 200ms ease-in-out, background-color 300ms linear, box-shadow 300ms ease;
   animation: borderAnimation 2s infinite linear;
   animation-play-state: paused;
+}
+@media (min-width: 769px) and (max-width: 920px) {
+  #contact textarea {
+    min-height: 85px;
+  }
 }
 #contact textarea:focus {
   animation-play-state: running;
@@ -1726,6 +1806,12 @@ p.bento-card .card-label {
   width: 100%;
   margin-top: 25px;
 }
+@media (min-width: 769px) and (max-width: 920px) {
+  #contact .direct-contact-container {
+    flex-basis: 48%;
+    margin-top: 10px;
+  }
+}
 #contact .availability-card {
   display: flex;
   align-items: center;
@@ -1736,6 +1822,16 @@ p.bento-card .card-label {
   border: 1px solid var(--accent);
   background-color: var(--glass-bg);
   font-size: 0.85rem;
+}
+@media (min-width: 769px) and (max-width: 920px) {
+  #contact .availability-card {
+    flex-wrap: wrap;
+    border-radius: 16px;
+    padding: 8px 12px;
+    margin-bottom: 12px;
+    gap: 6px 8px;
+    font-size: 0.8rem;
+  }
 }
 #contact .availability-card .status-dot {
   width: 9px;
@@ -1757,6 +1853,13 @@ p.bento-card .card-label {
   padding-left: 10px;
   border-left: 1px solid var(--accent);
   cursor: default;
+}
+@media (min-width: 769px) and (max-width: 920px) {
+  #contact .availability-card .local-time {
+    border-left: none;
+    padding-left: 17px;
+    width: 100%;
+  }
 }
 #contact .availability-card .local-time[data-title]::after {
   bottom: calc(100% + 8px);
@@ -1784,6 +1887,11 @@ p.bento-card .card-label {
   flex-direction: column;
   gap: 16px;
 }
+@media (min-width: 769px) and (max-width: 920px) {
+  #contact .contact-list {
+    gap: 10px;
+  }
+}
 #contact .list-item {
   display: flex;
   align-items: center;
@@ -1794,6 +1902,12 @@ p.bento-card .card-label {
   background-color: var(--glass-bg);
   color: var(--accent);
   transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+}
+@media (min-width: 769px) and (max-width: 920px) {
+  #contact .list-item {
+    padding: 10px 12px;
+    gap: 10px;
+  }
 }
 #contact .list-item:hover {
   transform: translateX(6px);
@@ -1818,6 +1932,13 @@ p.bento-card .card-label {
   font-size: 1.1rem;
   transition: background-color 0.25s ease, color 0.25s ease, transform 0.25s ease;
 }
+@media (min-width: 769px) and (max-width: 920px) {
+  #contact .icon-box {
+    width: 34px;
+    height: 34px;
+    font-size: 1rem;
+  }
+}
 #contact .contact-details {
   display: flex;
   flex-direction: column;
@@ -1837,6 +1958,12 @@ p.bento-card .card-label {
   text-decoration: none;
   transition-duration: 0.25s;
   font-size: 0.95rem;
+}
+@media (min-width: 769px) and (max-width: 920px) {
+  #contact .contact-text,
+  #contact .contact-text a {
+    font-size: 0.85rem;
+  }
 }
 #contact .contact-text:hover,
 #contact .contact-text a:hover {
@@ -1900,6 +2027,13 @@ p.bento-card .card-label {
   min-height: 100px;
   max-height: 150px;
 }
+@media (min-width: 769px) and (max-width: 920px) {
+  .waves {
+    height: 12vh;
+    min-height: 80px;
+    max-height: 120px;
+  }
+}
 .waves .parallax > use {
   fill: var(--footer-bg, rgb(51, 73, 119));
   transition: fill 0.6s ease;
@@ -1934,13 +2068,12 @@ p.bento-card .card-label {
     transform: translate3d(85px, 0, 0);
   }
 }
-@media (min-width: 768px) and (max-width: 1024px) {
-  .footer-wrapper {
-    margin-top: -7rem;
-    position: relative;
-    z-index: 1;
-  }
+.footer-wrapper {
+  position: relative;
+  z-index: 1;
+  margin-top: 0;
 }
+
 footer {
   background-color: var(--footer-bg);
   transition: background-color 0.6s ease;

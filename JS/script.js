@@ -263,7 +263,7 @@ const projectsData = {
     id: "side5",
     title: "React Photo Gallery",
     desc: "A responsive photo gallery built in React with lightbox experience.",
-    tech: ["React", "React-hooks", "CSS", "JavaScript"],
+    tech: ["React", "React-Hooks", "CSS", "JavaScript"],
     details:
       "Goal: Showcase images with pleasant UX and responsiveness. Contribution: Grid system, css-skeleton-loading, modals/lightbox, keyboard navigation.",
     media: {
@@ -302,14 +302,14 @@ let vtThumbElements = [];
 
 function createTechChip(name) {
   const iconMap = {
-    HTML: "fa-html5",
-    SCSS: "fa-scss",
-    CSS: "fa-css3",
-    "CSS Modules": "fa-css3",
-    JavaScript: "fa-code",
-    React: "fa-code",
-    Hooks: "fa-react",
-    "React-Hooks": "fa-react",
+    HTML: "fa-brands fa-html5",
+    SCSS: "fa-brands fa-sass",
+    CSS: "fa-brands fa-css3",
+    "CSS Modules": "fa-brands fa-css3",
+    JavaScript: "fa-brands fa-js",
+    React: "fa-brands fa-react",
+    Hooks: "fa-brands fa-react",
+    "React-Hooks": "fa-brands fa-react",
     Vite: "fa-bolt",
     Canvas: "fa-picture-o",
   };
