@@ -943,6 +943,7 @@ if (year) {
 
 // ============ Section Navigation ============
 const mainContent = document.querySelector(".panel__main-content");
+const backToTopBtn = document.querySelector(".back-to-top");
 
 // Smooth-scroll Back-to-Top button inside .panel__main-content
 if (backToTopBtn && mainContent) {

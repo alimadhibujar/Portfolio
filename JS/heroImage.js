@@ -367,6 +367,9 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     canvas.addEventListener("mousedown", (e) => {
+      // Ignore drags until the intro finishes; otherwise the release state
+      // (dragReleaseAnimating) can strand the load animation mid-scatter.
+      if (!loadAnimationDone) return;
       isDragging = true;
       dragReleaseAnimating = false; // cancel any release animation
       dragStart = { x: e.clientX, y: e.clientY };
@@ -455,6 +458,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Setup touch events for mobile/tablet support
     canvas.addEventListener("touchstart", (e) => {
+      if (!loadAnimationDone) return;
       if (e.touches.length > 0) {
         isDragging = true;
         dragReleaseAnimating = false;
@@ -579,7 +583,9 @@ document.addEventListener("DOMContentLoaded", () => {
     const now = performance.now();
 
     // Initial load animation (scatter → clear) — Staggered Swirl + Ease-Out
-    if (!isDragging && !dragReleaseAnimating && !loadAnimationDone) {
+    // Not gated on drag state: interactions are ignored until this finishes,
+    // and the intro must always run to completion.
+    if (!loadAnimationDone) {
       const duration = 2600;
       const elapsed = now - animationStartTime;
       let allDone = true;
