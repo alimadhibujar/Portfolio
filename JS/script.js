@@ -296,9 +296,35 @@ const modalDetails = modal?.querySelector("#projectModalDetails");
 const modalLive = modal?.querySelector("#projectModalLive");
 const modalRepo = modal?.querySelector("#projectModalRepo");
 
-// Elements that currently carry an inline view-transition-name for the
-// project-thumbnail expansion (tracked so we only clean up what we set)
-let vtThumbElements = [];
+// Thumbnail <-> modal morph (View Transitions).
+// A view-transition-name must be unique among rendered elements in each
+// captured state, and the thumbnail stays rendered behind the open modal. So
+// the shared name is only ever on ONE element at a time: it is applied right
+// before a transition starts and handed over inside the update callback.
+const VT_CLASS = "project-thumb"; // matches ::view-transition-group(*.project-thumb)
+let vtThumb = null; // the clicked project thumbnail
+let vtName = null; // shared transition name, e.g. "project-side1-thumb"
+
+function setMorphName(el, name) {
+  if (!el) return;
+  el.style.viewTransitionName = name;
+  el.style.viewTransitionClass = VT_CLASS;
+}
+
+function clearMorphName(el) {
+  if (!el) return;
+  el.style.viewTransitionName = "";
+  el.style.viewTransitionClass = "";
+}
+
+/**
+ * The modal element that morphs with the thumbnail. Looked up at call time
+ * because renderProjectPreview() builds a .preview-shell (+ iframe), and the
+ * timeout fallback / static media swap it for an <img> or <video>.
+ */
+function getModalMorphTarget() {
+  return modalMedia?.querySelector(".preview-shell, img, video") ?? null;
+}
 
 function createTechChip(name) {
   const iconMap = {
@@ -536,65 +562,87 @@ function openProjectModal(projectId) {
 
   fillModal(data);
 
-  // Set view-transition-name for thumbnail expansion effect.
-  // NOTE: view-transition-name is an inline *style* property, not an HTML
-  // attribute, so we look up the element by id / data-project instead.
-  const thumbnail =
-    document.getElementById(projectId) ||
-    document.querySelector(`a[data-project="${projectId}"]`);
-  const modalImg = modalMedia?.querySelector("img");
-
-  vtThumbElements = [];
-  if (thumbnail && modalImg) {
-    thumbnail.style.viewTransitionName = `project-${projectId}-thumb`;
-    modalImg.style.viewTransitionName = `project-${projectId}-thumb`;
-    vtThumbElements.push(thumbnail, modalImg);
-  }
-
-  // Use view transition if supported
-  if (document.startViewTransition) {
-    document.documentElement.classList.add("spa-transition");
-    const transition = document.startViewTransition(() => {
-      modal.classList.add("is-open");
-      modal.setAttribute("aria-hidden", "false");
-    });
-    transition.finished.finally(() => {
-      document.documentElement.classList.remove("spa-transition");
-    });
-  } else {
+  const root = document.documentElement;
+  const showModal = () => {
     modal.classList.add("is-open");
     modal.setAttribute("aria-hidden", "false");
+  };
+
+  // view-transition-name is an inline *style* property, not an HTML attribute,
+  // so find the thumbnail by id / data-project instead of a style selector.
+  vtThumb =
+    document.getElementById(projectId) ||
+    document.querySelector(`a[data-project="${projectId}"]`);
+  vtName = `project-${projectId}-thumb`;
+  const target = getModalMorphTarget(); // .preview-shell, or <img>/<video>
+  const canMorph = Boolean(vtThumb && target);
+
+  if (!document.startViewTransition) {
+    showModal();
+    return;
   }
+
+  // Old state: only the thumbnail is named (the modal is still display:none).
+  if (canMorph) setMorphName(vtThumb, vtName);
+
+  root.classList.add("spa-transition");
+  const transition = document.startViewTransition(() => {
+    showModal();
+    // New state: move the name onto the modal media. Leaving it on the
+    // thumbnail too would be a duplicate name and skip the transition.
+    if (canMorph) {
+      clearMorphName(vtThumb);
+      setMorphName(target, vtName);
+    }
+  });
+  transition.finished.finally(() => {
+    root.classList.remove("spa-transition");
+    clearMorphName(target);
+  });
 }
 
 function closeProjectModal() {
   if (!modal) return;
 
-  if (document.startViewTransition) {
-    document.documentElement.classList.add("spa-transition");
-    const transition = document.startViewTransition(() => {
-      modal.classList.remove("is-open");
-      modal.setAttribute("aria-hidden", "true");
-    });
-    transition.finished.finally(() => {
-      document.documentElement.classList.remove("spa-transition");
-    });
-  } else {
+  const root = document.documentElement;
+  const hideModal = () => {
     modal.classList.remove("is-open");
     modal.setAttribute("aria-hidden", "true");
+  };
+
+  // Re-query: the preview may have fallen back to a screenshot since opening.
+  const thumb = vtThumb;
+  const name = vtName;
+  const target = getModalMorphTarget();
+  const canMorph = Boolean(thumb && name && target);
+
+  if (document.startViewTransition) {
+    // Old state: only the modal media is named.
+    if (canMorph) setMorphName(target, name);
+
+    root.classList.add("spa-transition");
+    const transition = document.startViewTransition(() => {
+      hideModal();
+      // New state: hand the name back to the thumbnail.
+      if (canMorph) {
+        clearMorphName(target);
+        setMorphName(thumb, name);
+      }
+    });
+    transition.finished.finally(() => {
+      root.classList.remove("spa-transition");
+      clearMorphName(thumb);
+      clearMorphName(target);
+    });
+  } else {
+    hideModal();
   }
+
+  vtThumb = null;
+  vtName = null;
 
   // Notify listeners (e.g. live-preview timers) that the modal is closing
   modal.dispatchEvent(new CustomEvent("modal-closed"));
-
-  // Cleanup view-transition-names after transition — only the elements we
-  // set them on, not every element with an inline style
-  setTimeout(() => {
-    vtThumbElements.forEach((el) => {
-      el.style.viewTransitionName = "";
-    });
-    vtThumbElements = [];
-  }, 700);
 }
 
 // Modal close interactions
@@ -898,6 +946,25 @@ document.querySelectorAll(".copy-btn").forEach((btn) => {
 // 3. In-Page AJAX Form Submission + Paper Plane Takeoff
 const contactForm = document.getElementById("contact-form");
 if (contactForm) {
+  // Reset the button to its default state so users can re-submit after editing
+  function resetSubmitBtn(submitBtn, sendText) {
+    submitBtn.classList.remove("is-sending", "is-sent");
+    submitBtn.disabled = false;
+    sendText.textContent = "SEND";
+  }
+
+  // Re-enable the button whenever the user starts editing a field after a
+  // successful send, so they can submit again without a page reload.
+  contactForm.addEventListener("input", () => {
+    const submitBtn = document.getElementById("submit");
+    if (submitBtn?.classList.contains("is-sent")) {
+      const sendText = submitBtn.querySelector(".send-text");
+      resetSubmitBtn(submitBtn, sendText);
+      const statusEl = document.getElementById("form-status");
+      if (statusEl) statusEl.classList.remove("visible");
+    }
+  });
+
   contactForm.addEventListener("submit", async (e) => {
     e.preventDefault();
 
@@ -905,6 +972,13 @@ if (contactForm) {
     const sendText = submitBtn.querySelector(".send-text");
     const statusEl = document.getElementById("form-status");
 
+    // Guard against duplicate submits (Enter key, Space, rapid clicks)
+    if (submitBtn.disabled) return;
+
+    // Disable the button for the entire in-flight period so Enter / Space /
+    // extra clicks cannot fire another submit while the request is pending,
+    // and so the browser's own :disabled state blocks all interaction paths.
+    submitBtn.disabled = true;
     submitBtn.classList.add("is-sending");
     sendText.textContent = "SENDING...";
 
@@ -918,6 +992,8 @@ if (contactForm) {
       if (response.ok) {
         submitBtn.classList.remove("is-sending");
         submitBtn.classList.add("is-sent");
+        // Keep disabled while in sent state; the input listener above
+        // re-enables it as soon as the user edits any field.
         sendText.textContent = "MESSAGE SENT ✓";
         statusEl.textContent = "Thank you! I'll get back to you shortly.";
         statusEl.classList.add("visible");
@@ -926,8 +1002,8 @@ if (contactForm) {
         throw new Error("Form submission failed");
       }
     } catch (error) {
-      submitBtn.classList.remove("is-sending");
-      sendText.textContent = "SEND";
+      // On error: re-enable immediately so the user can try again
+      resetSubmitBtn(submitBtn, sendText);
       statusEl.textContent = "Something went wrong. Please email me directly.";
       statusEl.classList.add("visible");
     }

@@ -1562,6 +1562,8 @@ p.bento-card {
       margin-top: 10px;
     }
 
+    // ---- Field groups ----
+
     .field-group {
       position: relative;
       margin-bottom: 25px;
@@ -1571,12 +1573,14 @@ p.bento-card {
       }
     }
 
-    input {
+    // ---- Shared field base (input + textarea) ----
+
+    input,
+    textarea {
       width: 100%;
-      height: 45px;
-      padding-left: 15px;
       color: var(--text-primary);
       background-color: var(--glass-bg);
+      // Wavy border size tracks the animation; height/width set per-element below
       background-size:
         1px calc(100% + 16px),
         calc(100% + 16px) 1px,
@@ -1585,9 +1589,6 @@ p.bento-card {
       border: 1px solid var(--accent);
       border-radius: 10px;
       outline: none;
-      transition:
-        background-color 300ms linear,
-        box-shadow 300ms ease;
       animation: borderAnimation 2s infinite linear;
       animation-play-state: paused;
 
@@ -1597,20 +1598,55 @@ p.bento-card {
         box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
       }
 
-      // Run label animation only on focus
+      // Activate label animation and reveal it on focus / hover
       &:focus + label {
         animation-play-state: running;
         opacity: 1;
       }
-
       &:hover + label {
         opacity: 1;
       }
+
+      // Filled state (value present)
+      &:not(:placeholder-shown) {
+        border: 1px solid var(--accent-purple);
+        background-color: var(--input-filled-bg);
+      }
     }
 
+    // ---- Input-specific overrides ----
+
+    input {
+      height: 45px;
+      padding-left: 15px;
+      transition:
+        background-color 300ms linear,
+        box-shadow 300ms ease;
+    }
+
+    // ---- Textarea-specific overrides ----
+
+    textarea {
+      display: block;
+      padding: 10px 15px;
+      resize: vertical;
+      min-height: 100px;
+      transition:
+        opacity 200ms ease-in-out,
+        background-color 300ms linear,
+        box-shadow 300ms ease;
+
+      @media (min-width: 769px) and (max-width: 920px) {
+        min-height: 85px;
+      }
+    }
+
+    // Hide placeholder text (floating label acts as the visible placeholder)
     ::placeholder {
       color: transparent;
     }
+
+    // ---- Floating label (default / idle state) ----
 
     label {
       position: absolute;
@@ -1628,135 +1664,39 @@ p.bento-card {
         color 200ms ease-in-out,
         opacity 200ms ease-in-out,
         background-color 200ms ease-in-out;
+      // Label border runs the animation in reverse so it moves opposite the field
       animation: borderAnimation 2s infinite linear reverse;
       animation-play-state: paused;
     }
 
-    // Wavy borders for inputs, textarea and their floating labels
+    // ---- Wavy animated border (applied to both fields and their labels) ----
+    // Uses the mixin from _variables.scss so the gradient definition lives in one place.
+
     input,
     textarea,
     input:not(:placeholder-shown) + label,
+    input:focus + label,
+    textarea:not(:placeholder-shown) + label,
+    textarea:focus + label {
+      @include wavy-border-bg;
+    }
+
+    // ---- Floating label – focused state (accent colour border) ----
+
+    input:focus + label,
+    textarea:focus + label {
+      @include label-lifted(var(--accent));
+    }
+
+    // ---- Floating label – filled state (purple border signals "done") ----
+
+    input:not(:placeholder-shown) + label,
     textarea:not(:placeholder-shown) + label {
-      background-image:
-        repeating-linear-gradient(
-          55deg,
-          var(--text-primary),
-          var(--text-primary) 1px,
-          transparent 5px,
-          transparent 6px,
-          var(--text-primary) 16px
-        ),
-        repeating-linear-gradient(
-          145deg,
-          var(--text-primary),
-          var(--text-primary) 1px,
-          transparent 5px,
-          transparent 6px,
-          var(--text-primary) 16px
-        ),
-        repeating-linear-gradient(
-          235deg,
-          var(--text-primary),
-          var(--text-primary) 1px,
-          transparent 5px,
-          transparent 6px,
-          var(--text-primary) 16px
-        ),
-        repeating-linear-gradient(
-          325deg,
-          var(--text-primary),
-          var(--text-primary) 1px,
-          transparent 5px,
-          transparent 6px,
-          var(--text-primary) 16px
-        );
-      background-position:
-        0 0,
-        0 0,
-        100% 0,
-        0 100%;
-      background-repeat: no-repeat;
-      opacity: 1;
-    }
-
-    // Floating label – input filled or focused
-    input:not(:placeholder-shown) + label {
-      transform: translateY(-22px) translateX(10px) scale(0.75);
-      transform-origin: 0 50%;
-      color: inherit;
-      background-color: var(--label-bg);
-      background-size:
-        0px,
-        0px,
-        0px,
-        calc(100% + 16px) 1px;
-      border-bottom: 2px solid $purple;
-    }
-
-    input:not(:placeholder-shown) {
-      border: 1px solid var(--accent-purple);
-      background-color: var(--input-filled-bg);
+      @include label-lifted($purple);
     }
   }
 
-  textarea {
-    width: 100%;
-    display: block;
-    background-color: var(--glass-bg);
-    background-size:
-      1px calc(100% + 16px),
-      calc(100% + 16px) 1px,
-      1px calc(100% + 16px),
-      calc(100% + 16px) 1px;
-    color: var(--text-primary);
-    border: 1px solid var(--accent);
-    border-radius: 10px;
-    outline: none;
-    padding: 10px 15px;
-    resize: vertical;
-    min-height: 100px;
-    transition:
-      opacity 200ms ease-in-out,
-      background-color 300ms linear,
-      box-shadow 300ms ease;
-    animation: borderAnimation 2s infinite linear;
-    animation-play-state: paused;
-
-    @media (min-width: 769px) and (max-width: 920px) {
-      min-height: 85px;
-    }
-
-    &:focus {
-      animation-play-state: running;
-      background-color: var(--input-focus-bg);
-      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
-    }
-    &:focus + label {
-      animation-play-state: running;
-      opacity: 1;
-    }
-    &:hover + label {
-      opacity: 1;
-    }
-  }
-
-  textarea:not(:placeholder-shown) + label {
-    color: inherit;
-    background-color: var(--label-bg);
-    background-size:
-      0px,
-      0px,
-      0px,
-      calc(100% + 16px) 1px;
-    border-bottom: 2px solid $purple;
-    transform: translateY(-22px) translateX(10px) scale(0.75);
-    transform-origin: 0 50%;
-  }
-
-  textarea:not(:placeholder-shown) {
-    border: 1px solid var(--accent-purple);
-    background-color: var(--input-filled-bg);
-  }
+  // ---- Wavy border keyframes (shared by inputs, textarea, and labels) ----
 
   @keyframes borderAnimation {
     from {
@@ -2502,9 +2442,21 @@ html:not(.spa-transition) {
   animation-timing-function: $ease-soft;
 }
 
-::view-transition-group(*[style*="project-"]) {
+// Project thumbnail <-> modal image expansion.
+// The transition names are generated per project in JS (`project-<id>-thumb`),
+// and pseudo-element arguments can't match attributes or partial names, so JS
+// also sets `view-transition-class: project-thumb` and we target that class.
+::view-transition-group(*.project-thumb) {
   animation-duration: 0.7s;
   animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+// The thumbnail and the modal media have different aspect ratios, so make both
+// snapshots fill the animating group (cropped) instead of keeping their own.
+::view-transition-old(*.project-thumb),
+::view-transition-new(*.project-thumb) {
+  height: 100%;
+  object-fit: cover;
 }
 
 // ======================

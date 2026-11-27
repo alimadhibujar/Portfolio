@@ -1538,31 +1538,58 @@ p.bento-card .card-label {
     margin-bottom: 16px;
   }
 }
-#contact .form-horizontal input {
+#contact .form-horizontal input,
+#contact .form-horizontal textarea {
   width: 100%;
-  height: 45px;
-  padding-left: 15px;
   color: var(--text-primary);
   background-color: var(--glass-bg);
   background-size: 1px calc(100% + 16px), calc(100% + 16px) 1px, 1px calc(100% + 16px), calc(100% + 16px) 1px;
   border: 1px solid var(--accent);
   border-radius: 10px;
   outline: none;
-  transition: background-color 300ms linear, box-shadow 300ms ease;
   animation: borderAnimation 2s infinite linear;
   animation-play-state: paused;
 }
-#contact .form-horizontal input:focus {
+#contact .form-horizontal input:focus,
+#contact .form-horizontal textarea:focus {
   animation-play-state: running;
   background-color: var(--input-focus-bg);
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
 }
-#contact .form-horizontal input:focus + label {
+#contact .form-horizontal input:focus + label,
+#contact .form-horizontal textarea:focus + label {
   animation-play-state: running;
   opacity: 1;
 }
-#contact .form-horizontal input:hover + label {
+#contact .form-horizontal input:hover + label,
+#contact .form-horizontal textarea:hover + label {
   opacity: 1;
+}
+#contact .form-horizontal input:not(:-moz-placeholder), #contact .form-horizontal textarea:not(:-moz-placeholder) {
+  border: 1px solid var(--accent-purple);
+  background-color: var(--input-filled-bg);
+}
+#contact .form-horizontal input:not(:placeholder-shown),
+#contact .form-horizontal textarea:not(:placeholder-shown) {
+  border: 1px solid var(--accent-purple);
+  background-color: var(--input-filled-bg);
+}
+#contact .form-horizontal input {
+  height: 45px;
+  padding-left: 15px;
+  transition: background-color 300ms linear, box-shadow 300ms ease;
+}
+#contact .form-horizontal textarea {
+  display: block;
+  padding: 10px 15px;
+  resize: vertical;
+  min-height: 100px;
+  transition: opacity 200ms ease-in-out, background-color 300ms linear, box-shadow 300ms ease;
+}
+@media (min-width: 769px) and (max-width: 920px) {
+  #contact .form-horizontal textarea {
+    min-height: 85px;
+  }
 }
 #contact .form-horizontal ::-moz-placeholder {
   color: transparent;
@@ -1594,13 +1621,24 @@ p.bento-card .card-label {
 #contact .form-horizontal input,
 #contact .form-horizontal textarea,
 #contact .form-horizontal input:not(:placeholder-shown) + label,
-#contact .form-horizontal textarea:not(:placeholder-shown) + label {
+#contact .form-horizontal input:focus + label,
+#contact .form-horizontal textarea:not(:placeholder-shown) + label,
+#contact .form-horizontal textarea:focus + label {
   background-image: repeating-linear-gradient(55deg, var(--text-primary), var(--text-primary) 1px, transparent 5px, transparent 6px, var(--text-primary) 16px), repeating-linear-gradient(145deg, var(--text-primary), var(--text-primary) 1px, transparent 5px, transparent 6px, var(--text-primary) 16px), repeating-linear-gradient(235deg, var(--text-primary), var(--text-primary) 1px, transparent 5px, transparent 6px, var(--text-primary) 16px), repeating-linear-gradient(325deg, var(--text-primary), var(--text-primary) 1px, transparent 5px, transparent 6px, var(--text-primary) 16px);
   background-position: 0 0, 0 0, 100% 0, 0 100%;
   background-repeat: no-repeat;
   opacity: 1;
 }
-#contact .form-horizontal input:not(:-moz-placeholder) + label {
+#contact .form-horizontal input:focus + label,
+#contact .form-horizontal textarea:focus + label {
+  transform: translateY(-22px) translateX(10px) scale(0.75);
+  transform-origin: 0 50%;
+  color: inherit;
+  background-color: var(--label-bg);
+  background-size: 0px, 0px, 0px, calc(100% + 16px) 1px;
+  border-bottom: 2px solid var(--accent);
+}
+#contact .form-horizontal input:not(:-moz-placeholder) + label, #contact .form-horizontal textarea:not(:-moz-placeholder) + label {
   transform: translateY(-22px) translateX(10px) scale(0.75);
   transform-origin: 0 50%;
   color: inherit;
@@ -1608,78 +1646,14 @@ p.bento-card .card-label {
   background-size: 0px, 0px, 0px, calc(100% + 16px) 1px;
   border-bottom: 2px solid #6e48aa;
 }
-#contact .form-horizontal input:not(:placeholder-shown) + label {
+#contact .form-horizontal input:not(:placeholder-shown) + label,
+#contact .form-horizontal textarea:not(:placeholder-shown) + label {
   transform: translateY(-22px) translateX(10px) scale(0.75);
   transform-origin: 0 50%;
   color: inherit;
   background-color: var(--label-bg);
   background-size: 0px, 0px, 0px, calc(100% + 16px) 1px;
   border-bottom: 2px solid #6e48aa;
-}
-#contact .form-horizontal input:not(:-moz-placeholder) {
-  border: 1px solid var(--accent-purple);
-  background-color: var(--input-filled-bg);
-}
-#contact .form-horizontal input:not(:placeholder-shown) {
-  border: 1px solid var(--accent-purple);
-  background-color: var(--input-filled-bg);
-}
-#contact textarea {
-  width: 100%;
-  display: block;
-  background-color: var(--glass-bg);
-  background-size: 1px calc(100% + 16px), calc(100% + 16px) 1px, 1px calc(100% + 16px), calc(100% + 16px) 1px;
-  color: var(--text-primary);
-  border: 1px solid var(--accent);
-  border-radius: 10px;
-  outline: none;
-  padding: 10px 15px;
-  resize: vertical;
-  min-height: 100px;
-  transition: opacity 200ms ease-in-out, background-color 300ms linear, box-shadow 300ms ease;
-  animation: borderAnimation 2s infinite linear;
-  animation-play-state: paused;
-}
-@media (min-width: 769px) and (max-width: 920px) {
-  #contact textarea {
-    min-height: 85px;
-  }
-}
-#contact textarea:focus {
-  animation-play-state: running;
-  background-color: var(--input-focus-bg);
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
-}
-#contact textarea:focus + label {
-  animation-play-state: running;
-  opacity: 1;
-}
-#contact textarea:hover + label {
-  opacity: 1;
-}
-#contact textarea:not(:-moz-placeholder) + label {
-  color: inherit;
-  background-color: var(--label-bg);
-  background-size: 0px, 0px, 0px, calc(100% + 16px) 1px;
-  border-bottom: 2px solid #6e48aa;
-  transform: translateY(-22px) translateX(10px) scale(0.75);
-  transform-origin: 0 50%;
-}
-#contact textarea:not(:placeholder-shown) + label {
-  color: inherit;
-  background-color: var(--label-bg);
-  background-size: 0px, 0px, 0px, calc(100% + 16px) 1px;
-  border-bottom: 2px solid #6e48aa;
-  transform: translateY(-22px) translateX(10px) scale(0.75);
-  transform-origin: 0 50%;
-}
-#contact textarea:not(:-moz-placeholder) {
-  border: 1px solid var(--accent-purple);
-  background-color: var(--input-filled-bg);
-}
-#contact textarea:not(:placeholder-shown) {
-  border: 1px solid var(--accent-purple);
-  background-color: var(--input-filled-bg);
 }
 @keyframes borderAnimation {
   from {
@@ -2320,9 +2294,16 @@ html:not(.spa-transition) #name-title {
   animation-timing-function: cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
-::view-transition-group(*[style*="project-"]) {
+::view-transition-group(*.project-thumb) {
   animation-duration: 0.7s;
   animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+::view-transition-old(*.project-thumb),
+::view-transition-new(*.project-thumb) {
+  height: 100%;
+  -o-object-fit: cover;
+     object-fit: cover;
 }
 
 .modal {

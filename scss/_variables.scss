@@ -91,6 +91,68 @@ $bgImgColor:
   -webkit-backdrop-filter: blur($blur) saturate($saturate);
 }
 
+// Wavy animated border made of four repeating-linear-gradients.
+// Applied to both inputs/textareas (idle state) and their floating labels
+// (active / filled state) so the border pattern moves in sync.
+@mixin wavy-border-bg {
+  background-image:
+    repeating-linear-gradient(
+      55deg,
+      var(--text-primary),
+      var(--text-primary) 1px,
+      transparent 5px,
+      transparent 6px,
+      var(--text-primary) 16px
+    ),
+    repeating-linear-gradient(
+      145deg,
+      var(--text-primary),
+      var(--text-primary) 1px,
+      transparent 5px,
+      transparent 6px,
+      var(--text-primary) 16px
+    ),
+    repeating-linear-gradient(
+      235deg,
+      var(--text-primary),
+      var(--text-primary) 1px,
+      transparent 5px,
+      transparent 6px,
+      var(--text-primary) 16px
+    ),
+    repeating-linear-gradient(
+      325deg,
+      var(--text-primary),
+      var(--text-primary) 1px,
+      transparent 5px,
+      transparent 6px,
+      var(--text-primary) 16px
+    );
+  background-position:
+    0 0,
+    0 0,
+    100% 0,
+    0 100%;
+  background-repeat: no-repeat;
+  opacity: 1;
+}
+
+// Floating label – lifted (focus or filled) state.
+// $border-color: the bottom-border accent colour for this state.
+@mixin label-lifted($border-color) {
+  transform: translateY(-22px) translateX(10px) scale(0.75);
+  transform-origin: 0 50%;
+  color: inherit;
+  background-color: var(--label-bg);
+  // Collapse the wavy-border gradients so only the bottom line remains
+  background-size:
+    0px,
+    0px,
+    0px,
+    calc(100% + 16px) 1px;
+  border-bottom: 2px solid $border-color;
+}
+
 // ======================
 // Base
 // ======================
